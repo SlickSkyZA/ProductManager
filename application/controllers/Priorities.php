@@ -7,22 +7,22 @@ defined('BASEPATH') OR exit('');
  * @author Amir <amirsanni@gmail.com>
  * @date 31st Dec, 2015
  */
-class ProductGroups extends CI_Controller{
+class Priorities extends CI_Controller{
 
     public function __construct(){
         parent::__construct();
 
         $this->genlib->checkLogin();
 
-        $this->load->model(['productGroup']);
+        $this->load->model(['priority']);
     }
 
     /**
      *
      */
     public function index(){
-        $data['pageContent'] = $this->load->view('productGroups/groups', '', TRUE);
-        $data['pageTitle'] = "Product Groups";
+        $data['pageContent'] = $this->load->view('priority/priorities', '', TRUE);
+        $data['pageTitle'] = "Priority";
 
         $this->load->view('main', $data);
     }
@@ -48,7 +48,7 @@ class ProductGroups extends CI_Controller{
         $orderFormat = $this->input->get('orderFormat', TRUE) ? $this->input->get('orderFormat', TRUE) : "ASC";
 
         //count the total number of items in db
-        $totalItems = $this->db->count_all('product_group');
+        $totalItems = $this->db->count_all('priority');
 
         $this->load->library('pagination');
 
@@ -58,17 +58,17 @@ class ProductGroups extends CI_Controller{
         $start = $pageNumber == 0 ? 0 : ($pageNumber - 1) * $limit;//start from 0 if pageNumber is 0, else start from the next iteration
 
         //call setPaginationConfig($totalRows, $urlToCall, $limit, $attributes) in genlib to configure pagination
-        $config = $this->genlib->setPaginationConfig($totalItems, "productGroups/lilt", $limit, ['onclick'=>'return lilt(this.href);']);
+        $config = $this->genlib->setPaginationConfig($totalItems, "priorities/lilt", $limit, ['onclick'=>'return lilt(this.href);']);
 
         $this->pagination->initialize($config);//initialize the library class
 
         //get all items from db
-        $data['allItems'] = $this->productGroup->getAll($orderBy, $orderFormat, $start, $limit);
+        $data['allItems'] = $this->priority->getAll($orderBy, $orderFormat, $start, $limit);
         $data['range'] = $totalItems > 0 ? "Showing " . ($start+1) . "-" . ($start + count($data['allItems'])) . " of " . $totalItems : "";
         $data['links'] = $this->pagination->create_links();//page links
         $data['sn'] = $start+1;
 
-        $json['itemsListTable'] = $this->load->view('productGroups/groupslisttable', $data, TRUE);//get view with populated items table
+        $json['itemsListTable'] = $this->load->view('priority/prioritieslisttable', $data, TRUE);//get view with populated items table
 
         $this->output->set_content_type('application/json')->set_output(json_encode($json));
     }
@@ -90,8 +90,10 @@ class ProductGroups extends CI_Controller{
 
         $this->form_validation->set_error_delimiters('', '');
 
-        $this->form_validation->set_rules('groupName', 'Group name', ['required', 'trim', 'max_length[80]', 'is_unique[product_group.Name]'],
+        $this->form_validation->set_rules('priorityValue', 'Priority Value', ['required', 'trim', 'numeric', 'is_unique[priority.Value]'], //numeric
                 ['required'=>"required"]);
+        $this->form_validation->set_rules('priorityName', 'Priority Name', ['required', 'trim', 'max_length[80]'], ['required'=>"required"]);
+
 
         if($this->form_validation->run() !== FALSE){
             $this->db->trans_start();//start transaction
@@ -100,20 +102,20 @@ class ProductGroups extends CI_Controller{
              * insert info into db
              * function header: add($itemName, $itemQuantity, $itemPrice, $itemDescription, $itemCode)
              */
-            $insertedId = $this->productGroup->add(set_value('groupName'), set_value('description'));
+            $insertedId = $this->priority->add(set_value('priorityValue'), set_value('priorityName'), set_value('description'));
 
-            $itemName = set_value('groupName');
+            $itemName = set_value('priorityName');
 
             //insert into eventlog
             //function header: addevent($event, $eventRowId, $eventDesc, $eventTable, $staffId)
-            $desc = "New addition of product group {$itemName}";
+            $desc = "New addition of priority:{$itemName}";
 
-            $insertedId ? $this->genmod->addevent("Creation of new group", $insertedId, $desc, "product group", $this->session->admin_id) : "";
+            $insertedId ? $this->genmod->addevent("Creation of new priority", $insertedId, $desc, "priority", $this->session->admin_id) : "";
 
             $this->db->trans_complete();
 
             $json = $this->db->trans_status() !== FALSE ?
-                    ['status'=>1, 'msg'=>"Group successfully added"]
+                    ['status'=>1, 'msg'=>"Priority successfully added"]
                     :
                     ['status'=>0, 'msg'=>"Oops! Unexpected server error! Please contact administrator for help. Sorry for the embarrassment"];
         }
@@ -372,7 +374,7 @@ class ProductGroups extends CI_Controller{
         $item_id = $this->input->post('i', TRUE);
 
         if($item_id){
-            $this->db->where('id', $item_id)->delete('product_group');
+            $this->db->where('id', $item_id)->delete('priority');
 
             $json['status'] = 1;
         }

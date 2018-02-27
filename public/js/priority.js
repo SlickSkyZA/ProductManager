@@ -95,25 +95,27 @@ $(document).ready(function(){
     $("#addNewItem").click(function(e){
         e.preventDefault();
 
-        changeInnerHTML(['groupNameErr', 'addCustErrMsg'], "");
+        changeInnerHTML(['priorityValueErr', 'priorityNameErr', 'addCustErrMsg'], "");
 
-        var groupName = $("#groupName").val();
+        var priorityName = $("#priorityName").val();
+        var priorityValue = $("#priorityValue").val();
         var description = $("#description").val();
 
-        if(!groupName){
-            !groupName ? $("#groupNameErr").text("required") : "";
+        if(!priorityName || !priorityValue){
+            !priorityName ? $("#priorityNameErr").text("required") : "";
+            !priorityValue ? $("#priorityValueErr").text("required") : "";
 
             $("#addCustErrMsg").text("One or more required fields are empty");
 
             return;
         }
 
-        displayFlashMsg("Adding Group '"+groupName+"'", "fa fa-spinner faa-spin animated", '', '');
+        displayFlashMsg("Adding Priority '"+priorityName+"'", "fa fa-spinner faa-spin animated", '', '');
 
         $.ajax({
             type: "post",
-            url: appRoot+"productGroups/add",
-            data:{groupName:groupName, description:description},
+            url: appRoot+"priorities/add",
+            data:{priorityValue:priorityValue, priorityName:priorityName, description:description},
 
             success: function(returnedData){
                 if(returnedData.status === 1){
@@ -124,14 +126,15 @@ $(document).ready(function(){
                     lilt();
 
                     //return focus to item code input to allow adding item with barcode scanner
-                    $("#groupName").focus();
+                    $("#priorityName").focus();
                 }
 
                 else{
                     hideFlashMsg();
 
                     //display all errors
-                    $("#groupNameErr").text(returnedData.groupName);
+                    $("#priorityValueErr").text(returnedData.priorityValue);
+                    $("#priorityNameErr").text(returnedData.priorityName);
                     $("#addCustErrMsg").text(returnedData.msg);
                 }
             },
@@ -283,84 +286,6 @@ $(document).ready(function(){
         $("#updateStockModal").modal('show');
     });
 
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    //runs when the update type is changed while trying to update stock
-    //sets a default description if update type is "newStock"
-    $("#stockUpdateType").on('change', function(){
-        var updateType = $("#stockUpdateType").val();
-
-        if(updateType && (updateType === 'newStock')){
-            $("#stockUpdateDescription").val("New items were purchased");
-        }
-
-        else{
-            $("#stockUpdateDescription").val("");
-        }
-    });
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    //handles the updating of item's quantity in stock
-    $("#stockUpdateSubmit").click(function(){
-        var updateType = $("#stockUpdateType").val();
-        var stockUpdateQuantity = $("#stockUpdateQuantity").val();
-        var stockUpdateDescription = $("#stockUpdateDescription").val();
-        var itemId = $("#stockUpdateItemId").val();
-
-        if(!updateType || !stockUpdateQuantity || !stockUpdateDescription || !itemId){
-            !updateType ? $("#stockUpdateTypeErr").html("required") : "";
-            !stockUpdateQuantity ? $("#stockUpdateQuantityErr").html("required") : "";
-            !stockUpdateDescription ? $("#stockUpdateDescriptionErr").html("required") : "";
-            !itemId ? $("#stockUpdateItemIdErr").html("required") : "";
-
-            return;
-        }
-
-        $("#stockUpdateFMsg").html("<i class='"+spinnerClass+"'></i> Updating Stock.....");
-
-        $.ajax({
-            method: "POST",
-            url: appRoot+"items/updatestock",
-            data: {_iId:itemId, _upType:updateType, qty:stockUpdateQuantity, desc:stockUpdateDescription}
-        }).done(function(returnedData){
-            if(returnedData.status === 1){
-                $("#stockUpdateFMsg").html(returnedData.msg);
-
-                //refresh items' list
-                lilt();
-
-                //reset form
-                document.getElementById("updateStockForm").reset();
-
-                //dismiss modal after some secs
-                setTimeout(function(){
-                    $("#updateStockModal").modal('hide');//hide modal
-                    $("#stockUpdateFMsg").html("");//remove msg
-                }, 1000);
-            }
-
-            else{
-                $("#stockUpdateFMsg").html(returnedData.msg);
-
-                $("#stockUpdateTypeErr").html(returnedData._upType);
-                $("#stockUpdateQuantityErr").html(returnedData.qty);
-                $("#stockUpdateDescriptionErr").html(returnedData.desc);
-            }
-        }).fail(function(){
-            $("#stockUpdateFMsg").html("Unable to process your request at this time. Please check your internet connection and try again");
-        });
-    });
-
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -391,10 +316,10 @@ $(document).ready(function(){
             var confirm = window.confirm("Are you sure you want to delete item? This cannot be undone.");
 
             if(confirm){
-                displayFlashMsg('Please wait... ', spinnerClass, 'black');
+                displayFlashMsg('Please wait...', spinnerClass, 'black');
 
                 $.ajax({
-                    url: appRoot+"productGroups/delete",
+                    url: appRoot+"priorities/delete",
                     method: "POST",
                     data: {i:itemId}
                 }).done(function(rd){
@@ -406,7 +331,7 @@ $(document).ready(function(){
                         resetItemSN();
 
                         //display success message
-                        changeFlashMsgContent('groups deleted', '', 'green', 1000);
+                        changeFlashMsgContent('Item deleted', '', 'green', 1000);
                     }
 
                     else{
@@ -435,7 +360,7 @@ function lilt(url){
 
     $.ajax({
         type:'get',
-        url: url ? url : appRoot+"productGroups/lilt/",
+        url: url ? url : appRoot+"priorities/lilt/",
         data: {orderBy:orderBy, orderFormat:orderFormat, limit:limit},
 
         success: function(returnedData){

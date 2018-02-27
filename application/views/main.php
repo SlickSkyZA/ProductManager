@@ -84,13 +84,6 @@ defined('BASEPATH') OR exit('');
                             </a>
                         </li>
 
-                        <li class="<?= $pageTitle == 'ProductGroups' ? 'active' : '' ?>">
-                            <a href="<?= site_url('productGroups') ?>">
-                                <i class="fa fa-exchange"></i>
-                                Product Groups
-                            </a>
-                        </li>
-
                         <?php if($this->session->admin_role === "Super"):?>
                         <!--
 
@@ -197,8 +190,15 @@ defined('BASEPATH') OR exit('');
 
                         <li class="<?= $pageTitle == 'ProductGroups' ? 'active' : '' ?>">
                             <a href="<?= site_url('productGroups') ?>">
-                                <i class="fa fa-exchange"></i>
+                                <i class="fa fa-tag"></i>
                                 Product Groups
+                            </a>
+                        </li>
+
+                        <li class="<?= $pageTitle == 'Priorities' ? 'active' : '' ?>">
+                            <a href="<?= site_url('priorities') ?>">
+                                <i class="fa fa-tasks"></i>
+                                Priority
                             </a>
                         </li>
 
