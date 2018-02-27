@@ -7,22 +7,22 @@ defined('BASEPATH') OR exit('');
  * @author Amir <amirsanni@gmail.com>
  * @date 31st Dec, 2015
  */
-class Items extends CI_Controller{
+class ProductGroups extends CI_Controller{
 
     public function __construct(){
         parent::__construct();
 
         $this->genlib->checkLogin();
 
-        $this->load->model(['item']);
+        $this->load->model(['productGroup']);
     }
 
     /**
      *
      */
     public function index(){
-        $data['pageContent'] = $this->load->view('items/items', '', TRUE);
-        $data['pageTitle'] = "Items";
+        $data['pageContent'] = $this->load->view('productGroups/groups', '', TRUE);
+        $data['pageTitle'] = "Product Groups";
 
         $this->load->view('main', $data);
     }
@@ -44,11 +44,11 @@ class Items extends CI_Controller{
         $this->load->helper('text');
 
         //set the sort order
-        $orderBy = $this->input->get('orderBy', TRUE) ? $this->input->get('orderBy', TRUE) : "name";
+        $orderBy = $this->input->get('orderBy', TRUE) ? $this->input->get('orderBy', TRUE) : "Name";
         $orderFormat = $this->input->get('orderFormat', TRUE) ? $this->input->get('orderFormat', TRUE) : "ASC";
 
         //count the total number of items in db
-        $totalItems = $this->db->count_all('items');
+        $totalItems = $this->db->count_all('product_group');
 
         $this->load->library('pagination');
 
@@ -58,17 +58,17 @@ class Items extends CI_Controller{
         $start = $pageNumber == 0 ? 0 : ($pageNumber - 1) * $limit;//start from 0 if pageNumber is 0, else start from the next iteration
 
         //call setPaginationConfig($totalRows, $urlToCall, $limit, $attributes) in genlib to configure pagination
-        $config = $this->genlib->setPaginationConfig($totalItems, "items/lilt", $limit, ['onclick'=>'return lilt(this.href);']);
+        $config = $this->genlib->setPaginationConfig($totalItems, "productGroups/lilt", $limit, ['onclick'=>'return lilt(this.href);']);
 
         $this->pagination->initialize($config);//initialize the library class
 
         //get all items from db
-        $data['allItems'] = $this->item->getAll($orderBy, $orderFormat, $start, $limit);
+        $data['allItems'] = $this->productGroup->getAll($orderBy, $orderFormat, $start, $limit);
         $data['range'] = $totalItems > 0 ? "Showing " . ($start+1) . "-" . ($start + count($data['allItems'])) . " of " . $totalItems : "";
         $data['links'] = $this->pagination->create_links();//page links
         $data['sn'] = $start+1;
 
-        $json['itemsListTable'] = $this->load->view('items/itemslisttable', $data, TRUE);//get view with populated items table
+        $json['itemsListTable'] = $this->load->view('productGroups/groupslisttable', $data, TRUE);//get view with populated items table
 
         $this->output->set_content_type('application/json')->set_output(json_encode($json));
     }
@@ -90,13 +90,8 @@ class Items extends CI_Controller{
 
         $this->form_validation->set_error_delimiters('', '');
 
-        $this->form_validation->set_rules('productName', 'Product name', ['required', 'trim', 'max_length[80]', 'is_unique[items.name]'],
+        $this->form_validation->set_rules('groupName', 'Group name', ['required', 'trim', 'max_length[80]', 'is_unique[`product group`.Name]'],
                 ['required'=>"required"]);
-        $this->form_validation->set_rules('groupName', 'Group Name', ['required', 'trim', 'numeric'], ['required'=>"required"]);
-        $this->form_validation->set_rules('priority', 'Priority', ['required', 'trim', 'numeric'], ['required'=>"required"]);
-        $this->form_validation->set_rules('version', 'Version', ['required', 'trim', 'numeric'], ['required'=>"required"]);
-        //$this->form_validation->set_rules('itemCode', 'Item Code', ['required', 'trim', 'max_length[20]', 'is_unique[items.code]'],
-        //        ['required'=>"required", 'is_unique'=>"There is already an item with this code"]);
 
         if($this->form_validation->run() !== FALSE){
             $this->db->trans_start();//start transaction
@@ -105,23 +100,20 @@ class Items extends CI_Controller{
              * insert info into db
              * function header: add($itemName, $itemQuantity, $itemPrice, $itemDescription, $itemCode)
              */
-            $insertedId = $this->item->add(set_value('itemName'), set_value('itemQuantity'), set_value('itemPrice'),
-                    set_value('itemDescription'), set_value('itemCode'));
+            $insertedId = $this->productGroup->add(set_value('groupName'), set_value('description'));
 
-            $itemName = set_value('itemName');
-            $itemQty = set_value('itemQuantity');
-            $itemPrice = "&#8358;".number_format(set_value('itemPrice'), 2);
+            $itemName = set_value('groupName');
 
             //insert into eventlog
             //function header: addevent($event, $eventRowId, $eventDesc, $eventTable, $staffId)
-            $desc = "Addition of {$itemQty} quantities of a new item '{$itemName}' with a unit price of {$itemPrice} to stock";
+            $desc = "New addition of product group {$itemName}";
 
-            $insertedId ? $this->genmod->addevent("Creation of new item", $insertedId, $desc, "items", $this->session->admin_id) : "";
+            $insertedId ? $this->genmod->addevent("Creation of new group", $insertedId, $desc, "product group", $this->session->admin_id) : "";
 
             $this->db->trans_complete();
 
             $json = $this->db->trans_status() !== FALSE ?
-                    ['status'=>1, 'msg'=>"Item successfully added"]
+                    ['status'=>1, 'msg'=>"Group successfully added"]
                     :
                     ['status'=>0, 'msg'=>"Oops! Unexpected server error! Please contact administrator for help. Sorry for the embarrassment"];
         }
@@ -279,28 +271,23 @@ class Items extends CI_Controller{
         $this->form_validation->set_rules('_iId', 'Item ID', ['required', 'trim', 'numeric']);
         $this->form_validation->set_rules('itemName', 'Item Name', ['required', 'trim',
             'callback_crosscheckName['.$this->input->post('_iId', TRUE).']'], ['required'=>'required']);
-        $this->form_validation->set_rules('itemCode', 'Item Code', ['required', 'trim',
-            'callback_crosscheckCode['.$this->input->post('_iId', TRUE).']'], ['required'=>'required']);
-        $this->form_validation->set_rules('itemPrice', 'Item Unit Price', ['required', 'trim', 'numeric']);
         $this->form_validation->set_rules('itemDesc', 'Item Description', ['trim']);
 
         if($this->form_validation->run() !== FALSE){
             $itemId = set_value('_iId');
             $itemDesc = set_value('itemDesc');
-            $itemPrice = set_value('itemPrice');
             $itemName = set_value('itemName');
-            $itemCode = $this->input->post('itemCode', TRUE);
 
             //update item in db
-            $updated = $this->item->edit($itemId, $itemName, $itemDesc, $itemPrice);
+            $updated = $this->productGroup->edit($itemId, $itemName, $itemDesc);
 
             $json['status'] = $updated ? 1 : 0;
 
             //add event to log
             //function header: addevent($event, $eventRowId, $eventDesc, $eventTable, $staffId)
-            $desc = "Details of item with code '$itemCode' was updated";
+            $desc = "Details of item with code '$itemId' was updated";
 
-            $this->genmod->addevent("Item Update", $itemId, $desc, 'items', $this->session->admin_id);
+            $this->genmod->addevent("Group Info Update", $itemId, $desc, 'product group', $this->session->admin_id);
         }
 
         else{

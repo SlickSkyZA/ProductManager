@@ -6,11 +6,11 @@ defined('BASEPATH') OR exit('');
 <html>
     <head>
         <title><?= $pageTitle ?></title>
-		
+
         <!-- Favicon -->
         <link rel="shortcut icon" href="<?=base_url()?>public/images/icon.ico">
         <!-- favicon ends -->
-        
+
         <!-- LOAD FILES -->
         <?php if((stristr($_SERVER['HTTP_HOST'], "localhost") !== FALSE) || (stristr($_SERVER['HTTP_HOST'], "192.168.") !== FALSE)|| (stristr($_SERVER['HTTP_HOST'], "127.0.0.") !== FALSE)): ?>
         <link rel="stylesheet" href="<?=base_url()?>public/bootstrap/css/bootstrap.min.css">
@@ -24,19 +24,19 @@ defined('BASEPATH') OR exit('');
         <script src="<?=base_url()?>public/ext/select2/select2.min.js"></script>
 
         <?php else: ?>
-        
+
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome-animation/0.0.8/font-awesome-animation.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css">
-        
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+
+        <script src="<?=base_url()?>public/js/jquery.min.js"></script>
+        <script src="<?=base_url()?>public/js/bootstrap.min.js"></script>
+        <script src="<?=base_url()?>public/js/select2.min.js"></script>
 
         <?php endif; ?>
-        
+
         <!-- custom CSS -->
         <link rel="stylesheet" href="<?= base_url() ?>public/css/main.css">
 
@@ -69,14 +69,14 @@ defined('BASEPATH') OR exit('');
                                 Dashboard
                             </a>
                         </li>
-                        
+
                         <li class="<?= $pageTitle == 'Transactions' ? 'active' : '' ?>">
                             <a href="<?= site_url('transactions') ?>">
                                 <i class="fa fa-exchange"></i>
                                 Transactions
                             </a>
                         </li>
-                        
+
                         <li class="<?= $pageTitle == 'Items' ? 'active' : '' ?>">
                             <a href="<?= site_url('items') ?>">
                                 <i class="fa fa-cart-plus"></i>
@@ -84,36 +84,51 @@ defined('BASEPATH') OR exit('');
                             </a>
                         </li>
 
+                        <li class="<?= $pageTitle == 'ProductGroups' ? 'active' : '' ?>">
+                            <a href="<?= site_url('productGroups') ?>">
+                                <i class="fa fa-exchange"></i>
+                                Product Groups
+                            </a>
+                        </li>
+
                         <?php if($this->session->admin_role === "Super"):?>
                         <!--
+
+                        <li class="<?= $pageTitle == 'ProductGroups' ? 'active' : '' ?>">
+                            <a href="<?= site_url('transactions') ?>">
+                                <i class="fa fa-exchange"></i>
+                                Product Groups
+                            </a>
+                        </li>
+
                         <li class="<?= $pageTitle == 'Employees' ? 'active' : '' ?>">
                             <a href="<?= site_url('employees') ?>">
                                 <i class="fa fa-users"></i>
                                 Employees
                             </a>
                         </li>
-                        
+
                         <li class="<?= $pageTitle == 'Reports' ? 'active' : '' ?>">
                             <a href="<?= site_url('reports') ?>">
                                 <i class="fa fa-newspaper-o"></i>
                                 Reports
                             </a>
                         </li>
-                        
+
                         <li class="<?= $pageTitle == 'Eventlog' ? 'active' : '' ?>">
                             <a href="<?= site_url('Eventlog') ?>">
                                 <i class="fa fa-tasks"></i>
                                 Event Log
                             </a>
                         </li>--->
-                        
+
                         <li class="<?= $pageTitle == 'Database' ? 'active' : '' ?>">
                             <a href="<?= site_url('dbmanagement') ?>">
                                 <i class="fa fa-database"></i>
                                 Database Management
                             </a>
                         </li>
-                        
+
                         <li class="<?= $pageTitle == 'Administrators' ? 'active' : '' ?>">
                             <a href="<?= site_url('administrators') ?>">
                                 <i class="fa fa-user"></i>
@@ -140,7 +155,7 @@ defined('BASEPATH') OR exit('');
                                 <li class="divider"></li>
                                 <!---<li>
                                     <a href="#">
-                                        <i class="fa fa-gear fa-fw"></i> 
+                                        <i class="fa fa-gear fa-fw"></i>
                                         Settings
                                     </a>
                                 </li>
@@ -171,7 +186,7 @@ defined('BASEPATH') OR exit('');
                                 Transactions
                             </a>
                         </li>
-                        
+
                         <?php if($this->session->admin_role === "Super"):?>
                         <li class="<?= $pageTitle == 'Items' ? 'active' : '' ?>">
                             <a href="<?= site_url('items') ?>">
@@ -179,7 +194,14 @@ defined('BASEPATH') OR exit('');
                                 Inventory Items
                             </a>
                         </li>
-                        
+
+                        <li class="<?= $pageTitle == 'ProductGroups' ? 'active' : '' ?>">
+                            <a href="<?= site_url('productGroups') ?>">
+                                <i class="fa fa-exchange"></i>
+                                Product Groups
+                            </a>
+                        </li>
+
                         <!--
                         <li class="<?= $pageTitle == 'Employees' ? 'active' : '' ?>">
                             <a href="<?= site_url('employees') ?>">
@@ -199,14 +221,14 @@ defined('BASEPATH') OR exit('');
                                 Event Log
                             </a>
                         </li>--->
-                        
+
                         <li class="<?= $pageTitle == 'Database' ? 'active' : '' ?>">
                             <a href="<?= site_url('dbmanagement') ?>">
                                 <i class="fa fa-database"></i>
                                 Database Management
                             </a>
                         </li>
-                        
+
                         <li class="<?= $pageTitle == 'Administrators' ? 'active' : '' ?>">
                             <a href="<?= site_url('administrators') ?>">
                                 <i class="fa fa-user"></i>
@@ -261,8 +283,8 @@ defined('BASEPATH') OR exit('');
             </div>
         </div>
         <!--- End of modal--->
-		
-		
+
+
         <!---Login Modal--->
         <div class="modal fade" role='dialog' data-backdrop='static' id='logInModal'>
             <div class="modal-dialog">
@@ -287,7 +309,7 @@ defined('BASEPATH') OR exit('');
                                     <span class="help-block errMsg" id="logInModalPasswordErr"></span>
                                 </div>
                             </div>
-                            
+
                             <div class="row">
                                 <!--<div class="col-sm-6 pull-left">
                                     <input type="checkbox" class="control-label" id='remMe'> Remember me

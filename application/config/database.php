@@ -75,10 +75,10 @@ $query_builder = TRUE;
 
 //details for mysql
 $db['mysql'] = array(
-	'dsn'	=> 'mysql:hostname=localhost; dbname=1410inventory',
+	'dsn'	=> 'mysql:hostname=172.17.122.152; dbname=1410inventory',
 	'hostname' => '',
 	'username' => 'root',
-	'password' => '',
+	'password' => 'gqj3375',
 	'database' => '',
 	'dbdriver' => 'pdo',
 	'dbprefix' => '',
