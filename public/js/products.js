@@ -30,6 +30,59 @@ $(document).ready(function(){
         $("#itemsListDiv").toggleClass("col-sm-8", "col-sm-12");
         $("#createNewItemDiv").toggleClass('hidden');
         $("#itemName").focus();
+
+        //$(".selectedItemDefault").addClass("selectedItem").val("");
+
+        //loop through the currentItems variable to add the items to the select input
+		return new Promise((resolve, reject)=>{
+			//if an item has been selected (i.e. added to the current transaction), do not add it to the list. This way, an item will appear just once.
+			//We start by forming an array of all selected items, then skip that item in the loop appending items to select dropdown
+			var selectedGroupsArr = [];
+            var selectedPrioritysArr = [];
+
+			return new Promise((res, rej)=>{
+				//$(".selectedItem").each(function(){
+				//	//push the selected value (which is the item code [a key in currentItems object]) to the array
+				//	$(this).val() ? selectedItemsArr.push($(this).val()) : "";
+				//});
+
+				res();
+			}).then(()=>{
+                $(".selectedGroupDefault").empty();
+				for(let key in currentGroups){
+					//if the current key in the loop is in our 'selectedItemsArr' array
+					if(!inArray(key, selectedGroupsArr)){
+						//if the item has not been selected, append it to the select list
+						$(".selectedGroupDefault").append("<option value='"+key+"'>"+currentGroups[key]+"</option>");
+					}
+				}
+
+				//prepend 'select item' to the select option
+				$(".selectedGroupDefault").prepend("<option value='' selected>Select Group</option>");
+
+                $(".selectedPriorityDefault").empty();
+                for(let key in currentPriorities){
+					//if the current key in the loop is in our 'selectedItemsArr' array
+					if(!inArray(key, selectedPrioritysArr)){
+						//if the item has not been selected, append it to the select list
+						$(".selectedPriorityDefault").append("<option value='"+key+"'>"+currentPriorities[key]+"</option>");
+					}
+				}
+
+				//prepend 'select item' to the select option
+				$(".selectedPriorityDefault").prepend("<option value='' selected>Select Priority</option>");
+
+				resolve(selectedGroupsArr, selectedPrioritysArr);
+			});
+		}).then((selectedGroupsArray, selectedPrioritysArray)=>{
+				//add select2 to the 'select input'
+			    $('.selectedGroupDefault').select2();
+                $('.selectedPriorityDefault').select2();
+		}).catch(()=>{
+			console.log('outer promise err');
+		});
+
+        return false;
     });
 
 
@@ -95,27 +148,30 @@ $(document).ready(function(){
     $("#addNewItem").click(function(e){
         e.preventDefault();
 
-        changeInnerHTML(['priorityValueErr', 'priorityNameErr', 'addCustErrMsg'], "");
+        changeInnerHTML(['productNameErr', 'productGroupErr', 'priorityErr', 'addCustErrMsg'], "");
 
-        var priorityName = $("#priorityName").val();
-        var priorityValue = $("#priorityValue").val();
+        var productName = $("#productName").val();
+        var productGroup = $("#productGroup").val();
+        var priority = $("#priority").val();
+        var version = $("#version").val();
         var description = $("#description").val();
 
-        if(!priorityName || !priorityValue){
-            !priorityName ? $("#priorityNameErr").text("required") : "";
-            !priorityValue ? $("#priorityValueErr").text("required") : "";
+        if(!productName || !productGroup || !priority){
+            !productName ? $("#productNameErr").text("required") : "";
+            !productGroup ? $("#productGroupErr").text("required") : "";
+            !priority ? $("#priorityErr").text("required") : "";
 
             $("#addCustErrMsg").text("One or more required fields are empty");
 
             return;
         }
 
-        displayFlashMsg("Adding Priority '"+priorityName+"'", "fa fa-spinner faa-spin animated", '', '');
+        displayFlashMsg("Adding Product '"+productName+"'", "fa fa-spinner faa-spin animated", '', '');
 
         $.ajax({
             type: "post",
-            url: appRoot+"priorities/add",
-            data:{priorityValue:priorityValue, priorityName:priorityName, description:description},
+            url: appRoot+"products/add",
+            data:{productName:productName, productGroup:productGroup, priority:priority, version:version, description:description},
 
             success: function(returnedData){
                 if(returnedData.status === 1){
@@ -126,15 +182,16 @@ $(document).ready(function(){
                     lilt();
 
                     //return focus to item code input to allow adding item with barcode scanner
-                    $("#priorityName").focus();
+                    $("#productName").focus();
                 }
 
                 else{
                     hideFlashMsg();
 
                     //display all errors
-                    $("#priorityValueErr").text(returnedData.priorityValue);
-                    $("#priorityNameErr").text(returnedData.priorityName);
+                    $("#productGroupErr").text(returnedData.productGroup);
+                    $("#productNameErr").text(returnedData.productName);
+                    $("#priorityErr").text(returnedData.priority);
                     $("#addCustErrMsg").text(returnedData.msg);
                 }
             },
@@ -365,7 +422,7 @@ function lilt(url){
 
     $.ajax({
         type:'get',
-        url: url ? url : appRoot+"priorities/lilt/",
+        url: url ? url : appRoot+"products/lilt/",
         data: {orderBy:orderBy, orderFormat:orderFormat, limit:limit},
 
         success: function(returnedData){

@@ -271,17 +271,20 @@ class Priorities extends CI_Controller{
         $this->form_validation->set_error_delimiters('', '');
 
         $this->form_validation->set_rules('_iId', 'Item ID', ['required', 'trim', 'numeric']);
-        $this->form_validation->set_rules('itemName', 'Item Name', ['required', 'trim',
+        $this->form_validation->set_rules('itemName', 'Priority Name', ['required', 'trim',
             'callback_crosscheckName['.$this->input->post('_iId', TRUE).']'], ['required'=>'required']);
+        $this->form_validation->set_rules('itemValue', 'Priority Value', ['required', 'trim', 'numeric',
+            'callback_crosscheckValue['.$this->input->post('_iId', TRUE).']'], ['required'=>"required"]);
         $this->form_validation->set_rules('itemDesc', 'Item Description', ['trim']);
 
         if($this->form_validation->run() !== FALSE){
             $itemId = set_value('_iId');
             $itemDesc = set_value('itemDesc');
             $itemName = set_value('itemName');
+            $itemValue = set_value('itemValue');
 
             //update item in db
-            $updated = $this->productGroup->edit($itemId, $itemName, $itemDesc);
+            $updated = $this->priority->edit($itemId, $itemName, $itemValue, $itemDesc);
 
             $json['status'] = $updated ? 1 : 0;
 
@@ -313,7 +316,7 @@ class Priorities extends CI_Controller{
 
     public function crosscheckName($itemName, $itemId){
         //check db to ensure name was previously used for the item we are updating
-        $itemWithName = $this->genmod->getTableCol('items', 'id', 'name', $itemName);
+        $itemWithName = $this->genmod->getTableCol('priority', 'id', 'Name', $itemName);
 
         //if item name does not exist or it exist but it's the name of current item
         if(!$itemWithName || ($itemWithName == $itemId)){
@@ -342,9 +345,9 @@ class Priorities extends CI_Controller{
      * @param type $item_id
      * @return boolean
      */
-    public function crosscheckCode($item_code, $item_id){
+    public function crosscheckValue($item_code, $item_id){
         //check db to ensure item code was previously used for the item we are updating
-        $item_with_code = $this->genmod->getTableCol('items', 'id', 'code', $item_code);
+        $item_with_code = $this->genmod->getTableCol('priority', 'id', 'Value', $item_code);
 
         //if item code does not exist or it exist but it's the code of current item
         if(!$item_with_code || ($item_with_code == $item_id)){
@@ -352,7 +355,7 @@ class Priorities extends CI_Controller{
         }
 
         else{//if it exist
-            $this->form_validation->set_message('crosscheckCode', 'There is an item with this code');
+            $this->form_validation->set_message('crosscheckValue', 'There is an item with this value');
 
             return FALSE;
         }

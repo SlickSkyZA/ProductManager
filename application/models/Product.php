@@ -7,7 +7,7 @@ defined('BASEPATH') OR exit('');
  * @author Amir <amirsanni@gmail.com>
  * @date 4th RabThaani, 1437AH (15th Jan, 2016)
  */
-class ProductGroup extends CI_Model{
+class Product extends CI_Model{
     public function __construct(){
         parent::__construct();
     }
@@ -21,8 +21,13 @@ class ProductGroup extends CI_Model{
     public function getAll($orderBy, $orderFormat, $start=0, $limit=''){
         $this->db->limit($limit, $start);
         $this->db->order_by($orderBy, $orderFormat);
+        $this->db->select('product.id, product.Name, product_group.Name GroupName, product.Version,
+        priority.Name PriorityName, priority.Value PriorityValue, product.AddedDate, product.UpdatedDate, product.Notes');
 
-        $run_q = $this->db->get('product_group');
+        $this->db->join('product_group', 'product.GroupID = product_group.id');
+        $this->db->join('priority', 'product.PriorityID = priority.id');
+
+        $run_q = $this->db->get('product');
 
         if($run_q->num_rows() > 0){
             return $run_q->result();
@@ -51,8 +56,8 @@ class ProductGroup extends CI_Model{
      * @param type $itemCode
      * @return boolean
      */
-    public function add($groupName, $description){
-        $data = ['Name'=>$groupName, 'Notes'=>$description];
+    public function add($productName, $productGroup, $priority, $version, $description){
+        $data = ['GroupID'=>$productGroup, 'PriorityID'=>$priority, 'Name'=>$productName, 'Version'=>$version, 'Notes'=>$description];
 
         //set the datetime based on the db driver in use
         $this->db->platform() == "sqlite3"
@@ -61,7 +66,7 @@ class ProductGroup extends CI_Model{
                 :
         $this->db->set('AddedDate', "NOW()", FALSE);
 
-        $this->db->insert('product_group', $data);
+        $this->db->insert('product', $data);
 
         if($this->db->insert_id()){
             return $this->db->insert_id();
@@ -86,7 +91,7 @@ class ProductGroup extends CI_Model{
      * @return boolean
      */
     public function itemsearch($value){
-        $q = "SELECT * FROM product_group
+        $q = "SELECT * FROM priority
             WHERE
             Name LIKE '%".$this->db->escape_like_str($value)."%'";
 
@@ -214,11 +219,11 @@ class ProductGroup extends CI_Model{
     * @param type $itemDesc
     * @param type $itemPrice
     */
-   public function edit($itemId, $itemName, $itemDesc){
-       $data = ['Name'=>$itemName, 'Notes'=>$itemDesc];
+   public function edit($itemId, $itemName, $itemValue, $itemDesc){
+       $data = ['Name'=>$itemName, 'Value'=>$itemValue, 'Notes'=>$itemDesc];
 
        $this->db->where('id', $itemId);
-       $this->db->update('product_group', $data);
+       $this->db->update('priority', $data);
 
        return TRUE;
    }
@@ -234,7 +239,7 @@ class ProductGroup extends CI_Model{
 	public function getActiveItems($orderBy, $orderFormat){
         $this->db->order_by($orderBy, $orderFormat);
 
-        $run_q = $this->db->get('product_group');
+        $run_q = $this->db->get('priority');
 
         if($run_q->num_rows() > 0){
             return $run_q->result();

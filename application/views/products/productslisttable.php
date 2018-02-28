@@ -3,7 +3,7 @@
 <?= isset($range) && !empty($range) ? $range : ""; ?>
 <div class="panel panel-primary">
     <!-- Default panel contents -->
-    <div class="panel-heading">Priority</div>
+    <div class="panel-heading">Product</div>
     <?php if($allItems): ?>
     <div class="table table-responsive">
         <table class="table table-bordered table-striped" style="background-color: #f5f5f5">
@@ -11,8 +11,10 @@
                 <tr>
                     <th>SN</th>
                     <th>ID</th>
-                    <th>Priority Name</th>
-                    <th>Priority Value</th>
+                    <th>Name</th>
+                    <th>Group</th>
+                    <th>Priority</th>
+                    <th>Version</th>
                     <th>Create DATE</th>
                     <th>Update DATE</th>
                     <th>DESCRIPTION</th>
@@ -27,7 +29,9 @@
                     <th class="itemSN"><?=$sn?>.</th>
                     <td><span id="itemID-<?=$get->id?>"><?=$get->id?></span></td>
                     <td><span id="itemName-<?=$get->id?>"><?=$get->Name?></td>
-                    <td><span id="itemValue-<?=$get->id?>"><?=$get->Value?></td>
+                    <td><span id="itemGroup-<?=$get->id?>"><?=$get->GroupName?></td>
+                    <td><span id="itemPriority-<?=$get->id?>"><?=$get->PriorityName?></td>
+                    <td><span id="itemVersion-<?=$get->id?>"><?=$get->Version?></td>
                     <td><span id="itemAddDate-<?=$get->id?>"><?=$get->AddedDate?></td>
                     <td><span id="itemUpdateDate-<?=$get->id?>"><?=$get->UpdatedDate?></td>
                     <td>

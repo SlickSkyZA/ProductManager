@@ -1,6 +1,28 @@
 <?php
 defined('BASEPATH') OR exit('');
+
+$current_groups = [];
+$current_priorities = [];
+
+if(isset($priorities) && !empty($priorities)){
+    foreach($priorities as $get){
+        $current_priorities[$get->id] = $get->Name;
+    }
+}
+
+if(isset($product_group) && !empty($product_group)){
+    foreach($product_group as $get){
+        $current_groups[$get->id] = $get->Name;
+    }
+}
 ?>
+
+<style href="<?=base_url('public/ext/datetimepicker/bootstrap-datepicker.min.css')?>" rel="stylesheet"></style>
+
+<script>
+    var currentGroups = <?=json_encode($current_groups)?>;
+    var currentPriorities = <?=json_encode($current_priorities)?>;
+</script>
 
 <div class="pwell hidden-print">
     <div class="row">
@@ -9,7 +31,7 @@ defined('BASEPATH') OR exit('');
             <div class="row">
                 <div class="col-sm-12">
                     <div class="col-sm-2 form-inline form-group-sm">
-                        <button class="btn btn-primary btn-sm" id='createItem'>Add New Priority</button>
+                        <button class="btn btn-primary btn-sm" id='createItem'>Add New Product</button>
                     </div>
 
                     <div class="col-sm-3 form-inline form-group-sm">
@@ -65,19 +87,36 @@ defined('BASEPATH') OR exit('');
 
                         <div class="row">
                             <div class="col-sm-12 form-group-sm">
-                                <label for="priorityValue">Priority Value</label>
-                                <input type="number" id="priorityValue" name="priorityValue" placeholder="Priority Value"
-                                    class="form-control" min="0" onchange="checkField(this.value, 'priorityValueErr')">
-                                <span class="help-block errMsg" id="priorityValueErr"></span>
+                                <label for="productName">Product Name</label>
+                                <input type="text" id="productName" name="productName" placeholder="Product Name" maxlength="80"
+                                    class="form-control" onchange="checkField(this.value, 'productNameErr')">
+                                <span class="help-block errMsg" id="productNameErr"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 form-group-sm">
+                                <label for="productGroup">Product Group</label>
+                                <select class="form-control selectedGroupDefault" id="productGroup" name="productGroup" maxlength="80"
+                                    onchange="checkField(this.value, 'productGroupErr')"></select>
+                                <span class="help-block errMsg" id="productGroupErr"></span>
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-sm-12 form-group-sm">
-                                <label for="priorityName">Priority Name</label>
-                                <input type="text" id="priorityName" name="priorityName" placeholder="Priority Name" maxlength="80"
-                                    class="form-control" onchange="checkField(this.value, 'priorityNameErr')">
-                                <span class="help-block errMsg" id="priorityNameErr"></span>
+                                <label for="priority">Priority</label>
+                                <select class="form-control selectedPriorityDefault" id="priority" name="priority" maxlength="80"
+                                    onchange="checkField(this.value, 'priorityErr')"></select>
+                                <span class="help-block errMsg" id="priorityErr"></span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-12 form-group-sm">
+                                <label for="version">Version (Optional)</label>
+                                <input type="text" id="version" name="version" placeholder="Version " maxlength="80"
+                                    class="form-control" onchange="checkField(this.value, 'versionErr')">
+                                <span class="help-block errMsg" id="versionErr"></span>
                             </div>
                         </div>
 
@@ -91,7 +130,7 @@ defined('BASEPATH') OR exit('');
                         <br>
                         <div class="row text-center">
                             <div class="col-sm-6 form-group-sm">
-                                <button class="btn btn-primary btn-sm" id="addNewItem">Add Priority</button>
+                                <button class="btn btn-primary btn-sm" id="addNewItem">Add Product</button>
                             </div>
 
                             <div class="col-sm-6 form-group-sm">
@@ -158,5 +197,10 @@ defined('BASEPATH') OR exit('');
         </div>
     </div>
 </div>
-<!--end of modal--->
-<script src="<?=base_url()?>public/js/priority.js"></script>
+
+<!---End of copy of div to clone when adding more items to sales transaction---->
+<script src="<?=base_url()?>public/js/products.js"></script>
+<script src="<?=base_url('public/ext/datetimepicker/bootstrap-datepicker.min.js')?>"></script>
+<script src="<?=base_url('public/ext/datetimepicker/jquery.timepicker.min.js')?>"></script>
+<script src="<?=base_url()?>public/ext/datetimepicker/datepair.min.js"></script>
+<script src="<?=base_url()?>public/ext/datetimepicker/jquery.datepair.min.js"></script>

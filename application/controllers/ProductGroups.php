@@ -311,7 +311,7 @@ class ProductGroups extends CI_Controller{
 
     public function crosscheckName($itemName, $itemId){
         //check db to ensure name was previously used for the item we are updating
-        $itemWithName = $this->genmod->getTableCol('items', 'id', 'name', $itemName);
+        $itemWithName = $this->genmod->getTableCol('product_group', 'id', 'Name', $itemName);
 
         //if item name does not exist or it exist but it's the name of current item
         if(!$itemWithName || ($itemWithName == $itemId)){
@@ -319,7 +319,7 @@ class ProductGroups extends CI_Controller{
         }
 
         else{//if it exist
-            $this->form_validation->set_message('crosscheckName', 'There is an item with this name');
+            $this->form_validation->set_message('crosscheckName', 'There is an group with this name');
 
             return FALSE;
         }

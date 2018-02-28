@@ -214,11 +214,11 @@ class Priority extends CI_Model{
     * @param type $itemDesc
     * @param type $itemPrice
     */
-   public function edit($itemId, $itemName, $itemDesc){
-       $data = ['Name'=>$itemName, 'Notes'=>$itemDesc];
+   public function edit($itemId, $itemName, $itemValue, $itemDesc){
+       $data = ['Name'=>$itemName, 'Value'=>$itemValue, 'Notes'=>$itemDesc];
 
        $this->db->where('id', $itemId);
-       $this->db->update('product_group', $data);
+       $this->db->update('priority', $data);
 
        return TRUE;
    }
@@ -234,9 +234,7 @@ class Priority extends CI_Model{
 	public function getActiveItems($orderBy, $orderFormat){
         $this->db->order_by($orderBy, $orderFormat);
 
-		$this->db->where('quantity >=', 1);
-
-        $run_q = $this->db->get('items');
+        $run_q = $this->db->get('priority');
 
         if($run_q->num_rows() > 0){
             return $run_q->result();
