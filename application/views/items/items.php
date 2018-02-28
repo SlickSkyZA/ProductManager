@@ -2,7 +2,7 @@
 defined('BASEPATH') OR exit('');
 ?>
 
-<div class="pwell hidden-print">
+<div class="pwell hidden-print">   
     <div class="row">
         <div class="col-sm-12">
             <!-- sort and co row-->
@@ -51,9 +51,9 @@ defined('BASEPATH') OR exit('');
             <!-- end of sort and co div-->
         </div>
     </div>
-
+    
     <hr>
-
+    
     <!-- row of adding new item form and items list table--->
     <div class="row">
         <div class="col-sm-12">
@@ -64,57 +64,57 @@ defined('BASEPATH') OR exit('');
                     <button class="close cancelAddItem">&times;</button><br>
                     <form name="addNewItemForm" id="addNewItemForm" role="form">
                         <div class="text-center errMsg" id='addCustErrMsg'></div>
-
+                        
                         <br>
-
+                        
                         <div class="row">
                             <div class="col-sm-12 form-group-sm">
-                                <label for="productName">Product Name</label>
-                                <input type="text" id="productName" name="productName" placeholder="Product Name" maxlength="80"
-                                    class="form-control" onchange="checkField(this.value, 'productNameErr')" autofocus>
+                                <label for="itemCode">Item Code</label>
+                                <input type="text" id="itemCode" name="itemCode" placeholder="Item Code" maxlength="80"
+                                    class="form-control" onchange="checkField(this.value, 'itemCodeErr')" autofocus>
                                 <!--<span class="help-block"><input type="checkbox" id="gen4me"> auto-generate</span>-->
-                                <span class="help-block errMsg" id="productNameErr"></span>
+                                <span class="help-block errMsg" id="itemCodeErr"></span>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-sm-12 form-group-sm">
+                                <label for="itemName">Item Name</label>
+                                <input type="text" id="itemName" name="itemName" placeholder="Item Name" maxlength="80"
+                                    class="form-control" onchange="checkField(this.value, 'itemNameErr')">
+                                <span class="help-block errMsg" id="itemNameErr"></span>
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-sm-12 form-group-sm">
-                                <label for="groupName">Group Name</label>
-                                <input type="text" id="groupName" name="groupName" placeholder="Group Name" maxlength="80"
-                                    class="form-control" onchange="checkField(this.value, 'groupNameErr')">
-                                <span class="help-block errMsg" id="groupNameErr"></span>
+                                <label for="itemQuantity">Quantity</label>
+                                <input type="number" id="itemQuantity" name="itemQuantity" placeholder="Available Quantity"
+                                    class="form-control" min="0" onchange="checkField(this.value, 'itemQuantityErr')">
+                                <span class="help-block errMsg" id="itemQuantityErr"></span>
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-sm-12 form-group-sm">
-                                <label for="priority">Priority</label>
-                                <input type="number" id="priority" name="priority" placeholder="Product Priority"
-                                    class="form-control" min="0" onchange="checkField(this.value, 'priorityErr')">
-                                <span class="help-block errMsg" id="priorityErr"></span>
+                                <label for="unitPrice">(&#8358;)Unit Price</label>
+                                <input type="text" id="itemPrice" name="itemPrice" placeholder="(&#8358;)Unit Price" class="form-control"
+                                    onchange="checkField(this.value, 'itemPriceErr')">
+                                <span class="help-block errMsg" id="itemPriceErr"></span>
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-sm-12 form-group-sm">
-                                <label for="version">Version</label>
-                                <input type="text" id="version" name="version" placeholder="Product Version" class="form-control"
-                                    onchange="checkField(this.value, 'versionErr')">
-                                <span class="help-block errMsg" id="versionErr"></span>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-sm-12 form-group-sm">
-                                <label for="description" class="">Description (Optional)</label>
-                                <textarea class="form-control" id="description" name="description" rows='4'
-                                    placeholder="Optional Product Description"></textarea>
+                                <label for="itemDescription" class="">Description (Optional)</label>
+                                <textarea class="form-control" id="itemDescription" name="itemDescription" rows='4'
+                                    placeholder="Optional Item Description"></textarea>
                             </div>
                         </div>
                         <br>
                         <div class="row text-center">
                             <div class="col-sm-6 form-group-sm">
-                                <button class="btn btn-primary btn-sm" id="addNewItem">Add Product</button>
+                                <button class="btn btn-primary btn-sm" id="addNewItem">Add Item</button>
                             </div>
 
                             <div class="col-sm-6 form-group-sm">
@@ -124,7 +124,7 @@ defined('BASEPATH') OR exit('');
                     </form><!-- end of form-->
                 </div>
             </div>
-
+            
             <!--- Item list div-->
             <div class="col-sm-12" id="itemsListDiv">
                 <!-- Item list Table-->
@@ -156,12 +156,12 @@ defined('BASEPATH') OR exit('');
                             <label>Item Name</label>
                             <input type="text" readonly id="stockUpdateItemName" class="form-control">
                         </div>
-
+                        
                         <div class="col-sm-4 form-group-sm">
                             <label>Item Code</label>
                             <input type="text" readonly id="stockUpdateItemCode" class="form-control">
                         </div>
-
+                        
                         <div class="col-sm-4 form-group-sm">
                             <label>Quantity in Stock</label>
                             <input type="text" readonly id="stockUpdateItemQInStock" class="form-control">
@@ -178,7 +178,7 @@ defined('BASEPATH') OR exit('');
                             </select>
                             <span class="help-block errMsg" id="stockUpdateTypeErr"></span>
                         </div>
-
+                        
                         <div class="col-sm-6 form-group-sm">
                             <label for="stockUpdateQuantity">Quantity</label>
                             <input type="number" id="stockUpdateQuantity" placeholder="Update Quantity"
@@ -186,7 +186,7 @@ defined('BASEPATH') OR exit('');
                             <span class="help-block errMsg" id="stockUpdateQuantityErr"></span>
                         </div>
                     </div>
-
+                    
                     <div class="row">
                         <div class="col-sm-12 form-group-sm">
                             <label for="stockUpdateDescription" class="">Description</label>
@@ -194,7 +194,7 @@ defined('BASEPATH') OR exit('');
                             <span class="help-block errMsg" id="stockUpdateDescriptionErr"></span>
                         </div>
                     </div>
-
+                    
                     <input type="hidden" id="stockUpdateItemId">
                 </form>
             </div>
@@ -226,20 +226,20 @@ defined('BASEPATH') OR exit('');
                             <input type="text" id="itemNameEdit" placeholder="Item Name" autofocus class="form-control checkField">
                             <span class="help-block errMsg" id="itemNameEditErr"></span>
                         </div>
-
+                        
                         <div class="col-sm-4 form-group-sm">
                             <label for="itemCode">Item Code</label>
                             <input type="text" id="itemCodeEdit" class="form-control">
                             <span class="help-block errMsg" id="itemCodeEditErr"></span>
                         </div>
-
+                        
                         <div class="col-sm-4 form-group-sm">
                             <label for="unitPrice">Unit Price</label>
                             <input type="text" id="itemPriceEdit" name="itemPrice" placeholder="Unit Price" class="form-control checkField">
                             <span class="help-block errMsg" id="itemPriceEditErr"></span>
                         </div>
                     </div>
-
+                    
                     <div class="row">
                         <div class="col-sm-12 form-group-sm">
                             <label for="itemDescriptionEdit" class="">Description (Optional)</label>
