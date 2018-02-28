@@ -40,7 +40,7 @@ defined('BASEPATH') OR exit('');
 
                     <div class="col-sm-3 form-inline form-group-sm">
                         <label for='itemSearch'><i class="fa fa-search"></i></label>
-                        <input type="search" id="itemSearch" class="form-control" placeholder="Search Group">
+                        <input type="search" id="itemSearch" class="form-control" placeholder="Search Priority Name">
                     </div>
                 </div>
             </div>

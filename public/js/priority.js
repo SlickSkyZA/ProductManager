@@ -172,10 +172,10 @@ $(document).ready(function(){
 
     $("#itemSearch").keyup(function(){
         var value = $(this).val();
-
+        //console.log("The Priority NAME value: %s", value);
         if(value){
             $.ajax({
-                url: appRoot+"search/itemsearch",
+                url: appRoot+"search/prioritySearch",
                 type: "get",
                 data: {v:value},
                 success: function(returnedData){

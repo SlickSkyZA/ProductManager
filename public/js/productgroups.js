@@ -169,10 +169,10 @@ $(document).ready(function(){
 
     $("#itemSearch").keyup(function(){
         var value = $(this).val();
-
+        //console.log("The GROUP NAME value: %s", value);
         if(value){
             $.ajax({
-                url: appRoot+"search/itemsearch",
+                url: appRoot+"search/productGroupSearch",
                 type: "get",
                 data: {v:value},
                 success: function(returnedData){

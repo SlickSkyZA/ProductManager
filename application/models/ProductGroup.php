@@ -86,9 +86,9 @@ class ProductGroup extends CI_Model{
      * @return boolean
      */
     public function itemsearch($value){
-        $q = "SELECT * FROM 'product group'
+        $q = "SELECT * FROM product_group
             WHERE
-            name LIKE '%".$this->db->escape_like_str($value)."%'";
+            Name LIKE '%".$this->db->escape_like_str($value)."%'";
 
         $run_q = $this->db->query($q, [$value, $value]);
 
