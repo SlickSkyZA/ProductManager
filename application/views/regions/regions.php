@@ -120,22 +120,16 @@ defined('BASEPATH') OR exit('');
                 <form name="addNewItemForm" id="addNewItemForm" role="form">
                     <div class="row">
                         <div class="col-sm-4 form-group-sm">
-                            <label for="itemNameEdit">Priority Name</label>
-                            <input type="text" id="itemNameEdit" placeholder="Priority Name" autofocus class="form-control checkField">
+                            <label for="itemNameEdit">Region Name(Full)</label>
+                            <input type="text" id="itemNameEdit" placeholder="Region Name(Full)" autofocus class="form-control checkField">
                             <span class="help-block errMsg" id="itemNameEditErr"></span>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-4 form-group-sm">
-                            <label for="itemValueEdit">Priority Value</label>
-                            <input type="number" id="itemValueEdit" placeholder="Priority Value" min="0" class="form-control checkField">
-                            <span class="help-block errMsg" id="itemValueEditErr"></span>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12 form-group-sm">
-                            <label for="itemDescriptionEdit" class="">Description (Optional)</label>
-                            <textarea class="form-control" id="itemDescriptionEdit" placeholder="Optional Item Description"></textarea>
+                            <label for="itemShortNameEdit">Region Name(Short)</label>
+                            <input type="text" id="itemShortNameEdit" placeholder="Region Name(Short)" min="0" class="form-control checkField">
+                            <span class="help-block errMsg" id="itemShortNameEditErr"></span>
                         </div>
                     </div>
                     <input type="hidden" id="itemIdEdit">

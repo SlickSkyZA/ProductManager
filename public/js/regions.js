@@ -202,15 +202,13 @@ $(document).ready(function(){
 
         //get item info
         var itemId = $(this).attr('id').split("-")[1];
-        var itemDesc = $("#itemDesc-"+itemId).attr('title');
         var itemName = $("#itemName-"+itemId).html();
-        var itemValue = $("#itemValue-"+itemId).html();
+        var itemShortName = $("#itemShortName-"+itemId).html();
 
         //prefill form with info
         $("#itemIdEdit").val(itemId);
         $("#itemNameEdit").val(itemName);
-        $("#itemValueEdit").val(itemValue);
-        $("#itemDescriptionEdit").val(itemDesc);
+        $("#itemShortNameEdit").val(itemShortName);
 
         //remove all error messages that might exist
         $("#editItemFMsg").html("");
@@ -228,13 +226,12 @@ $(document).ready(function(){
 
     $("#editItemSubmit").click(function(){
         var itemName = $("#itemNameEdit").val();
-        var itemValue = $("#itemValueEdit").val();
-        var itemDesc = $("#itemDescriptionEdit").val();
+        var itemShortName = $("#itemShortNameEdit").val();
         var itemId = $("#itemIdEdit").val();
 
-        if(!itemName || !itemId || !itemValue){
-            !itemName ? $("#itemNameEditErr").html("Priority name cannot be empty") : "";
-            !itemValue ? $("#itemValueEditErr").html("Priority value cannot be empty") : "";
+        if(!itemName || !itemId || !itemShortName){
+            !itemName ? $("#itemNameEditErr").html("Region name cannot be empty") : "";
+            !itemShortName ? $("#itemShortNameEditErr").html("Region name cannot be empty") : "";
             !itemId ? $("#editItemFMsg").html("Unknown Priority") : "";
             return;
         }
@@ -243,11 +240,11 @@ $(document).ready(function(){
 
         $.ajax({
             method: "POST",
-            url: appRoot+"priorities/edit",
-            data: {itemName:itemName, itemValue:itemValue, itemDesc:itemDesc, _iId:itemId}
+            url: appRoot+"regions/edit",
+            data: {itemName:itemName, itemShortName:itemShortName, _iId:itemId}
         }).done(function(returnedData){
             if(returnedData.status === 1){
-                $("#editItemFMsg").css('color', 'green').html("Priority successfully updated");
+                $("#editItemFMsg").css('color', 'green').html("Customer Region successfully updated");
 
                 setTimeout(function(){
                     $("#editItemModal").modal('hide');
@@ -260,7 +257,7 @@ $(document).ready(function(){
                 $("#editItemFMsg").css('color', 'red').html("One or more required fields are empty or not properly filled");
 
                 $("#itemNameEditErr").html(returnedData.itemName);
-                $("#itemValueEditErr").html(returnedData.itemValue);
+                $("#itemShortNameEditErr").html(returnedData.itemShortName);
             }
         }).fail(function(){
             $("#editItemFMsg").css('color', 'red').html("Unable to process your request at this time. Please check your internet connection and try again");

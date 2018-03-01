@@ -214,11 +214,11 @@ class Region extends CI_Model{
     * @param type $itemDesc
     * @param type $itemPrice
     */
-   public function edit($itemId, $itemName, $itemValue, $itemDesc){
-       $data = ['Name'=>$itemName, 'Value'=>$itemValue, 'Notes'=>$itemDesc];
+   public function edit($itemId, $itemName, $itemShortName){
+       $data = ['Name'=>$itemName, 'ShortName'=>$itemShortName];
 
        $this->db->where('id', $itemId);
-       $this->db->update('priority', $data);
+       $this->db->update('customer_region', $data);
 
        return TRUE;
    }

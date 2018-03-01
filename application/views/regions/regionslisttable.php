@@ -26,7 +26,7 @@
                     <th class="itemSN"><?=$sn?>.</th>
                     <td><span id="itemID-<?=$get->id?>"><?=$get->id?></span></td>
                     <td><span id="itemName-<?=$get->id?>"><?=$get->Name?></td>
-                    <td><span id="itemValue-<?=$get->id?>"><?=$get->ShortName?></td>
+                    <td><span id="itemShortName-<?=$get->id?>"><?=$get->ShortName?></td>
                     <td><span id="itemAddDate-<?=$get->id?>"><?=$get->AddedDate?></td>
                     <td><span id="itemUpdateDate-<?=$get->id?>"><?=$get->UpdatedDate?></td>
                     <td class="text-center text-primary">

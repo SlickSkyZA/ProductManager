@@ -274,18 +274,16 @@ class Regions extends CI_Controller{
         $this->form_validation->set_rules('_iId', 'Item ID', ['required', 'trim', 'numeric']);
         $this->form_validation->set_rules('itemName', 'Priority Name', ['required', 'trim',
             'callback_crosscheckName['.$this->input->post('_iId', TRUE).']'], ['required'=>'required']);
-        $this->form_validation->set_rules('itemValue', 'Priority Value', ['required', 'trim', 'numeric',
-            'callback_crosscheckValue['.$this->input->post('_iId', TRUE).']'], ['required'=>"required"]);
-        $this->form_validation->set_rules('itemDesc', 'Item Description', ['trim']);
+        $this->form_validation->set_rules('itemShortName', 'Priority Value', ['required', 'trim',
+            'callback_crosscheckShortName['.$this->input->post('_iId', TRUE).']'], ['required'=>"required"]);
 
         if($this->form_validation->run() !== FALSE){
             $itemId = set_value('_iId');
-            $itemDesc = set_value('itemDesc');
             $itemName = set_value('itemName');
-            $itemValue = set_value('itemValue');
+            $itemShortName = set_value('itemShortName');
 
             //update item in db
-            $updated = $this->priority->edit($itemId, $itemName, $itemValue, $itemDesc);
+            $updated = $this->region->edit($itemId, $itemName, $itemShortName);
 
             $json['status'] = $updated ? 1 : 0;
 
@@ -293,7 +291,7 @@ class Regions extends CI_Controller{
             //function header: addevent($event, $eventRowId, $eventDesc, $eventTable, $staffId)
             $desc = "Details of item with code '$itemId' was updated";
 
-            $this->genmod->addevent("Group Info Update", $itemId, $desc, 'product group', $this->session->admin_id);
+            $this->genmod->addevent("Region Info Update", $itemId, $desc, 'Customer Region', $this->session->admin_id);
         }
 
         else{
@@ -317,7 +315,7 @@ class Regions extends CI_Controller{
 
     public function crosscheckName($itemName, $itemId){
         //check db to ensure name was previously used for the item we are updating
-        $itemWithName = $this->genmod->getTableCol('priority', 'id', 'Name', $itemName);
+        $itemWithName = $this->genmod->getTableCol('customer_region', 'id', 'Name', $itemName);
 
         //if item name does not exist or it exist but it's the name of current item
         if(!$itemWithName || ($itemWithName == $itemId)){
@@ -346,9 +344,9 @@ class Regions extends CI_Controller{
      * @param type $item_id
      * @return boolean
      */
-    public function crosscheckValue($item_code, $item_id){
+    public function crosscheckShortName($item_code, $item_id){
         //check db to ensure item code was previously used for the item we are updating
-        $item_with_code = $this->genmod->getTableCol('priority', 'id', 'Value', $item_code);
+        $item_with_code = $this->genmod->getTableCol('customer_region', 'id', 'ShortName', $item_code);
 
         //if item code does not exist or it exist but it's the code of current item
         if(!$item_with_code || ($item_with_code == $item_id)){
@@ -356,7 +354,7 @@ class Regions extends CI_Controller{
         }
 
         else{//if it exist
-            $this->form_validation->set_message('crosscheckValue', 'There is an item with this value');
+            $this->form_validation->set_message('crosscheckShortName', 'There is an item with this value');
 
             return FALSE;
         }
