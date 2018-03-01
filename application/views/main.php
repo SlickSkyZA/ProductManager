@@ -205,14 +205,14 @@ defined('BASEPATH') OR exit('');
                         <li class="<?= $pageTitle == 'Product Platform' ? 'active' : '' ?>">
                             <a href="<?= site_url('platforms') ?>">
                                 <i class="fa fa-tag"></i>
-                                Product Platform
+                                Product Platforms
                             </a>
                         </li>
 
-                        <li class="<?= $pageTitle == 'Priority' ? 'active' : '' ?>">
-                            <a href="<?= site_url('priorities') ?>">
+                        <li class="<?= $pageTitle == 'Product Status' ? 'active' : '' ?>">
+                            <a href="<?= site_url('status') ?>">
                                 <i class="fa fa-tag"></i>
-                                Priority
+                                Product Status
                             </a>
                         </li>
 
@@ -230,17 +230,17 @@ defined('BASEPATH') OR exit('');
                             </a>
                         </li>
 
-                        <li class="<?= $pageTitle == 'Status' ? 'active' : '' ?>">
-                            <a href="<?= site_url('status') ?>">
+                        <li class="<?= $pageTitle == 'Customer Venders' ? 'active' : '' ?>">
+                            <a href="<?= site_url('venders') ?>">
                                 <i class="fa fa-tag"></i>
-                                Status
+                                Customer Venders
                             </a>
                         </li>
 
-                        <li class="<?= $pageTitle == 'Competitors' ? 'active' : '' ?>">
-                            <a href="<?= site_url('competitors') ?>">
+                        <li class="<?= $pageTitle == 'Priority' ? 'active' : '' ?>">
+                            <a href="<?= site_url('priorities') ?>">
                                 <i class="fa fa-tag"></i>
-                                Competitors
+                                Priority
                             </a>
                         </li>
 
