@@ -318,7 +318,7 @@ $(document).ready(function(){
                 displayFlashMsg('Please wait...', spinnerClass, 'black');
 
                 $.ajax({
-                    url: appRoot+"priorities/delete",
+                    url: appRoot+"platforms/delete",
                     method: "POST",
                     data: {i:itemId}
                 }).done(function(rd){

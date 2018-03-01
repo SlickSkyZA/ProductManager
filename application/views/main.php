@@ -84,61 +84,6 @@ defined('BASEPATH') OR exit('');
                             </a>
                         </li>
 
-                        <li class="<?= $pageTitle == 'Products' ? 'active' : '' ?>">
-                            <a href="<?= site_url('products') ?>">
-                                <i class="fa fa-archive"></i>
-                                Products
-                            </a>
-                        </li>
-
-                        <li class="<?= $pageTitle == 'ProductGroups' ? 'active' : '' ?>">
-                            <a href="<?= site_url('productGroups') ?>">
-                                <i class="fa fa-tag"></i>
-                                Product Groups
-                            </a>
-                        </li>
-
-                        <li class="<?= $pageTitle == 'Priorities' ? 'active' : '' ?>">
-                            <a href="<?= site_url('priorities') ?>">
-                                <i class="fa fa-tasks"></i>
-                                Priority
-                            </a>
-                        </li>
-
-                        <li class="<?= $pageTitle == 'OEM Region' ? 'active' : '' ?>">
-                            <a href="<?= site_url('region') ?>">
-                                <i class="fa fa-tasks"></i>
-                                OEM Region
-                            </a>
-                        </li>
-
-                        <li class="<?= $pageTitle == 'DSP Platform' ? 'active' : '' ?>">
-                            <a href="<?= site_url('platform') ?>">
-                                <i class="fa fa-tasks"></i>
-                                DSP Platform
-                            </a>
-                        </li>
-
-                        <li class="<?= $pageTitle == 'Status' ? 'active' : '' ?>">
-                            <a href="<?= site_url('status') ?>">
-                                <i class="fa fa-tasks"></i>
-                                Status
-                            </a>
-                        </li>
-
-                        <li class="<?= $pageTitle == 'Competitors' ? 'active' : '' ?>">
-                            <a href="<?= site_url('competitors') ?>">
-                                <i class="fa fa-tasks"></i>
-                                Competitors
-                            </a>
-                        </li>
-
-                        <li class="<?= $pageTitle == 'Curtomers' ? 'active' : '' ?>">
-                            <a href="<?= site_url('curstomers') ?>">
-                                <i class="fa fa-tasks"></i>
-                                Curtomers
-                            </a>
-                        </li>
                         <?php if($this->session->admin_role === "Super"):?>
                         <!--
 
@@ -271,17 +216,17 @@ defined('BASEPATH') OR exit('');
                             </a>
                         </li>
 
-                        <li class="<?= $pageTitle == 'Curtomers' ? 'active' : '' ?>">
-                            <a href="<?= site_url('curstomers') ?>">
+                        <li class="<?= $pageTitle == 'Customers' ? 'active' : '' ?>">
+                            <a href="<?= site_url('customers') ?>">
                                 <i class="fa fa-tag"></i>
-                                Curtomers
+                                Customers
                             </a>
                         </li>
 
                         <li class="<?= $pageTitle == 'Region(OEM)' ? 'active' : '' ?>">
                             <a href="<?= site_url('regions') ?>">
                                 <i class="fa fa-tag"></i>
-                                Cusomer Regions
+                                Customer Regions
                             </a>
                         </li>
 

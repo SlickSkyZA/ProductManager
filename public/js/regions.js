@@ -320,7 +320,7 @@ $(document).ready(function(){
                 displayFlashMsg('Please wait...', spinnerClass, 'black');
 
                 $.ajax({
-                    url: appRoot+"priorities/delete",
+                    url: appRoot+"regions/delete",
                     method: "POST",
                     data: {i:itemId}
                 }).done(function(rd){

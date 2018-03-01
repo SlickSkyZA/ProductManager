@@ -1,6 +1,28 @@
 <?php
 defined('BASEPATH') OR exit('');
+
+$current_regions = [];
+$current_priorities = [];
+
+if(isset($priorities) && !empty($priorities)){
+    foreach($priorities as $get){
+        $current_priorities[$get->id] = $get->Name;
+    }
+}
+
+if(isset($product_regions) && !empty($product_regions)){
+    foreach($product_regions as $get){
+        $current_regions[$get->id] = $get->Name;
+    }
+}
 ?>
+
+<style href="<?=base_url('public/ext/datetimepicker/bootstrap-datepicker.min.css')?>" rel="stylesheet"></style>
+
+<script>
+    var currentRegions = <?=json_encode($current_regions)?>;
+    var currentPriorities = <?=json_encode($current_priorities)?>;
+</script>
 
 <div class="pwell hidden-print">
     <div class="row">
@@ -9,7 +31,7 @@ defined('BASEPATH') OR exit('');
             <div class="row">
                 <div class="col-sm-12">
                     <div class="col-sm-2 form-inline form-group-sm">
-                        <button class="btn btn-primary btn-sm" id='createItem'>Add New Group</button>
+                        <button class="btn btn-primary btn-sm" id='createItem'>Add New Customers</button>
                     </div>
 
                     <div class="col-sm-3 form-inline form-group-sm">
@@ -30,16 +52,18 @@ defined('BASEPATH') OR exit('');
                     <div class="col-sm-4 form-group-sm form-inline">
                         <label for="itemsListSortBy">Sort by</label>
                         <select id="itemsListSortBy" class="form-control">
-                            <option value="name-ASC">Group Name (A-Z)</option>
-                            <option value="id-ASC">ID (Ascending)</option>
-                            <option value="name-DESC">Item Name (Z-A)</option>
-                            <option value="id-DESC">ID Code (Descending)</option>
+                            <option value="Name-ASC">Customer Name (A-Z)</option>
+                            <option value="RegionID-ASC">Region (Ascending)</option>
+                            <option value="PriorityValue-ASC">Priority (Ascending)</option>
+                            <option value="Name-DESC">Customer Name (Z-A)</option>
+                            <option value="RegionID-DESC">Region (Descending)</option>
+                            <option value="PriorityValue-DESC">Priority (Descending)</option>
                         </select>
                     </div>
 
                     <div class="col-sm-3 form-inline form-group-sm">
                         <label for='itemSearch'><i class="fa fa-search"></i></label>
-                        <input type="search" id="itemSearch" class="form-control" placeholder="Search Group Name">
+                        <input type="search" id="itemSearch" class="form-control" placeholder="Search Customer Name">
                     </div>
                 </div>
             </div>
@@ -64,10 +88,27 @@ defined('BASEPATH') OR exit('');
 
                         <div class="row">
                             <div class="col-sm-12 form-group-sm">
-                                <label for="groupName">Group Name</label>
-                                <input type="text" id="groupName" name="groupName" placeholder="Group Name" maxlength="80"
-                                    class="form-control" onchange="checkField(this.value, 'groupNameErr')">
-                                <span class="help-block errMsg" id="groupNameErr"></span>
+                                <label for="customerName">Customer Name</label>
+                                <input type="text" id="customerName" name="customerName" placeholder="Customer Name" maxlength="80"
+                                    class="form-control" onchange="checkField(this.value, 'customerNameErr')">
+                                <span class="help-block errMsg" id="customerNameErr"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 form-group-sm">
+                                <label for="customerRegion">Customer Region</label>
+                                <select class="form-control selectedGroupDefault" id="customerRegion" name="customerRegion" maxlength="80"
+                                    onchange="checkField(this.value, 'customerRegionErr')"></select>
+                                <span class="help-block errMsg" id="customerRegionErr"></span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-12 form-group-sm">
+                                <label for="priority">Priority</label>
+                                <select class="form-control selectedPriorityDefault" id="priority" name="priority" maxlength="80"
+                                    onchange="checkField(this.value, 'priorityErr')"></select>
+                                <span class="help-block errMsg" id="priorityErr"></span>
                             </div>
                         </div>
 
@@ -81,7 +122,7 @@ defined('BASEPATH') OR exit('');
                         <br>
                         <div class="row text-center">
                             <div class="col-sm-6 form-group-sm">
-                                <button class="btn btn-primary btn-sm" id="addNewItem">Add Group</button>
+                                <button class="btn btn-primary btn-sm" id="addNewItem">Add Customer</button>
                             </div>
 
                             <div class="col-sm-6 form-group-sm">
@@ -113,19 +154,33 @@ defined('BASEPATH') OR exit('');
         <div class="modal-content">
             <div class="modal-header">
                 <button class="close" data-dismiss="modal">&times;</button>
-                <h4 class="text-center">Edit Group Name</h4>
+                <h4 class="text-center">Edit Customer Info</h4>
                 <div id="editItemFMsg" class="text-center"></div>
             </div>
             <div class="modal-body">
                 <form name="addNewItemForm" id="addNewItemForm" role="form">
                     <div class="row">
                         <div class="col-sm-4 form-group-sm">
-                            <label for="itemNameEdit">Group Name</label>
-                            <input type="text" id="itemNameEdit" placeholder="Group Name" autofocus class="form-control checkField">
+                            <label for="itemNameEdit">Customer Name</label>
+                            <input type="text" id="itemNameEdit" placeholder="Priority Name" autofocus class="form-control  checkField">
                             <span class="help-block errMsg" id="itemNameEditErr"></span>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-sm-4 form-group-sm">
+                            <label for="itemRegionEdit">Customer Region</label>
+                            <select class="form-control selectedGroupDefault checkField" id="itemRegionEdit" name="itemRegionEdit"></select>
+                            <span class="help-block errMsg" id="itemRegionEditErr"></span>
+                        </div>
+                    </div>
 
+                    <div class="row">
+                        <div class="col-sm-4 form-group-sm">
+                            <label for="itemPriorityEdit">Product Priority</label>
+                            <select class="form-control selectedPriorityDefault checkField" id="itemPriorityEdit" name="itemPriorityEdit"></select>
+                            <span class="help-block errMsg" id="itemPriorityEditErr"></span>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-sm-12 form-group-sm">
                             <label for="itemDescriptionEdit" class="">Description (Optional)</label>
@@ -142,5 +197,10 @@ defined('BASEPATH') OR exit('');
         </div>
     </div>
 </div>
-<!--end of modal--->
-<script src="<?=base_url()?>public/js/productgroups.js"></script>
+
+<!---End of copy of div to clone when adding more items to sales transaction---->
+<script src="<?=base_url()?>public/js/customers.js"></script>
+<script src="<?=base_url('public/ext/datetimepicker/bootstrap-datepicker.min.js')?>"></script>
+<script src="<?=base_url('public/ext/datetimepicker/jquery.timepicker.min.js')?>"></script>
+<script src="<?=base_url()?>public/ext/datetimepicker/datepair.min.js"></script>
+<script src="<?=base_url()?>public/ext/datetimepicker/jquery.datepair.min.js"></script>
