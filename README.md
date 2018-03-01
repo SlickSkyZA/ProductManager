@@ -1,5 +1,5 @@
-# Mini-Inventory-and-Sales-Management-System
-An Inventory and Sales Management System written in PHP (codeIgniter) with support for MySQL and Sqlite3 databases
+# Product Manager
+An Product Manage System written in PHP (codeIgniter) with support for MySQL and Sqlite3 databases
 
 
 # Features
