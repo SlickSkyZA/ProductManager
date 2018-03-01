@@ -15,8 +15,11 @@ DROP TABLE IF EXISTS `Customer`;
 CREATE TABLE `Customer` (
   `id` INTEGER NOT NULL AUTO_INCREMENT,
   `Name` VARCHAR(256) NOT NULL DEFAULT 'NULL',
-  `Priority` INTEGER NOT NULL DEFAULT 0,
+  `PriorityID` INTEGER NOT NULL DEFAULT 0,
   `RegionID` INTEGER NOT NULL DEFAULT 0,
+  `AddedDate` DATETIME NOT NULL,
+  `UpdatedDate` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `Notes` MEDIUMTEXT NULL,
   PRIMARY KEY (`id`)
 );
 
@@ -39,52 +42,52 @@ CREATE TABLE `Competitor` (
 --
 -- ---
 
-DROP TABLE IF EXISTS `Product`;
-
-CREATE TABLE `Product` (
-  `id` INTEGER NOT NULL AUTO_INCREMENT,
-  `Name` VARCHAR(256) NOT NULL DEFAULT 'NULL',
-  `GroupID` INTEGER NOT NULL,
-  `Version` VARCHAR(256) DEFAULT 'NULL',
-  `PriorityID` INTEGER NOT NULL,
-  `AddedDate` DATETIME NOT NULL,
-  `UpdatedDate` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `Notes` MEDIUMTEXT NULL,
-  PRIMARY KEY (`id`)
-);
-
--- ---
--- Table 'Product Group'
---
--- ---
-
-DROP TABLE IF EXISTS `Product_Group`;
-
-CREATE TABLE `Product_Group` (
-  `id` INTEGER NOT NULL AUTO_INCREMENT,
-  `Name` VARCHAR(256) NOT NULL DEFAULT 'NULL',
-  `AddedDate` DATETIME NOT NULL,
-  `UpdatedDate` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `Notes` MEDIUMTEXT NULL,
-  PRIMARY KEY (`id`)
-);
-
--- ---
--- Table 'Product Group'
---
--- ---
-
-DROP TABLE IF EXISTS `Priority`;
-
-CREATE TABLE `Priority` (
-  `id` INTEGER NOT NULL AUTO_INCREMENT,
-  `Value` INTEGER NOT NULL,
-  `Name` VARCHAR(256) NOT NULL DEFAULT 'NULL',
-  `AddedDate` DATETIME NOT NULL,
-  `UpdatedDate` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `Notes` MEDIUMTEXT NULL,
-  PRIMARY KEY (`id`)
-);
+-- DROP TABLE IF EXISTS `Product`;
+-- 
+-- CREATE TABLE `Product` (
+--   `id` INTEGER NOT NULL AUTO_INCREMENT,
+--   `Name` VARCHAR(256) NOT NULL DEFAULT 'NULL',
+--   `GroupID` INTEGER NOT NULL,
+--   `Version` VARCHAR(256) DEFAULT 'NULL',
+--   `PriorityID` INTEGER NOT NULL,
+--   `AddedDate` DATETIME NOT NULL,
+--   `UpdatedDate` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+--   `Notes` MEDIUMTEXT NULL,
+--   PRIMARY KEY (`id`)
+-- );
+-- 
+-- -- ---
+-- -- Table 'Product Group'
+-- --
+-- -- ---
+-- 
+-- DROP TABLE IF EXISTS `Product_Group`;
+-- 
+-- CREATE TABLE `Product_Group` (
+--   `id` INTEGER NOT NULL AUTO_INCREMENT,
+--   `Name` VARCHAR(256) NOT NULL DEFAULT 'NULL',
+--   `AddedDate` DATETIME NOT NULL,
+--   `UpdatedDate` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+--   `Notes` MEDIUMTEXT NULL,
+--   PRIMARY KEY (`id`)
+-- );
+-- 
+-- -- ---
+-- -- Table 'Product Group'
+-- --
+-- -- ---
+-- 
+-- DROP TABLE IF EXISTS `Priority`;
+-- 
+-- CREATE TABLE `Priority` (
+--   `id` INTEGER NOT NULL AUTO_INCREMENT,
+--   `Value` INTEGER NOT NULL,
+--   `Name` VARCHAR(256) NOT NULL DEFAULT 'NULL',
+--   `AddedDate` DATETIME NOT NULL,
+--   `UpdatedDate` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+--   `Notes` MEDIUMTEXT NULL,
+--   PRIMARY KEY (`id`)
+-- );
 
 -- ---
 -- Table 'Product Status'
@@ -99,19 +102,22 @@ CREATE TABLE `Product_Status` (
   PRIMARY KEY (`id`)
 );
 
--- ---
--- Table 'Product Platform'
---
--- ---
-
-DROP TABLE IF EXISTS `Product_Platform`;
-
-CREATE TABLE `Product_Platform` (
-  `id` INTEGER NOT NULL AUTO_INCREMENT,
-  `Name` VARCHAR(256) NOT NULL DEFAULT 'NULL',
-  PRIMARY KEY (`id`)
-);
-
+-- -- ---
+-- -- Table 'Product Platform'
+-- --
+-- -- ---
+-- 
+-- DROP TABLE IF EXISTS `Product_Platform`;
+-- 
+-- CREATE TABLE `Product_Platform` (
+--   `id` INTEGER NOT NULL AUTO_INCREMENT,
+--   `Name` VARCHAR(256) NOT NULL DEFAULT 'NULL',
+--   `AddedDate` DATETIME NOT NULL,
+--   `UpdatedDate` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+--   `Notes` MEDIUMTEXT NULL,
+--   PRIMARY KEY (`id`)
+-- );
+-- 
 -- ---
 -- Table 'XSCP'
 --
@@ -146,25 +152,28 @@ CREATE TABLE `Customer_Status` (
   PRIMARY KEY (`id`)
 );
 
--- ---
--- Table 'Customer Region'
---
--- ---
-
-DROP TABLE IF EXISTS `Customer_Region`;
-
-CREATE TABLE `Customer_Region` (
-  `id` INTEGER NOT NULL AUTO_INCREMENT,
-  `Name` VARCHAR(256) NOT NULL DEFAULT 'NULL',
-  `ShortName` VARCHAR(256) NOT NULL DEFAULT 'NULL',
-  PRIMARY KEY (`id`)
-);
+-- -- ---
+-- -- Table 'Customer Region'
+-- --
+-- -- ---
+-- 
+-- DROP TABLE IF EXISTS `Customer_Region`;
+-- 
+-- CREATE TABLE `Customer_Region` (
+--   `id` INTEGER NOT NULL AUTO_INCREMENT,
+--   `Name` VARCHAR(256) NOT NULL DEFAULT 'NULL',
+--   `ShortName` VARCHAR(256) NOT NULL DEFAULT 'NULL',
+--   `AddedDate` DATETIME NOT NULL,
+--   `UpdatedDate` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+--   PRIMARY KEY (`id`)
+-- );
 
 -- ---
 -- Foreign Keys
 -- ---
 
 ALTER TABLE `Customer` ADD FOREIGN KEY (RegionID) REFERENCES `Customer_Region` (`id`);
+ALTER TABLE `Customer` ADD FOREIGN KEY (PriorityID) REFERENCES `Priority` (`id`);
 ALTER TABLE `Product` ADD FOREIGN KEY (GroupID) REFERENCES `Product_Group` (`id`);
 ALTER TABLE `Product` ADD FOREIGN KEY (PriorityID) REFERENCES `Priority` (`id`);
 ALTER TABLE `XSCP` ADD FOREIGN KEY (StatusID) REFERENCES `Product_Status` (`id`);
