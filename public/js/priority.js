@@ -248,7 +248,7 @@ $(document).ready(function(){
             data: {itemName:itemName, itemValue:itemValue, itemDesc:itemDesc, _iId:itemId}
         }).done(function(returnedData){
             if(returnedData.status === 1){
-                $("#editItemFMsg").css('color', 'green').html("Group successfully updated");
+                $("#editItemFMsg").css('color', 'green').html("Priority successfully updated");
 
                 setTimeout(function(){
                     $("#editItemModal").modal('hide');

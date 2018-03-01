@@ -91,9 +91,13 @@ class Product extends CI_Model{
      * @return boolean
      */
     public function itemsearch($value){
-        $q = "SELECT * FROM priority
-            WHERE
-            Name LIKE '%".$this->db->escape_like_str($value)."%'";
+        $q = "SELECT product.id, product.Name, product_group.Name GroupName, product.Version,
+                priority.Name PriorityName, priority.Value PriorityValue, product.AddedDate, product.UpdatedDate, product.Notes
+                FROM product
+                JOIN product_group ON product.GroupID = product_group.id
+                JOIN priority ON product.PriorityID = priority.id
+                WHERE
+                product.Name LIKE '%".$this->db->escape_like_str($value)."%'";
 
         $run_q = $this->db->query($q, [$value, $value]);
 
@@ -219,11 +223,11 @@ class Product extends CI_Model{
     * @param type $itemDesc
     * @param type $itemPrice
     */
-   public function edit($itemId, $itemName, $itemValue, $itemDesc){
-       $data = ['Name'=>$itemName, 'Value'=>$itemValue, 'Notes'=>$itemDesc];
+   public function edit($itemId, $itemName, $itemGroupID, $itemPriorityID, $itemVersion, $itemDesc){
+       $data = ['Name'=>$itemName, 'GroupID'=>$itemGroupID, 'PriorityID'=>$itemPriorityID, 'Version'=>$itemVersion, 'Notes'=>$itemDesc];
 
        $this->db->where('id', $itemId);
-       $this->db->update('priority', $data);
+       $this->db->update('product', $data);
 
        return TRUE;
    }

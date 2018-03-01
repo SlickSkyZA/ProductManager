@@ -232,7 +232,7 @@ $(document).ready(function(){
         //console.log("The Priority NAME value: %s", value);
         if(value){
             $.ajax({
-                url: appRoot+"search/prioritySearch",
+                url: appRoot+"search/productSearch",
                 type: "get",
                 data: {v:value},
                 success: function(returnedData){
@@ -262,12 +262,14 @@ $(document).ready(function(){
         var itemId = $(this).attr('id').split("-")[1];
         var itemDesc = $("#itemDesc-"+itemId).attr('title');
         var itemName = $("#itemName-"+itemId).html();
-        var itemValue = $("#itemValue-"+itemId).html();
+        var itemGroup = $("#itemGroup-"+itemId).html();
+        var itemPriority = $("#itemPriority-"+itemId).html();
+        var itemVersion = $("#itemVersion-"+itemId).html();
 
         //prefill form with info
         $("#itemIdEdit").val(itemId);
         $("#itemNameEdit").val(itemName);
-        $("#itemValueEdit").val(itemValue);
+        $("#itemVersionEdit").val(itemVersion);
         $("#itemDescriptionEdit").val(itemDesc);
 
         //remove all error messages that might exist
@@ -276,6 +278,67 @@ $(document).ready(function(){
 
         //launch modal
         $("#editItemModal").modal('show');
+
+        //$(".selectedItemDefault").addClass("selectedItem").val("");
+
+        //loop through the currentItems variable to add the items to the select input
+		return new Promise((resolve, reject)=>{
+			//if an item has been selected (i.e. added to the current transaction), do not add it to the list. This way, an item will appear just once.
+			//We start by forming an array of all selected items, then skip that item in the loop appending items to select dropdown
+			var selectedGroupsArr = [];
+            var selectedPrioritysArr = [];
+
+			return new Promise((res, rej)=>{
+				//$(".selectedItem").each(function(){
+				//	//push the selected value (which is the item code [a key in currentItems object]) to the array
+				//	$(this).val() ? selectedItemsArr.push($(this).val()) : "";
+				//});
+
+				res();
+			}).then(()=>{
+                $(".selectedGroupDefault").empty();
+				for(let key in currentGroups){
+					//if the current key in the loop is in our 'selectedItemsArr' array
+					if(!inArray(key, selectedGroupsArr)){
+						//if the item has not been selected, append it to the select list
+                        if (currentGroups[key] == itemGroup) {
+                            $(".selectedGroupDefault").append("<option value='"+key+"' selected>"+currentGroups[key]+"</option>");
+                        } else {
+                            $(".selectedGroupDefault").append("<option value='"+key+"'>"+currentGroups[key]+"</option>");
+                        }
+					}
+				}
+
+				//prepend 'select item' to the select option
+				$(".selectedGroupDefault").prepend("<option value=''>Select Group</option>");
+
+                $(".selectedPriorityDefault").empty();
+                for(let key in currentPriorities){
+					//if the current key in the loop is in our 'selectedItemsArr' array
+					if(!inArray(key, selectedPrioritysArr)){
+						//if the item has not been selected, append it to the select list
+                        if (currentPriorities[key] == itemPriority) {
+	                        $(".selectedPriorityDefault").append("<option value='"+key+"' selected>"+currentPriorities[key]+"</option>");
+                        } else {
+                            $(".selectedPriorityDefault").append("<option value='"+key+"'>"+currentPriorities[key]+"</option>");
+                        }
+					}
+				}
+
+				//prepend 'select item' to the select option
+				$(".selectedPriorityDefault").prepend("<option value=''>Select Priority</option>");
+
+				resolve(selectedGroupsArr, selectedPrioritysArr);
+			});
+		}).then((selectedGroupsArray, selectedPrioritysArray)=>{
+				//add select2 to the 'select input'
+			    $('.selectedGroupDefault').select2({dropdownAutoWidth : true, width : "100%"});
+                $('.selectedPriorityDefault').select2({dropdownAutoWidth : true, width : "100%"});
+		}).catch(()=>{
+			console.log('outer promise err');
+		});
+
+        return false;
     });
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -286,26 +349,32 @@ $(document).ready(function(){
 
     $("#editItemSubmit").click(function(){
         var itemName = $("#itemNameEdit").val();
-        var itemValue = $("#itemValueEdit").val();
+        var itemGroup = $("#itemGroupEdit").val();
+        var itemPriority = $("#itemPriorityEdit").val();
+        var itemVersion = $("#itemVersionEdit").val();
         var itemDesc = $("#itemDescriptionEdit").val();
         var itemId = $("#itemIdEdit").val();
 
-        if(!itemName || !itemId || !itemValue){
-            !itemName ? $("#itemNameEditErr").html("Priority name cannot be empty") : "";
-            !itemValue ? $("#itemValueEditErr").html("Priority value cannot be empty") : "";
+        if(!itemName || !itemId || !itemGroup || !itemPriority){
+            !itemName ? $("#itemNameEditErr").html("Product name cannot be empty") : "";
+            !itemGroup ? $("#itemGroupEditErr").html("Product group cannot be empty") : "";
+            !itemPriority ? $("#itemPriorityEditErr").html("Product priority cannot be empty") : "";
             !itemId ? $("#editItemFMsg").html("Unknown Priority") : "";
             return;
         }
+
+        var itemGroupID = itemGroup;
+        var itemPriorityID = itemPriority;
 
         $("#editItemFMsg").css('color', 'black').html("<i class='"+spinnerClass+"'></i> Processing your request....");
 
         $.ajax({
             method: "POST",
-            url: appRoot+"priorities/edit",
-            data: {itemName:itemName, itemValue:itemValue, itemDesc:itemDesc, _iId:itemId}
+            url: appRoot+"products/edit",
+            data: {itemName:itemName, itemGroupID:itemGroupID, itemPriorityID:itemPriorityID, itemVersion:itemVersion, itemDesc:itemDesc, _iId:itemId}
         }).done(function(returnedData){
             if(returnedData.status === 1){
-                $("#editItemFMsg").css('color', 'green').html("Group successfully updated");
+                $("#editItemFMsg").css('color', 'green').html("Product successfully updated");
 
                 setTimeout(function(){
                     $("#editItemModal").modal('hide');

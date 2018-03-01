@@ -139,6 +139,79 @@ class Products extends CI_Controller{
     }
 
     /*
+     ********************************************************************************************************************************
+     ********************************************************************************************************************************
+     ********************************************************************************************************************************
+     ********************************************************************************************************************************
+     ********************************************************************************************************************************
+     */
+
+     public function edit(){
+         $this->genlib->ajaxOnly();
+
+         $this->load->library('form_validation');
+
+         $this->form_validation->set_error_delimiters('', '');
+        //itemName:itemName, itemGroupID:itemGroupID, itemPriorityID:itemPriorityID, itemVersion:itemVersion, itemDesc:itemDesc, _iId:itemId
+         $this->form_validation->set_rules('_iId', 'Item ID', ['required', 'trim', 'numeric']);
+         $this->form_validation->set_rules('itemName', 'Product Name', ['required', 'trim',
+             'callback_crosscheckName['.$this->input->post('_iId', TRUE).']'], ['required'=>'required']);
+         $this->form_validation->set_rules('itemDesc', 'Product Description', ['trim']);
+         $this->form_validation->set_rules('itemVersion', 'Product Version', ['trim']);
+
+         if($this->form_validation->run() !== FALSE){
+             $itemId = set_value('_iId');
+             $itemDesc = set_value('itemDesc');
+             $itemName = set_value('itemName');
+             $itemGroupID = set_value('itemGroupID');
+             $itemPriorityID = set_value('itemPriorityID');
+             $itemVersion = set_value('itemVersion');
+
+             //update item in db
+             $updated = $this->product->edit($itemId, $itemName, $itemGroupID, $itemPriorityID, $itemVersion, $itemDesc);
+
+             $json['status'] = $updated ? 1 : 0;
+
+             //add event to log
+             //function header: addevent($event, $eventRowId, $eventDesc, $eventTable, $staffId)
+             $desc = "Details of item with code '$itemId' was updated";
+
+             $this->genmod->addevent("Group Info Update", $itemId, $desc, 'product group', $this->session->admin_id);
+         }
+
+         else{
+             $json['status'] = 0;
+             $json = $this->form_validation->error_array();
+         }
+
+         $this->output->set_content_type('application/json')->set_output(json_encode($json));
+    }
+
+    /*
+     ********************************************************************************************************************************
+     ********************************************************************************************************************************
+     ********************************************************************************************************************************
+     ********************************************************************************************************************************
+     ********************************************************************************************************************************
+     */
+
+     public function crosscheckName($itemName, $itemId){
+         //check db to ensure name was previously used for the item we are updating
+         $itemWithName = $this->genmod->getTableCol('product', 'id', 'Name', $itemName);
+
+         //if item name does not exist or it exist but it's the name of current item
+         if(!$itemWithName || ($itemWithName == $itemId)){
+             return TRUE;
+         }
+
+         else{//if it exist
+             $this->form_validation->set_message('crosscheckName', 'There is an item with this name');
+
+             return FALSE;
+         }
+     }
+
+    /*
     ********************************************************************************************************************************
     ********************************************************************************************************************************
     ********************************************************************************************************************************

@@ -53,16 +53,18 @@ if(isset($product_group) && !empty($product_group)){
                     <div class="col-sm-4 form-group-sm form-inline">
                         <label for="itemsListSortBy">Sort by</label>
                         <select id="itemsListSortBy" class="form-control">
-                            <option value="Name-ASC">Priority Name (A-Z)</option>
-                            <option value="Value-ASC">Value (Ascending)</option>
-                            <option value="Name-DESC">Priority Name (Z-A)</option>
-                            <option value="Value-DESC">Value (Descending)</option>
+                            <option value="Name-ASC">Product Name (A-Z)</option>
+                            <option value="GroupID-ASC">GroupID (Ascending)</option>
+                            <option value="PriorityValue-ASC">Priority (Ascending)</option>
+                            <option value="Name-DESC">Product Name (Z-A)</option>
+                            <option value="GroupID-DESC">GroupID (Descending)</option>
+                            <option value="PriorityValue-DESC">Priority (Descending)</option>
                         </select>
                     </div>
 
                     <div class="col-sm-3 form-inline form-group-sm">
                         <label for='itemSearch'><i class="fa fa-search"></i></label>
-                        <input type="search" id="itemSearch" class="form-control" placeholder="Search Priority Name">
+                        <input type="search" id="itemSearch" class="form-control" placeholder="Search Product Name">
                     </div>
                 </div>
             </div>
@@ -162,23 +164,39 @@ if(isset($product_group) && !empty($product_group)){
         <div class="modal-content">
             <div class="modal-header">
                 <button class="close" data-dismiss="modal">&times;</button>
-                <h4 class="text-center">Edit Priority Name</h4>
+                <h4 class="text-center">Edit Product Info</h4>
                 <div id="editItemFMsg" class="text-center"></div>
             </div>
             <div class="modal-body">
                 <form name="addNewItemForm" id="addNewItemForm" role="form">
                     <div class="row">
                         <div class="col-sm-4 form-group-sm">
-                            <label for="itemNameEdit">Priority Name</label>
-                            <input type="text" id="itemNameEdit" placeholder="Priority Name" autofocus class="form-control checkField">
+                            <label for="itemNameEdit">Product Name</label>
+                            <input type="text" id="itemNameEdit" placeholder="Priority Name" autofocus class="form-control  checkField">
                             <span class="help-block errMsg" id="itemNameEditErr"></span>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-4 form-group-sm">
-                            <label for="itemValueEdit">Priority Value</label>
-                            <input type="number" id="itemValueEdit" placeholder="Priority Value" min="0" class="form-control checkField">
-                            <span class="help-block errMsg" id="itemValueEditErr"></span>
+                            <label for="itemGroupEdit">Product Group</label>
+                            <select class="form-control selectedGroupDefault checkField" id="itemGroupEdit" name="itemGroupEdit"></select>
+                            <span class="help-block errMsg" id="itemGroupEditErr"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-4 form-group-sm">
+                            <label for="itemPriorityEdit">Product Priority</label>
+                            <select class="form-control selectedPriorityDefault checkField" id="itemPriorityEdit" name="itemPriorityEdit"></select>
+                            <span class="help-block errMsg" id="itemPriorityEditErr"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-4 form-group-sm">
+                            <label for="itemVersionEdit">Version (Optional)</label>
+                            <input type="text" id="itemVersionEdit" name="itemVersionEdit" placeholder="Version" class="form-control">
+                            <span class="help-block errMsg" id="itemVersionEditErr"></span>
                         </div>
                     </div>
                     <div class="row">
