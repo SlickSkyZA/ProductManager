@@ -1,28 +1,36 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') OR exit('');
 
 /**
- * Description of Search
+ * Description of Customer
  *
  * @author Amir <amirsanni@gmail.com>
- * @date 26th Rab.Awwal, 1437A.H (Jan. 7th, 2016)
+ * @date 4th RabThaani, 1437AH (15th Jan, 2016)
  */
-
-class Search extends CI_Controller{
-    protected $value;
-
-    public function __construct() {
+class Platform extends CI_Model{
+    public function __construct(){
         parent::__construct();
+    }
 
-        //$this->gen->checklogin();
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        $this->genlib->ajaxOnly();
+    public function getAll($orderBy, $orderFormat, $start=0, $limit=''){
+        $this->db->limit($limit, $start);
+        $this->db->order_by($orderBy, $orderFormat);
 
-        $this->load->model(['transaction', 'item', 'productGroup', 'priority', 'product', 'region', 'platform']);
+        $run_q = $this->db->get('product_platform');
 
-        $this->load->helper('text');
+        if($run_q->num_rows() > 0){
+            return $run_q->result();
+        }
 
-        $this->value = $this->input->get('v', TRUE);
+        else{
+            return FALSE;
+        }
     }
 
     /*
@@ -34,119 +42,34 @@ class Search extends CI_Controller{
     */
 
 
-    public function index(){
-        /**
-         * function will call models to do all kinds of search just to check whether there is a match for the searched value
-         * in the search criteria or not. This applies only to global search
-         */
+    /**
+     *
+     * @param type $itemName
+     * @param type $itemQuantity
+     * @param type $itemPrice
+     * @param type $itemDescription
+     * @param type $itemCode
+     * @return boolean
+     */
+    public function add($platformName, $description){
+        $data = ['Name'=>$platformName, 'Notes'=>$description];
 
+        //set the datetime based on the db driver in use
+        $this->db->platform() == "sqlite3"
+                ?
+        $this->db->set('AddedDate', "datetime('now')", FALSE)
+                :
+        $this->db->set('AddedDate', "NOW()", FALSE);
 
+        $this->db->insert('product_platform', $data);
 
-        //set final output
-        $this->output->set_content_type('application/json')->set_output(json_encode($json));
-    }
+        if($this->db->insert_id()){
+            return $this->db->insert_id();
+        }
 
-    /*
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    */
-    public function productSearch(){
-        $data['allItems'] = $this->product->itemsearch($this->value);
-        $data['sn'] = 1;
-
-        $json['itemsListTable'] = $data['allItems'] ? $this->load->view('products/productslisttable', $data, TRUE) : "No match found {$this->value}";
-
-        //set final output
-        $this->output->set_content_type('application/json')->set_output(json_encode($json));
-    }
-
-    /*
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    */
-    public function productGroupSearch(){
-        $data['allItems'] = $this->productGroup->itemsearch($this->value);
-        $data['sn'] = 1;
-
-        $json['itemsListTable'] = $data['allItems'] ? $this->load->view('productGroups/groupslisttable', $data, TRUE) : "No match found {$this->value}";
-
-        //set final output
-        $this->output->set_content_type('application/json')->set_output(json_encode($json));
-    }
-
-    /*
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    */
-    public function prioritySearch(){
-        $data['allItems'] = $this->priority->itemsearch($this->value);
-        $data['sn'] = 1;
-
-        $json['itemsListTable'] = $data['allItems'] ? $this->load->view('priority/prioritieslisttable', $data, TRUE) : "No match found {$this->value}";
-
-        //set final output
-        $this->output->set_content_type('application/json')->set_output(json_encode($json));
-    }
-
-    /*
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    */
-    public function regionSearch(){
-        $data['allItems'] = $this->region->itemsearch($this->value);
-        $data['sn'] = 1;
-
-        $json['itemsListTable'] = $data['allItems'] ? $this->load->view('regions/regionslisttable', $data, TRUE) : "No match found {$this->value}";
-
-        //set final output
-        $this->output->set_content_type('application/json')->set_output(json_encode($json));
-    }
-
-    /*
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    */
-    public function platformSearch(){
-        $data['allItems'] = $this->platform->itemsearch($this->value);
-        $data['sn'] = 1;
-
-        $json['itemsListTable'] = $data['allItems'] ? $this->load->view('platforms/platformslisttable', $data, TRUE) : "No match found {$this->value}";
-
-        //set final output
-        $this->output->set_content_type('application/json')->set_output(json_encode($json));
-    }
-    /*
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    */
-
-
-    public function itemSearch(){
-        $data['allItems'] = $this->item->itemsearch($this->value);
-        $data['sn'] = 1;
-
-        $json['itemsListTable'] = $data['allItems'] ? $this->load->view('items/itemslisttable', $data, TRUE) : "No match found";
-
-        //set final output
-        $this->output->set_content_type('application/json')->set_output(json_encode($json));
+        else{
+            return FALSE;
+        }
     }
 
     /*
@@ -157,16 +80,25 @@ class Search extends CI_Controller{
     ********************************************************************************************************************************
     */
 
+    /**
+     *
+     * @param type $value
+     * @return boolean
+     */
+    public function itemsearch($value){
+        $q = "SELECT * FROM product_platform
+            WHERE
+            Name LIKE '%".$this->db->escape_like_str($value)."%'";
 
+        $run_q = $this->db->query($q, [$value, $value]);
 
-    public function transSearch(){
-        $data['allTransactions'] = $this->transaction->transsearch($this->value);
-        $data['sn'] = 1;
+        if($run_q->num_rows() > 0){
+            return $run_q->result();
+        }
 
-        $json['transTable'] = $data['allTransactions'] ? $this->load->view('transactions/transtable', $data, TRUE) : "No match found";
-
-        //set final output
-        $this->output->set_content_type('application/json')->set_output(json_encode($json));
+        else{
+            return FALSE;
+        }
     }
 
 
@@ -178,11 +110,46 @@ class Search extends CI_Controller{
     ********************************************************************************************************************************
     */
 
-    public function otherSearch(){
+    /**
+     * To add to the number of an item in stock
+     * @param type $itemId
+     * @param type $numberToadd
+     * @return boolean
+     */
+    public function incrementItem($itemId, $numberToadd){
+        $q = "UPDATE items SET quantity = quantity + ? WHERE id = ?";
 
+        $this->db->query($q, [$numberToadd, $itemId]);
 
-        //set final output
-        $this->output->set_content_type('application/json')->set_output(json_encode($json));
+        if($this->db->affected_rows() > 0){
+            return TRUE;
+        }
+
+        else{
+            return FALSE;
+        }
+    }
+
+    /*
+    ********************************************************************************************************************************
+    ********************************************************************************************************************************
+    ********************************************************************************************************************************
+    ********************************************************************************************************************************
+    ********************************************************************************************************************************
+    */
+
+    public function decrementItem($itemCode, $numberToRemove){
+        $q = "UPDATE items SET quantity = quantity - ? WHERE code = ?";
+
+        $this->db->query($q, [$numberToRemove, $itemCode]);
+
+        if($this->db->affected_rows() > 0){
+            return TRUE;
+        }
+
+        else{
+            return FALSE;
+        }
     }
 
 
@@ -194,6 +161,91 @@ class Search extends CI_Controller{
     ********************************************************************************************************************************
     */
 
+
+   public function newstock($itemId, $qty){
+       $q = "UPDATE items SET quantity = quantity + $qty WHERE id = ?";
+
+       $this->db->query($q, [$itemId]);
+
+       if($this->db->affected_rows()){
+           return TRUE;
+       }
+
+       else{
+           return FALSE;
+       }
+   }
+
+
+   /*
+    ********************************************************************************************************************************
+    ********************************************************************************************************************************
+    ********************************************************************************************************************************
+    ********************************************************************************************************************************
+    ********************************************************************************************************************************
+    */
+
+   public function deficit($itemId, $qty){
+       $q = "UPDATE items SET quantity = quantity - $qty WHERE id = ?";
+
+       $this->db->query($q, [$itemId]);
+
+       if($this->db->affected_rows()){
+           return TRUE;
+       }
+
+       else{
+           return FALSE;
+       }
+   }
+
+   /*
+    ********************************************************************************************************************************
+    ********************************************************************************************************************************
+    ********************************************************************************************************************************
+    ********************************************************************************************************************************
+    ********************************************************************************************************************************
+    */
+
+   /**
+    *
+    * @param type $itemId
+    * @param type $itemName
+    * @param type $itemDesc
+    * @param type $itemPrice
+    */
+   public function edit($itemId, $itemName, $itemDesc){
+       $data = ['Name'=>$itemName, 'Notes'=>$itemDesc];
+
+       $this->db->where('id', $itemId);
+       $this->db->update('product_platform', $data);
+
+       return TRUE;
+   }
+
+   /*
+    ********************************************************************************************************************************
+    ********************************************************************************************************************************
+    ********************************************************************************************************************************
+    ********************************************************************************************************************************
+    ********************************************************************************************************************************
+    */
+
+	public function getActiveItems($orderBy, $orderFormat){
+        $this->db->order_by($orderBy, $orderFormat);
+
+        $run_q = $this->db->get('priority');
+
+        if($run_q->num_rows() > 0){
+            return $run_q->result();
+        }
+
+        else{
+            return FALSE;
+        }
+    }
+
+
     /*
     ********************************************************************************************************************************
     ********************************************************************************************************************************
@@ -201,4 +253,20 @@ class Search extends CI_Controller{
     ********************************************************************************************************************************
     ********************************************************************************************************************************
     */
+
+    /**
+     * array $where_clause
+     * array $fields_to_fetch
+     *
+     * return array | FALSE
+     */
+    public function getItemInfo($where_clause, $fields_to_fetch){
+        $this->db->select($fields_to_fetch);
+
+        $this->db->where($where_clause);
+
+        $run_q = $this->db->get('product group');
+
+        return $run_q->num_rows() ? $run_q->row() : FALSE;
+    }
 }
