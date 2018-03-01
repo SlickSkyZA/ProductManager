@@ -76,7 +76,7 @@ class Products extends CI_Controller{
             $this->db->trans_complete();
 
             $json = $this->db->trans_status() !== FALSE ?
-                    ['status'=>1, 'msg'=>"Priority successfully added"]
+                    ['status'=>1, 'msg'=>"Product successfully added"]
                     :
                     ['status'=>0, 'msg'=>"Oops! Unexpected server error! Please contact administrator for help. Sorry for the embarrassment"];
         }

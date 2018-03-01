@@ -259,42 +259,42 @@ defined('BASEPATH') OR exit('');
 
                         <li class="<?= $pageTitle == 'Priority' ? 'active' : '' ?>">
                             <a href="<?= site_url('priorities') ?>">
-                                <i class="fa fa-tasks"></i>
+                                <i class="fa fa-tag"></i>
                                 Priority
                             </a>
                         </li>
 
-                        <li class="<?= $pageTitle == 'OEM Region' ? 'active' : '' ?>">
-                            <a href="<?= site_url('region') ?>">
-                                <i class="fa fa-tasks"></i>
-                                OEM Region
+                        <li class="<?= $pageTitle == 'Region(OEM)' ? 'active' : '' ?>">
+                            <a href="<?= site_url('regions') ?>">
+                                <i class="fa fa-tag"></i>
+                                Cusomer Region
                             </a>
                         </li>
 
-                        <li class="<?= $pageTitle == 'DSP Platform' ? 'active' : '' ?>">
+                        <li class="<?= $pageTitle == 'Platform' ? 'active' : '' ?>">
                             <a href="<?= site_url('platform') ?>">
-                                <i class="fa fa-tasks"></i>
-                                DSP Platform
+                                <i class="fa fa-tag"></i>
+                                Platform
                             </a>
                         </li>
 
                         <li class="<?= $pageTitle == 'Status' ? 'active' : '' ?>">
                             <a href="<?= site_url('status') ?>">
-                                <i class="fa fa-tasks"></i>
+                                <i class="fa fa-tag"></i>
                                 Status
                             </a>
                         </li>
 
                         <li class="<?= $pageTitle == 'Competitors' ? 'active' : '' ?>">
                             <a href="<?= site_url('competitors') ?>">
-                                <i class="fa fa-tasks"></i>
+                                <i class="fa fa-tag"></i>
                                 Competitors
                             </a>
                         </li>
 
                         <li class="<?= $pageTitle == 'Curtomers' ? 'active' : '' ?>">
                             <a href="<?= site_url('curstomers') ?>">
-                                <i class="fa fa-tasks"></i>
+                                <i class="fa fa-tag"></i>
                                 Curtomers
                             </a>
                         </li>
