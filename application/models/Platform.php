@@ -234,7 +234,7 @@ class Platform extends CI_Model{
 	public function getActiveItems($orderBy, $orderFormat){
         $this->db->order_by($orderBy, $orderFormat);
 
-        $run_q = $this->db->get('priority');
+        $run_q = $this->db->get('product_platform');
 
         if($run_q->num_rows() > 0){
             return $run_q->result();

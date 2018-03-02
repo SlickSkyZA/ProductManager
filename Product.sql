@@ -9,33 +9,35 @@
 -- Table 'Customer'
 --
 -- ---
-
-DROP TABLE IF EXISTS `Customer`;
-
-CREATE TABLE `Customer` (
-  `id` INTEGER NOT NULL AUTO_INCREMENT,
-  `Name` VARCHAR(256) NOT NULL DEFAULT 'NULL',
-  `PriorityID` INTEGER NOT NULL DEFAULT 0,
-  `RegionID` INTEGER NOT NULL DEFAULT 0,
-  `AddedDate` DATETIME NOT NULL,
-  `UpdatedDate` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `Notes` MEDIUMTEXT NULL,
-  PRIMARY KEY (`id`)
-);
+-- 
+-- DROP TABLE IF EXISTS `Customer`;
+-- 
+-- CREATE TABLE `Customer` (
+--   `id` INTEGER NOT NULL AUTO_INCREMENT,
+--   `Name` VARCHAR(256) NOT NULL DEFAULT 'NULL',
+--   `PriorityID` INTEGER NOT NULL DEFAULT 0,
+--   `RegionID` INTEGER NOT NULL DEFAULT 0,
+--   `AddedDate` DATETIME NOT NULL,
+--   `UpdatedDate` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+--   `Notes` MEDIUMTEXT NULL,
+--   PRIMARY KEY (`id`)
+-- );
 
 -- ---
 -- Table 'Competitor'
 --
 -- ---
 
-DROP TABLE IF EXISTS `Competitor`;
-
-CREATE TABLE `Competitor` (
-  `id` INTEGER NOT NULL AUTO_INCREMENT,
-  `Name` VARCHAR(256) NOT NULL DEFAULT 'NULL',
-  `ShortName` VARCHAR(256) NOT NULL DEFAULT 'NULL',
-  PRIMARY KEY (`id`)
-);
+-- DROP TABLE IF EXISTS `Customer_Vender`;
+-- 
+-- CREATE TABLE `Customer_Vender` (
+--   `id` INTEGER NOT NULL AUTO_INCREMENT,
+--   `Name` VARCHAR(256) NOT NULL DEFAULT 'NULL',
+--   `AddedDate` DATETIME NOT NULL,
+--   `UpdatedDate` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+--   `Notes` MEDIUMTEXT NULL,
+--   PRIMARY KEY (`id`)
+-- );
 
 -- ---
 -- Table 'Product'
@@ -93,15 +95,18 @@ CREATE TABLE `Competitor` (
 -- Table 'Product Status'
 --
 -- ---
-
-DROP TABLE IF EXISTS `Product_Status`;
-
-CREATE TABLE `Product_Status` (
-  `id` INTEGER NOT NULL AUTO_INCREMENT,
-  `StatusName` VARCHAR(256) NOT NULL DEFAULT 'NULL',
-  PRIMARY KEY (`id`)
-);
-
+-- 
+-- DROP TABLE IF EXISTS `Product_Status`;
+-- 
+-- CREATE TABLE `Product_Status` (
+--   `id` INTEGER NOT NULL AUTO_INCREMENT,
+--   `Name` VARCHAR(256) NOT NULL DEFAULT 'NULL',
+--   `AddedDate` DATETIME NOT NULL,
+--   `UpdatedDate` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+--   `Notes` MEDIUMTEXT NULL,
+--   PRIMARY KEY (`id`)
+-- );
+-- 
 -- -- ---
 -- -- Table 'Product Platform'
 -- --
@@ -129,10 +134,11 @@ CREATE TABLE `XSCP` (
   `id` INTEGER NOT NULL AUTO_INCREMENT,
   `ProductID` INTEGER NOT NULL,
   `CustomerID` INTEGER NOT NULL,
-  `CompetitorID` INTEGER NOT NULL,
-  `CustomerStatusID` INTEGER NOT NULL,
+  `VenderID` INTEGER NOT NULL,
   `StatusID` INTEGER NOT NULL,
   `PlatformID` INTEGER NOT NULL,
+  `ProjectName` VARCHAR(256) NOT NULL DEFAULT 'NULL',
+  `PriorityID` VARCHAR(256) NOT NULL DEFAULT 'NULL',
   `AddedDate` DATETIME NOT NULL,
   `UpdatedDate` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `Notes` MEDIUMTEXT NULL,
@@ -180,8 +186,7 @@ ALTER TABLE `XSCP` ADD FOREIGN KEY (StatusID) REFERENCES `Product_Status` (`id`)
 ALTER TABLE `XSCP` ADD FOREIGN KEY (PlatformID) REFERENCES `Product_Platform` (`id`);
 ALTER TABLE `XSCP` ADD FOREIGN KEY (ProductID) REFERENCES `Product` (`id`);
 ALTER TABLE `XSCP` ADD FOREIGN KEY (CustomerID) REFERENCES `Customer` (`id`);
-ALTER TABLE `XSCP` ADD FOREIGN KEY (CompetitorID) REFERENCES `Competitor` (`id`);
-ALTER TABLE `XSCP` ADD FOREIGN KEY (CustomerStatusID) REFERENCES `Customer_Status` (`id`);
+ALTER TABLE `XSCP` ADD FOREIGN KEY (VenderID) REFERENCES `Customer_Vender` (`id`);
 
 -- ---
 -- Table Properties

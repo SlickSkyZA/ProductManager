@@ -7,7 +7,7 @@ defined('BASEPATH') OR exit('');
  * @author Amir <amirsanni@gmail.com>
  * @date 4th RabThaani, 1437AH (15th Jan, 2016)
  */
-class Product extends CI_Model{
+class ProductTransaction extends CI_Model{
     public function __construct(){
         parent::__construct();
     }
@@ -56,8 +56,9 @@ class Product extends CI_Model{
      * @param type $itemCode
      * @return boolean
      */
-    public function add($productName, $productGroup, $priority, $version, $description){
-        $data = ['GroupID'=>$productGroup, 'PriorityID'=>$priority, 'Name'=>$productName, 'Version'=>$version, 'Notes'=>$description];
+    public function add($product, $customer, $priority, $platform, $status, $competitor, $projectName, $description){
+        $data = ['ProductID'=>$product, 'CustomerID'=>$customer, 'PriorityID'=>$priority, 'PlatformID'=>$platform,
+        'StatusID'=>$status, 'VenderID'=>$competitor, 'ProjectName'=>$projectName, 'Notes'=>$description];
 
         //set the datetime based on the db driver in use
         $this->db->platform() == "sqlite3"
@@ -66,7 +67,7 @@ class Product extends CI_Model{
                 :
         $this->db->set('AddedDate', "NOW()", FALSE);
 
-        $this->db->insert('product', $data);
+        $this->db->insert('xscp', $data);
 
         if($this->db->insert_id()){
             return $this->db->insert_id();

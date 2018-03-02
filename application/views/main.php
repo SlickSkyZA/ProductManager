@@ -49,12 +49,12 @@ defined('BASEPATH') OR exit('');
             <div class="container-fluid">
                 <!-- Brand and toggle get grouped for better mobile display -->
                 <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbarCollapse" aria-expanded="false">
+                    <!-- <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbarCollapse" aria-expanded="false">
                         <span class="sr-only">Toggle navigation</span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
-                    </button>
+                    </button> -->
                     <a class="navbar-brand" href="<?=base_url()?>" style="margin-top:-15px">
                         <img src="<?=base_url()?>public/images/logo_black.png" alt="logo" class="img-responsive" width="73px">
                     </a>
@@ -62,80 +62,13 @@ defined('BASEPATH') OR exit('');
 
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="navbarCollapse">
-                    <ul class="nav navbar-nav navbar-left visible-xs">
-                        <li class="<?= $pageTitle == 'Dashboard' ? 'active' : '' ?>">
-                            <a href="<?= site_url('dashboard') ?>">
-                                <i class="fa fa-home"></i>
-                                Dashboard
-                            </a>
-                        </li>
 
-                        <li class="<?= $pageTitle == 'Transactions' ? 'active' : '' ?>">
-                            <a href="<?= site_url('transactions') ?>">
-                                <i class="fa fa-exchange"></i>
-                                Transactions
-                            </a>
-                        </li>
-
-                        <li class="<?= $pageTitle == 'Items' ? 'active' : '' ?>">
-                            <a href="<?= site_url('items') ?>">
-                                <i class="fa fa-cart-plus"></i>
-                                Inventory Items
-                            </a>
-                        </li>
-
-                        <?php if($this->session->admin_role === "Super"):?>
-                        <!--
-
-                        <li class="<?= $pageTitle == 'ProductGroups' ? 'active' : '' ?>">
-                            <a href="<?= site_url('transactions') ?>">
-                                <i class="fa fa-exchange"></i>
-                                Product Groups
-                            </a>
-                        </li>
-
-                        <li class="<?= $pageTitle == 'Employees' ? 'active' : '' ?>">
-                            <a href="<?= site_url('employees') ?>">
-                                <i class="fa fa-users"></i>
-                                Employees
-                            </a>
-                        </li>
-
-                        <li class="<?= $pageTitle == 'Reports' ? 'active' : '' ?>">
-                            <a href="<?= site_url('reports') ?>">
-                                <i class="fa fa-newspaper-o"></i>
-                                Reports
-                            </a>
-                        </li>
-
-                        <li class="<?= $pageTitle == 'Eventlog' ? 'active' : '' ?>">
-                            <a href="<?= site_url('Eventlog') ?>">
-                                <i class="fa fa-tasks"></i>
-                                Event Log
-                            </a>
-                        </li>--->
-
-                        <li class="<?= $pageTitle == 'Database' ? 'active' : '' ?>">
-                            <a href="<?= site_url('dbmanagement') ?>">
-                                <i class="fa fa-database"></i>
-                                Database Management
-                            </a>
-                        </li>
-
-                        <li class="<?= $pageTitle == 'Administrators' ? 'active' : '' ?>">
-                            <a href="<?= site_url('administrators') ?>">
-                                <i class="fa fa-user"></i>
-                                Admin Management
-                            </a>
-                        </li>
-                        <?php endif; ?>
-                    </ul>
                     <ul class="nav navbar-nav navbar-right">
-                        <li class="dropdown">
+                        <!-- <li class="dropdown">
                             <a>
                                 Total Earned Today: <b>&#8358;<span id="totalEarnedToday"></span></b>
                             </a>
-                        </li>
+                        </li> -->
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                 <i class="fa fa-user navbarIcons"></i>
@@ -185,6 +118,13 @@ defined('BASEPATH') OR exit('');
                             <a href="<?= site_url('items') ?>">
                                 <i class="fa fa-shopping-cart"></i>
                                 Inventory Items
+                            </a>
+                        </li>
+
+                        <li class="<?= $pageTitle == 'Product Transactions' ? 'active' : '' ?>">
+                            <a href="<?= site_url('ProductTransactions') ?>">
+                                <i class="fa fa-exchange"></i>
+                                Product Transactions
                             </a>
                         </li>
 
