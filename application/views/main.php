@@ -231,7 +231,7 @@ defined('BASEPATH') OR exit('');
                         </li>
 
                         <li class="<?= $pageTitle == 'Customer Venders' ? 'active' : '' ?>">
-                            <a href="<?= site_url('venders') ?>">
+                            <a href="<?= site_url('customerVenders') ?>">
                                 <i class="fa fa-tag"></i>
                                 Customer Venders
                             </a>
