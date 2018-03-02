@@ -7,22 +7,22 @@ defined('BASEPATH') OR exit('');
  * @author Amir <amirsanni@gmail.com>
  * @date 31st Dec, 2015
  */
-class Platforms extends CI_Controller{
+class ProductStatuses extends CI_Controller{
 
     public function __construct(){
         parent::__construct();
 
         $this->genlib->checkLogin();
 
-        $this->load->model(['platform']);
+        $this->load->model(['productStatus']);
     }
 
     /**
      *
      */
     public function index(){
-        $data['pageContent'] = $this->load->view('platforms/platforms', '', TRUE);
-        $data['pageTitle'] = "Product Platform";
+        $data['pageContent'] = $this->load->view('productStatuses/productStatuses', '', TRUE);
+        $data['pageTitle'] = "Product Statuses";
 
         $this->load->view('main', $data);
     }
@@ -48,7 +48,7 @@ class Platforms extends CI_Controller{
         $orderFormat = $this->input->get('orderFormat', TRUE) ? $this->input->get('orderFormat', TRUE) : "ASC";
 
         //count the total number of items in db
-        $totalItems = $this->db->count_all('product_platform');
+        $totalItems = $this->db->count_all('product_status');
 
         $this->load->library('pagination');
 
@@ -58,17 +58,17 @@ class Platforms extends CI_Controller{
         $start = $pageNumber == 0 ? 0 : ($pageNumber - 1) * $limit;//start from 0 if pageNumber is 0, else start from the next iteration
 
         //call setPaginationConfig($totalRows, $urlToCall, $limit, $attributes) in genlib to configure pagination
-        $config = $this->genlib->setPaginationConfig($totalItems, "platforms/lilt", $limit, ['onclick'=>'return lilt(this.href);']);
+        $config = $this->genlib->setPaginationConfig($totalItems, "productStatuses/lilt", $limit, ['onclick'=>'return lilt(this.href);']);
 
         $this->pagination->initialize($config);//initialize the library class
 
         //get all items from db
-        $data['allItems'] = $this->platform->getAll($orderBy, $orderFormat, $start, $limit);
+        $data['allItems'] = $this->productStatus->getAll($orderBy, $orderFormat, $start, $limit);
         $data['range'] = $totalItems > 0 ? "Showing " . ($start+1) . "-" . ($start + count($data['allItems'])) . " of " . $totalItems : "";
         $data['links'] = $this->pagination->create_links();//page links
         $data['sn'] = $start+1;
 
-        $json['itemsListTable'] = $this->load->view('platforms/platformslisttable', $data, TRUE);//get view with populated items table
+        $json['itemsListTable'] = $this->load->view('productStatuses/productStatuseslisttable', $data, TRUE);//get view with populated items table
 
         $this->output->set_content_type('application/json')->set_output(json_encode($json));
     }
@@ -90,7 +90,7 @@ class Platforms extends CI_Controller{
 
         $this->form_validation->set_error_delimiters('', '');
 
-        $this->form_validation->set_rules('platformName', 'Platform Name', ['required', 'trim', 'max_length[80]', 'is_unique[product_platform.Name]'], //numeric
+        $this->form_validation->set_rules('statusName', 'Status Name', ['required', 'trim', 'max_length[80]', 'is_unique[product_status.Name]'], //numeric
                 ['required'=>"required"]);
 
         if($this->form_validation->run() !== FALSE){
@@ -100,20 +100,20 @@ class Platforms extends CI_Controller{
              * insert info into db
              * function header: add($itemName, $itemQuantity, $itemPrice, $itemDescription, $itemCode)
              */
-            $insertedId = $this->platform->add(set_value('platformName'), set_value('description'));
+            $insertedId = $this->productStatus->add(set_value('statusName'), set_value('description'));
 
-            $itemName = set_value('platformName');
+            $itemName = set_value('statusName');
 
             //insert into eventlog
             //function header: addevent($event, $eventRowId, $eventDesc, $eventTable, $staffId)
-            $desc = "New addition of platform:{$itemName}";
+            $desc = "New addition of status:{$itemName}";
 
-            $insertedId ? $this->genmod->addevent("Creation of new priority", $insertedId, $desc, "Platform", $this->session->admin_id) : "";
+            $insertedId ? $this->genmod->addevent("Creation of new priority", $insertedId, $desc, "Product Status", $this->session->admin_id) : "";
 
             $this->db->trans_complete();
 
             $json = $this->db->trans_status() !== FALSE ?
-                    ['status'=>1, 'msg'=>"Platform successfully added"]
+                    ['status'=>1, 'msg'=>"Status successfully added"]
                     :
                     ['status'=>0, 'msg'=>"Oops! Unexpected server error! Please contact administrator for help. Sorry for the embarrassment"];
         }
@@ -279,7 +279,7 @@ class Platforms extends CI_Controller{
             $itemName = set_value('itemName');
 
             //update item in db
-            $updated = $this->platform->edit($itemId, $itemName, $itemDesc);
+            $updated = $this->productStatus->edit($itemId, $itemName, $itemDesc);
 
             $json['status'] = $updated ? 1 : 0;
 
@@ -287,7 +287,7 @@ class Platforms extends CI_Controller{
             //function header: addevent($event, $eventRowId, $eventDesc, $eventTable, $staffId)
             $desc = "Details of item with code '$itemId' was updated";
 
-            $this->genmod->addevent("Platform Info Update", $itemId, $desc, 'Prodcut Platform', $this->session->admin_id);
+            $this->genmod->addevent("Status Info Update", $itemId, $desc, 'Prodcut Status', $this->session->admin_id);
         }
 
         else{
@@ -311,7 +311,7 @@ class Platforms extends CI_Controller{
 
     public function crosscheckName($itemName, $itemId){
         //check db to ensure name was previously used for the item we are updating
-        $itemWithName = $this->genmod->getTableCol('product_platform', 'id', 'Name', $itemName);
+        $itemWithName = $this->genmod->getTableCol('product_status', 'id', 'Name', $itemName);
 
         //if item name does not exist or it exist but it's the name of current item
         if(!$itemWithName || ($itemWithName == $itemId)){
@@ -372,7 +372,7 @@ class Platforms extends CI_Controller{
         $item_id = $this->input->post('i', TRUE);
 
         if($item_id){
-            $this->db->where('id', $item_id)->delete('product_platform');
+            $this->db->where('id', $item_id)->delete('product_status');
 
             $json['status'] = 1;
         }

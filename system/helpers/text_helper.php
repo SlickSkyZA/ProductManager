@@ -67,14 +67,14 @@ if ( ! function_exists('word_limiter'))
 		{
 			return $str;
 		}
-
+		
 		preg_match('/^\s*+(?:\S++\s*+){1,'.(int) $limit.'}/', $str, $matches);
 
 		if (strlen($str) === strlen($matches[0]))
 		{
 			$end_char = '';
 		}
-
+  
 		return rtrim($matches[0]).$end_char;
 	}
 }

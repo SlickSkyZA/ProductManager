@@ -209,10 +209,10 @@ defined('BASEPATH') OR exit('');
                             </a>
                         </li>
 
-                        <li class="<?= $pageTitle == 'Product Status' ? 'active' : '' ?>">
-                            <a href="<?= site_url('status') ?>">
+                        <li class="<?= $pageTitle == 'Product Statuses' ? 'active' : '' ?>">
+                            <a href="<?= site_url('productStatuses') ?>">
                                 <i class="fa fa-tag"></i>
-                                Product Status
+                                Product Statuses
                             </a>
                         </li>
 
