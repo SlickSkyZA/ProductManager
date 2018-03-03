@@ -348,6 +348,12 @@ $(document).ready(function(){
                 if(returnedData.status === 1){
                     changeFlashMsgContent(returnedData.msg, "text-success", '', 1500);
                     document.getElementById("salesTransForm").reset();
+                    $("#itemProduct").val(itemProduct);
+                    $("#itemCustomer").val(itemCustomer);
+                    $("#itemPlatform").val(itemPlatform);
+                    $("#itemPriority").val(itemPriority);
+                    $("#itemStatus").val(itemStatus);
+                    $("#itemCompetitor").val(itemCompetitor);
 
                     //refresh the items list table
                     lilt();

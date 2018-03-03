@@ -140,12 +140,12 @@ if(isset($customer_venders) && !empty($customer_venders)){
 
                             <br>
                             <div class="row">
-                                <div class="col-sm-2 form-group-sm">
-                                    <!-- <button class="btn btn-primary btn-sm" id='useScanner'>Use Barcode Scanner</button> -->
+                                <!-- <div class="col-sm-2 form-group-sm">
+                                     <button class="btn btn-primary btn-sm" id='useScanner'>Use Barcode Scanner</button>
                                 </div>
                                 <br class="visible-xs">
                                 <div class="col-sm-6"></div>
-                                <br class="visible-xs">
+                                <br class="visible-xs">  -->
                                 <div class="col-sm-4 form-group-sm">
                                     <button type="button" class="btn btn-primary btn-sm" id="confirmSaleOrder">Confirm</button>
                                     <button type="button" class="btn btn-danger btn-sm" id="cancelSaleOrder">Clear</button>
