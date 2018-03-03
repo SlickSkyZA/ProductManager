@@ -21,13 +21,18 @@ class ProductTransaction extends CI_Model{
     public function getAll($orderBy, $orderFormat, $start=0, $limit=''){
         $this->db->limit($limit, $start);
         $this->db->order_by($orderBy, $orderFormat);
-        $this->db->select('product.id, product.Name, product_group.Name GroupName, product.Version,
-        priority.Name PriorityName, priority.Value PriorityValue, product.AddedDate, product.UpdatedDate, product.Notes');
+        $this->db->select('xscp.id, product.Name ProductName, customer.Name CustomerName, IFNULL(customer_vender.Name,"") CompetitorName,
+        priority.Name PriorityName, product_status.Name StatusName, priority.Value PriorityValue, product_platform.Name PlatformName,
+        xscp.ProjectName, xscp.AddedDate, xscp.UpdatedDate, xscp.Notes');
 
-        $this->db->join('product_group', 'product.GroupID = product_group.id');
-        $this->db->join('priority', 'product.PriorityID = priority.id');
+        $this->db->join('product', 'xscp.ProductID = product.id');
+        $this->db->join('customer', 'xscp.CustomerID = customer.id');
+        $this->db->join('customer_vender', 'xscp.VenderID = customer_vender.id', 'left');
+        $this->db->join('product_status', 'xscp.StatusID = product_status.id');
+        $this->db->join('priority', 'xscp.PriorityID = priority.id');
+        $this->db->join('product_platform', 'xscp.PlatformID = product_platform.id');
 
-        $run_q = $this->db->get('product');
+        $run_q = $this->db->get('xscp');
 
         if($run_q->num_rows() > 0){
             return $run_q->result();

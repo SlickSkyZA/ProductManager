@@ -392,7 +392,129 @@ $(document).ready(function(){
     $("#cancelSaleOrder").click(function(e){
         e.preventDefault();
 
-        resetSalesTransForm();
+        document.getElementById('salesTransForm').reset();
+
+        return new Promise((resolve, reject)=>{
+			//if an item has been selected (i.e. added to the current transaction), do not add it to the list. This way, an item will appear just once.
+			//We start by forming an array of all selected items, then skip that item in the loop appending items to select dropdown
+			return new Promise((res, rej)=>{
+				//$(".selectedItem").each(function(){
+				//	//push the selected value (which is the item code [a key in currentItems object]) to the array
+				//	$(this).val() ? selectedItemsArr.push($(this).val()) : "";
+				//});
+
+				res();
+			}).then(()=>{
+                $(".selectedProductDefault").empty();
+				for(let key in currentProducts){
+					//if the current key in the loop is in our 'selectedItemsArr' array
+					$(".selectedProductDefault").append("<option value='"+key+"'>"+currentProducts[key]+"</option>");
+				}
+				//prepend 'select item' to the select option
+				$(".selectedProductDefault").prepend("<option value='' selected>Select Prodcut</option>");
+
+                $(".selectedPriorityDefault").empty();
+                for(let key in currentPriorities){
+					//if the current key in the loop is in our 'selectedItemsArr' array
+					$(".selectedPriorityDefault").append("<option value='"+key+"'>"+currentPriorities[key]+"</option>");
+				}
+				//prepend 'select item' to the select option
+				$(".selectedPriorityDefault").prepend("<option value='' selected>Select Priority</option>");
+
+                $(".selectedCustomerDefault").empty();
+                for(let key in currentCustomers){
+					//if the current key in the loop is in our 'selectedItemsArr' array
+					$(".selectedCustomerDefault").append("<option value='"+key+"'>"+currentCustomers[key]+"</option>");
+				}
+				//prepend 'select item' to the select option
+				$(".selectedCustomerDefault").prepend("<option value='' selected>Select Customer</option>");
+
+                $(".selectedPlatformDefault").empty();
+                for(let key in currentPlatforms){
+					//if the current key in the loop is in our 'selectedItemsArr' array
+					$(".selectedPlatformDefault").append("<option value='"+key+"'>"+currentPlatforms[key]+"</option>");
+				}
+				//prepend 'select item' to the select option
+				$(".selectedPlatformDefault").prepend("<option value='' selected>Select Platforms</option>");
+
+                $(".selectedStatusDefault").empty();
+                for(let key in currentStatuses){
+					//if the current key in the loop is in our 'selectedItemsArr' array
+					$(".selectedStatusDefault").append("<option value='"+key+"'>"+currentStatuses[key]+"</option>");
+				}
+				//prepend 'select item' to the select option
+				$(".selectedStatusDefault").prepend("<option value='' selected>Select Status</option>");
+
+                $(".selectedCompetitorDefault").empty();
+                for(let key in currentCompetitors){
+					//if the current key in the loop is in our 'selectedItemsArr' array
+					$(".selectedCompetitorDefault").append("<option value='"+key+"'>"+currentCompetitors[key]+"</option>");
+				}
+				//prepend 'select item' to the select option
+				$(".selectedCompetitorDefault").prepend("<option value='' selected>Select Competitor</option>");
+
+
+				resolve(); //selectedGroupsArr, selectedPrioritysArr
+			});
+		}).then(()=>{ //selectedGroupsArray, selectedPrioritysArray
+				//add select2 to the 'select input'
+			    $('.selectedCompetitorDefault').select2({dropdownAutoWidth : true, width : "100%"});
+                $('.selectedStatusDefault').select2({dropdownAutoWidth : true, width : "100%"});
+                $('.selectedPlatformDefault').select2({dropdownAutoWidth : true, width : "100%"});
+                $('.selectedCustomerDefault').select2({dropdownAutoWidth : true, width : "100%"});
+                $('.selectedProductDefault').select2({dropdownAutoWidth : true, width : "100%"});
+                $('.selectedPriorityDefault').select2({dropdownAutoWidth : true, width : "100%"});
+		}).catch(()=>{
+			console.log('outer promise err');
+		});
+
+        return false;
+    });
+
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //TO DELETE AN ITEM (The item will be marked as "deleted" instead of removing it totally from the db)
+    $("#transListTable").on('click', '.delItem', function(e){
+        e.preventDefault();
+
+        //get the item id
+        var itemId = $(this).parents('tr').find('.curItemId').val();
+        var itemRow = $(this).closest('tr');//to be used in removing the currently deleted row
+
+        if(itemId){
+            var confirm = window.confirm("Are you sure you want to delete item? This cannot be undone.");
+
+            if(confirm){
+                displayFlashMsg('Please wait...', spinnerClass, 'black');
+
+                $.ajax({
+                    url: appRoot+"productTransactions/delete",
+                    method: "POST",
+                    data: {i:itemId}
+                }).done(function(rd){
+                    if(rd.status === 1){
+                        //remove item from list, update items' SN, display success msg
+                        $(itemRow).remove();
+
+                        //update the SN
+                        resetItemSN();
+
+                        //display success message
+                        changeFlashMsgContent('Item deleted', '', 'green', 1000);
+                    }
+
+                    else{
+
+                    }
+                }).fail(function(){
+                    console.log('Req Failed');
+                });
+            }
+        }
     });
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -573,7 +695,7 @@ $(document).ready(function(){
         $("#itemCodeNotFoundMsg").html("");
 
         //change main "new transaction" button back to default
-        $("#showTransForm").html("<i class='fa fa-plus'></i> New Transaction");
+        $("#showTransForm").html("<i class='fa fa-plus'></i> New Product Transaction");
     });
 
 
@@ -873,21 +995,6 @@ function calchadue(){
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-function resetSalesTransForm(){
-    document.getElementById('salesTransForm').reset();
-
-    $(".itemUnitPrice, .itemTotalPrice, #cumAmount, #changeDue").html("0.00");
-    $(".itemAvailQty").html("0");
-    $("#amountTendered").prop('disabled', false);
-
-    //remove error messages
-    $("#itemCodeNotFoundMsg").html("");
-
-	//remove all appended lists
-	$("#appendClonedDivHere").html("");
-}
-
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1052,8 +1159,15 @@ function lilt(url){
 
 
 
+function resetItemSN(){
+    $(".itemSN").each(function(i){
+        $(this).html(parseInt(i)+1);
+    });
+}
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//TO DELETE AN ITEM (The item will be marked as "deleted" instead of removing it totally from the db)

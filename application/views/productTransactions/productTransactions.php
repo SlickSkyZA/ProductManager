@@ -147,8 +147,8 @@ if(isset($customer_venders) && !empty($customer_venders)){
                                 <div class="col-sm-6"></div>
                                 <br class="visible-xs">
                                 <div class="col-sm-4 form-group-sm">
-                                    <button type="button" class="btn btn-primary btn-sm" id="confirmSaleOrder">Confirm Order</button>
-                                    <button type="button" class="btn btn-danger btn-sm" id="cancelSaleOrder">Clear Order</button>
+                                    <button type="button" class="btn btn-primary btn-sm" id="confirmSaleOrder">Confirm</button>
+                                    <button type="button" class="btn btn-danger btn-sm" id="cancelSaleOrder">Clear</button>
                                     <button type="button" class="btn btn-danger btn-sm" id="hideTransForm">Close</button>
                                 </div>
                             </div>
@@ -170,7 +170,6 @@ if(isset($customer_venders) && !empty($customer_venders)){
                             <option value="5">5</option>
                             <option value="10" selected>10</option>
                             <option value="15">15</option>
-                            <option value="20">20</option>
                             <option value="20">20</option>
                             <option value="30">30</option>
                             <option value="50">50</option>

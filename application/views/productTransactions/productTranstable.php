@@ -3,7 +3,7 @@
 <?= isset($range) && !empty($range) ? $range : ""; ?>
 <div class="panel panel-primary">
     <!-- Default panel contents -->
-    <div class="panel-heading">Product</div>
+    <div class="panel-heading">Product Transactions</div>
     <?php if($allItems): ?>
     <div class="table table-responsive">
         <table class="table table-bordered table-striped" style="background-color: #f5f5f5">
@@ -11,10 +11,13 @@
                 <tr>
                     <th>SN</th>
                     <th>ID</th>
-                    <th>Name</th>
-                    <th>Group</th>
+                    <th>Product</th>
+                    <th>Customer</th>
                     <th>Priority</th>
-                    <th>Version</th>
+                    <th>Platform</th>
+                    <th>Status</th>
+                    <th>Competitor</th>
+                    <th>Project Name</th>
                     <th>Create DATE</th>
                     <th>Update DATE</th>
                     <th>DESCRIPTION</th>
@@ -28,12 +31,15 @@
                     <input type="hidden" value="<?=$get->id?>" class="curItemId">
                     <th class="itemSN"><?=$sn?>.</th>
                     <td><span id="itemID-<?=$get->id?>"><?=$get->id?></span></td>
-                    <td><span id="itemName-<?=$get->id?>"><?=$get->Name?></td>
-                    <td><span id="itemGroup-<?=$get->id?>"><?=$get->GroupName?></td>
+                    <td><span id="itemProduct-<?=$get->id?>"><?=$get->ProductName?></td>
+                    <td><span id="itemCustomer-<?=$get->id?>"><?=$get->CustomerName?></td>
                     <td><span id="itemPriority-<?=$get->id?>"><?=$get->PriorityName?></td>
-                    <td><span id="itemVersion-<?=$get->id?>"><?=$get->Version?></td>
-                    <td><span id="itemAddDate-<?=$get->id?>"><?=$get->AddedDate?></td>
-                    <td><span id="itemUpdateDate-<?=$get->id?>"><?=$get->UpdatedDate?></td>
+                    <td><span id="itemPlatform-<?=$get->id?>"><?=$get->PlatformName?></td>
+                    <td><span id="itemStatus-<?=$get->id?>"><?=$get->StatusName?></td>
+                    <td><span id="itemCompetitor-<?=$get->id?>"><?=$get->CompetitorName?></td>
+                    <td><span id="itemProject-<?=$get->id?>"><?=$get->ProjectName?></td>
+                    <td><span id="itemAddDate-<?=$get->id?>"><?= date('jS M, Y h:ia', strtotime($get->AddedDate)) ?> </td>
+                    <td><span id="itemUpdateDate-<?=$get->id?>"><?= date('jS M, Y h:ia', strtotime($get->UpdatedDate)) ?></td>
                     <td>
                         <span id="itemDesc-<?=$get->id?>" data-toggle="tooltip" title="<?=$get->Notes?>" data-placement="auto">
                             <?=character_limiter($get->Notes, 15)?>
