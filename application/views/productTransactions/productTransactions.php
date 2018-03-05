@@ -213,40 +213,62 @@ if(isset($customer_venders) && !empty($customer_venders)){
 </div>
 
 
-<div class="row hidden" id="divToClone">
-    <div class="col-sm-4 form-group-sm">
-        <label>Item</label>
-        <select class="form-control selectedItemDefault" onchange="selectedItem(this)"></select>
+<!---modal to edit item-->
+<div id="editItemModal" class="modal fade" role="dialog" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal">&times;</button>
+                <h4 class="text-center">Edit Product Info</h4>
+                <div id="editItemFMsg" class="text-center"></div>
+            </div>
+            <div class="modal-body">
+                <form name="addNewItemForm" id="addNewItemForm" role="form">
+                    <div class="row">
+                        <div class="col-sm-4 form-group-sm">
+                            <label for="itemNameEdit">Product Name</label>
+                            <input type="text" id="itemNameEdit" placeholder="Priority Name" autofocus class="form-control  checkField">
+                            <span class="help-block errMsg" id="itemNameEditErr"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4 form-group-sm">
+                            <label for="itemGroupEdit">Product Group</label>
+                            <select class="form-control selectedGroupDefault checkField" id="itemGroupEdit" name="itemGroupEdit"></select>
+                            <span class="help-block errMsg" id="itemGroupEditErr"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-4 form-group-sm">
+                            <label for="itemPriorityEdit">Product Priority</label>
+                            <select class="form-control selectedPriorityDefault checkField" id="itemPriorityEdit" name="itemPriorityEdit"></select>
+                            <span class="help-block errMsg" id="itemPriorityEditErr"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-4 form-group-sm">
+                            <label for="itemVersionEdit">Version (Optional)</label>
+                            <input type="text" id="itemVersionEdit" name="itemVersionEdit" placeholder="Version" class="form-control">
+                            <span class="help-block errMsg" id="itemVersionEditErr"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 form-group-sm">
+                            <label for="itemDescriptionEdit" class="">Description (Optional)</label>
+                            <textarea class="form-control" id="itemDescriptionEdit" placeholder="Optional Item Description"></textarea>
+                        </div>
+                    </div>
+                    <input type="hidden" id="itemIdEdit">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="editItemSubmit">Save</button>
+                <button class="btn btn-danger" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
     </div>
-
-    <div class="col-sm-2 form-group-sm itemAvailQtyDiv">
-        <label>Available Quantity</label>
-        <span class="form-control itemAvailQty">0</span>
-    </div>
-
-    <div class="col-sm-2 form-group-sm">
-        <label>Unit Price</label>
-        <span class="form-control itemUnitPrice">0.00</span>
-    </div>
-
-    <div class="col-sm-1 form-group-sm itemTransQtyDiv">
-        <label>Quantity</label>
-        <input type="number" min="0" class="form-control itemTransQty" value="0">
-        <span class="help-block itemTransQtyErr errMsg"></span>
-    </div>
-
-    <div class="col-sm-2 form-group-sm">
-        <label>Total Price</label>
-        <span class="form-control itemTotalPrice">0.00</span>
-    </div>
-
-    <br class="visible-xs">
-
-    <div class="col-sm-1">
-        <button class="close retrit">&times;</button>
-    </div>
-
-    <br class="visible-xs">
 </div>
 
 

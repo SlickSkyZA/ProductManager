@@ -111,6 +111,7 @@ class ProductTransactions extends CI_Controller{
      * "lilt" = "load Items List Table"
      */
     public function lilt(){
+
         $this->genlib->ajaxOnly();
 
         $this->load->helper('text');
@@ -133,6 +134,7 @@ class ProductTransactions extends CI_Controller{
         $config = $this->genlib->setPaginationConfig($totalItems, "productTransactions/lilt", $limit, ['onclick'=>'return lilt(this.href);']);
 
         $this->pagination->initialize($config);//initialize the library class
+
 
         //get all items from db
         $data['allItems'] = $this->productTransaction->getAll($orderBy, $orderFormat, $start, $limit);
