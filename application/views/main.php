@@ -163,6 +163,13 @@ defined('BASEPATH') OR exit('');
                             </a>
                         </li>
 
+                        <li class="<?= $pageTitle == 'Customer Projects' ? 'active' : '' ?>">
+                            <a href="<?= site_url('customerProjects') ?>">
+                                <i class="fa fa-tag"></i>
+                                Customer Projects
+                            </a>
+                        </li>
+
                         <li class="<?= $pageTitle == 'Region(OEM)' ? 'active' : '' ?>">
                             <a href="<?= site_url('regions') ?>">
                                 <i class="fa fa-tag"></i>

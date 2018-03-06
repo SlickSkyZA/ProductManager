@@ -7,22 +7,26 @@ defined('BASEPATH') OR exit('');
  * @author Amir <amirsanni@gmail.com>
  * @date 31st Dec, 2015
  */
-class CustomerTypes extends CI_Controller{
+class CustomerProjects extends CI_Controller{
 
     public function __construct(){
         parent::__construct();
 
         $this->genlib->checkLogin();
 
-        $this->load->model(['customerType']);
+        $this->load->model(['customerProject', 'customer']);
     }
 
     /**
      *
      */
     public function index(){
-        $data['pageContent'] = $this->load->view('customerTypes/customerTypes', '', TRUE);
-        $data['pageTitle'] = "Customer Types";
+        $transData['customers'] = $this->customer->getActiveItems('Name', 'ASC');//get items with at least one qty left, to be used when doing a new transaction
+        $transData['soc_companies'] = $this->customerProject->getSOCCompanies('SOCCompany', 'ASC');//get items with at least one qty left, to be used when doing a new transaction
+        $transData['soc_names'] = $this->customerProject->getSOCNames('SOCName', 'ASC');//get items with at least one qty left, to be used when doing a new transaction
+
+        $data['pageContent'] = $this->load->view('customerProjects/customerProjects', $transData, TRUE);
+        $data['pageTitle'] = "Customer Projects";
 
         $this->load->view('main', $data);
     }
@@ -48,7 +52,7 @@ class CustomerTypes extends CI_Controller{
         $orderFormat = $this->input->get('orderFormat', TRUE) ? $this->input->get('orderFormat', TRUE) : "ASC";
 
         //count the total number of items in db
-        $totalItems = $this->db->count_all('customer_type');
+        $totalItems = $this->db->count_all('customer_project');
 
         $this->load->library('pagination');
 
@@ -58,17 +62,17 @@ class CustomerTypes extends CI_Controller{
         $start = $pageNumber == 0 ? 0 : ($pageNumber - 1) * $limit;//start from 0 if pageNumber is 0, else start from the next iteration
 
         //call setPaginationConfig($totalRows, $urlToCall, $limit, $attributes) in genlib to configure pagination
-        $config = $this->genlib->setPaginationConfig($totalItems, "customerTypes/lilt", $limit, ['onclick'=>'return lilt(this.href);']);
+        $config = $this->genlib->setPaginationConfig($totalItems, "customerProjects/lilt", $limit, ['onclick'=>'return lilt(this.href);']);
 
         $this->pagination->initialize($config);//initialize the library class
 
         //get all items from db
-        $data['allItems'] = $this->customerType->getAll($orderBy, $orderFormat, $start, $limit);
+        $data['allItems'] = $this->customerProject->getAll($orderBy, $orderFormat, $start, $limit);
         $data['range'] = $totalItems > 0 ? "Showing " . ($start+1) . "-" . ($start + count($data['allItems'])) . " of " . $totalItems : "";
         $data['links'] = $this->pagination->create_links();//page links
         $data['sn'] = $start+1;
 
-        $json['itemsListTable'] = $this->load->view('customerTypes/customerTypeslisttable', $data, TRUE);//get view with populated items table
+        $json['itemsListTable'] = $this->load->view('customerProjects/customerProjectslisttable', $data, TRUE);//get view with populated items table
 
         $this->output->set_content_type('application/json')->set_output(json_encode($json));
     }
@@ -90,17 +94,27 @@ class CustomerTypes extends CI_Controller{
 
         $this->form_validation->set_error_delimiters('', '');
 
-        $this->form_validation->set_rules('itemName', 'Type Name', ['required', 'trim', 'max_length[80]', 'is_unique[customer_type.Name]'], //numeric
+        $this->form_validation->set_rules('itemName', 'Project Name', ['required', 'trim', 'max_length[80]', 'is_unique[customer_project.Name]'], //numeric
                 ['required'=>"required"]);
 
         if($this->form_validation->run() !== FALSE){
             $this->db->trans_start();//start transaction
+            $itemName = set_value('itemName');
+            $itemCustomer = set_value('itemCustomer');
+            $itemSOCCompany = set_value('itemSOCCompany');
+            $itemSOCName = set_value('itemSOCName');
+            $itemGPU = set_value('itemGPU');
+            $itemDSP = set_value('itemDSP');
+            $itemRAM = set_value('itemRAM');
+            $itemCamera0 = set_value('itemCamera0');
+            $itemCamera1 = set_value('itemCamera1');
+            $itemDesc = set_value('itemDesc');
 
             /**
              * insert info into db
              * function header: add($itemName, $itemQuantity, $itemPrice, $itemDescription, $itemCode)
              */
-            $insertedId = $this->customerType->add(set_value('itemName'), set_value('itemDesc'));
+            $insertedId = $this->customerProject->add($itemName, $itemCustomer, $itemSOCCompany, $itemSOCName, $itemGPU, $itemDSP, $itemRAM, $itemCamera0, $itemCamera1, $itemDesc);
 
             $itemName = set_value('itemName');
 
@@ -223,7 +237,7 @@ class CustomerTypes extends CI_Controller{
         $item_id = $this->input->post('i', TRUE);
 
         if($item_id){
-            $this->db->where('id', $item_id)->delete('customer_type');
+            $this->db->where('id', $item_id)->delete('customer_project');
 
             $json['status'] = 1;
         }

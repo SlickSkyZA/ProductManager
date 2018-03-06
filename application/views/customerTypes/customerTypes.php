@@ -30,8 +30,8 @@ defined('BASEPATH') OR exit('');
                     <div class="col-sm-4 form-group-sm form-inline">
                         <label for="itemsListSortBy">Sort by</label>
                         <select id="itemsListSortBy" class="form-control">
-                            <option value="Name-ASC">Status Name (A-Z)</option>
-                            <option value="Name-DESC">Status Name (Z-A)</option>
+                            <option value="Name-ASC">Type Name (A-Z)</option>
+                            <option value="Name-DESC">Type Name (Z-A)</option>
                         </select>
                     </div>
 
