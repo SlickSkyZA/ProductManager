@@ -7,22 +7,22 @@ defined('BASEPATH') OR exit('');
  * @author Amir <amirsanni@gmail.com>
  * @date 31st Dec, 2015
  */
-class CustomerVenders extends CI_Controller{
+class CustomerTypes extends CI_Controller{
 
     public function __construct(){
         parent::__construct();
 
         $this->genlib->checkLogin();
 
-        $this->load->model(['customerVender']);
+        $this->load->model(['customerType']);
     }
 
     /**
      *
      */
     public function index(){
-        $data['pageContent'] = $this->load->view('customerVenders/customerVenders', '', TRUE);
-        $data['pageTitle'] = "Customer Venders";
+        $data['pageContent'] = $this->load->view('customerTypes/customerTypes', '', TRUE);
+        $data['pageTitle'] = "Customer Types";
 
         $this->load->view('main', $data);
     }
@@ -48,7 +48,7 @@ class CustomerVenders extends CI_Controller{
         $orderFormat = $this->input->get('orderFormat', TRUE) ? $this->input->get('orderFormat', TRUE) : "ASC";
 
         //count the total number of items in db
-        $totalItems = $this->db->count_all('customer_vender');
+        $totalItems = $this->db->count_all('customer_type');
 
         $this->load->library('pagination');
 
@@ -58,17 +58,17 @@ class CustomerVenders extends CI_Controller{
         $start = $pageNumber == 0 ? 0 : ($pageNumber - 1) * $limit;//start from 0 if pageNumber is 0, else start from the next iteration
 
         //call setPaginationConfig($totalRows, $urlToCall, $limit, $attributes) in genlib to configure pagination
-        $config = $this->genlib->setPaginationConfig($totalItems, "customerVenders/lilt", $limit, ['onclick'=>'return lilt(this.href);']);
+        $config = $this->genlib->setPaginationConfig($totalItems, "customerTypes/lilt", $limit, ['onclick'=>'return lilt(this.href);']);
 
         $this->pagination->initialize($config);//initialize the library class
 
         //get all items from db
-        $data['allItems'] = $this->customerVender->getAll($orderBy, $orderFormat, $start, $limit);
+        $data['allItems'] = $this->customerType->getAll($orderBy, $orderFormat, $start, $limit);
         $data['range'] = $totalItems > 0 ? "Showing " . ($start+1) . "-" . ($start + count($data['allItems'])) . " of " . $totalItems : "";
         $data['links'] = $this->pagination->create_links();//page links
         $data['sn'] = $start+1;
 
-        $json['itemsListTable'] = $this->load->view('customerVenders/customerVenderslisttable', $data, TRUE);//get view with populated items table
+        $json['itemsListTable'] = $this->load->view('customerTypes/customerTypeslisttable', $data, TRUE);//get view with populated items table
 
         $this->output->set_content_type('application/json')->set_output(json_encode($json));
     }
@@ -90,7 +90,7 @@ class CustomerVenders extends CI_Controller{
 
         $this->form_validation->set_error_delimiters('', '');
 
-        $this->form_validation->set_rules('venderName', 'Vender Name', ['required', 'trim', 'max_length[80]', 'is_unique[customer_vender.Name]'], //numeric
+        $this->form_validation->set_rules('itemName', 'Type Name', ['required', 'trim', 'max_length[80]', 'is_unique[customer_type.Name]'], //numeric
                 ['required'=>"required"]);
 
         if($this->form_validation->run() !== FALSE){
@@ -100,20 +100,20 @@ class CustomerVenders extends CI_Controller{
              * insert info into db
              * function header: add($itemName, $itemQuantity, $itemPrice, $itemDescription, $itemCode)
              */
-            $insertedId = $this->customerVender->add(set_value('venderName'), set_value('description'));
+            $insertedId = $this->customerType->add(set_value('itemName'), set_value('itemDesc'));
 
-            $itemName = set_value('venderName');
+            $itemName = set_value('itemName');
 
             //insert into eventlog
             //function header: addevent($event, $eventRowId, $eventDesc, $eventTable, $staffId)
-            $desc = "New addition of vender:{$itemName}";
+            $desc = "New addition of type:{$itemName}";
 
-            $insertedId ? $this->genmod->addevent("Creation of new vernder", $insertedId, $desc, "Product Status", $this->session->admin_id) : "";
+            $insertedId ? $this->genmod->addevent("Creation of new vernder", $insertedId, $desc, "Customer Type", $this->session->admin_id) : "";
 
             $this->db->trans_complete();
 
             $json = $this->db->trans_status() !== FALSE ?
-                    ['status'=>1, 'msg'=>"Vender successfully added"]
+                    ['status'=>1, 'msg'=>"Type successfully added"]
                     :
                     ['status'=>0, 'msg'=>"Oops! Unexpected server error! Please contact administrator for help. Sorry for the embarrassment"];
         }
@@ -279,7 +279,7 @@ class CustomerVenders extends CI_Controller{
             $itemName = set_value('itemName');
 
             //update item in db
-            $updated = $this->customerVender->edit($itemId, $itemName, $itemDesc);
+            $updated = $this->customerType->edit($itemId, $itemName, $itemDesc);
 
             $json['status'] = $updated ? 1 : 0;
 
@@ -287,7 +287,7 @@ class CustomerVenders extends CI_Controller{
             //function header: addevent($event, $eventRowId, $eventDesc, $eventTable, $staffId)
             $desc = "Details of item with code '$itemId' was updated";
 
-            $this->genmod->addevent("Vender Info Update", $itemId, $desc, 'Customer Vender', $this->session->admin_id);
+            $this->genmod->addevent("Vender Info Update", $itemId, $desc, 'Customer Type', $this->session->admin_id);
         }
 
         else{
@@ -311,7 +311,7 @@ class CustomerVenders extends CI_Controller{
 
     public function crosscheckName($itemName, $itemId){
         //check db to ensure name was previously used for the item we are updating
-        $itemWithName = $this->genmod->getTableCol('product_status', 'id', 'Name', $itemName);
+        $itemWithName = $this->genmod->getTableCol('customer_type', 'id', 'Name', $itemName);
 
         //if item name does not exist or it exist but it's the name of current item
         if(!$itemWithName || ($itemWithName == $itemId)){
@@ -372,7 +372,7 @@ class CustomerVenders extends CI_Controller{
         $item_id = $this->input->post('i', TRUE);
 
         if($item_id){
-            $this->db->where('id', $item_id)->delete('customer_vender');
+            $this->db->where('id', $item_id)->delete('customer_type');
 
             $json['status'] = 1;
         }

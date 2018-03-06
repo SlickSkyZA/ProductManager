@@ -18,7 +18,7 @@ class Search extends CI_Controller{
 
         $this->genlib->ajaxOnly();
 
-        $this->load->model(['transaction', 'item', 'productGroup', 'priority', 'product', 'region', 'platform', 'customer', 'productStatus', 'customerVender', 'productTransaction']);
+        $this->load->model(['transaction', 'item', 'productGroup', 'priority', 'product', 'region', 'platform', 'customer', 'productStatus', 'customerVender', 'productTransaction', 'customerType']);
 
         $this->load->helper('text');
 
@@ -177,6 +177,23 @@ class Search extends CI_Controller{
         $data['sn'] = 1;
 
         $json['itemsListTable'] = $data['allItems'] ? $this->load->view('customerVenders/customerVenderslisttable', $data, TRUE) : "No match found {$this->value}";
+
+        //set final output
+        $this->output->set_content_type('application/json')->set_output(json_encode($json));
+    }
+
+    /*
+    ********************************************************************************************************************************
+    ********************************************************************************************************************************
+    ********************************************************************************************************************************
+    ********************************************************************************************************************************
+    ********************************************************************************************************************************
+    */
+    public function customerTypeSearch(){
+        $data['allItems'] = $this->customerType->itemsearch($this->value);
+        $data['sn'] = 1;
+
+        $json['itemsListTable'] = $data['allItems'] ? $this->load->view('customerTypes/customerTypeslisttable', $data, TRUE) : "No match found {$this->value}";
 
         //set final output
         $this->output->set_content_type('application/json')->set_output(json_encode($json));

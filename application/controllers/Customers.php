@@ -15,7 +15,7 @@ class Customers extends CI_Controller{
 
         $this->genlib->checkLogin();
 
-        $this->load->model(['priority', 'region', 'customer']);
+        $this->load->model(['priority', 'region', 'customer', 'customerType']);
     }
 
     /*
@@ -29,6 +29,7 @@ class Customers extends CI_Controller{
     public function index(){
         $transData['priorities'] = $this->priority->getActiveItems('Name', 'ASC');//get items with at least one qty left, to be used when doing a new transaction
         $transData['product_regions'] = $this->region->getActiveItems('Name', 'ASC');
+        $transData['customer_types'] = $this->customerType->getActiveItems('Name', 'ASC');
 
         $data['pageContent'] = $this->load->view('customers/customers', $transData, TRUE);
         $data['pageTitle'] = "Customers";
@@ -54,18 +55,22 @@ class Customers extends CI_Controller{
         $this->form_validation->set_rules('customerName', 'Customer Name', ['required', 'trim', 'max_length[80]', 'is_unique[product.Name]'], //numeric
                 ['required'=>"required"]);
         $this->form_validation->set_rules('customerRegion', 'Customer Region', ['required', 'trim', 'numeric'], ['required'=>"required"]);
+        $this->form_validation->set_rules('customerType', 'Customer Type', ['required', 'trim', 'numeric'], ['required'=>"required"]);
         $this->form_validation->set_rules('priority', 'Priority', ['required', 'trim', 'numeric'], ['required'=>"required"]);
 
         if($this->form_validation->run() !== FALSE){
             $this->db->trans_start();//start transaction
+            $itemName = set_value('customerName');
+            $itemRegion = set_value('customerRegion');
+            $itemType = set_value('customerType');
+            $itemPriority = set_value('priority');
+            $itemDesc = set_value('description');
 
             /**
              * insert info into db
              * function header: add($itemName, $itemQuantity, $itemPrice, $itemDescription, $itemCode)
              */
-            $insertedId = $this->customer->add(set_value('customerName'), set_value('customerRegion'), set_value('priority'), set_value('description'));
-
-            $itemName = set_value('customerName');
+            $insertedId = $this->customer->add($itemName, $itemRegion, $itemType, $itemPriority, $itemDesc);
 
             //insert into eventlog
             //function header: addevent($event, $eventRowId, $eventDesc, $eventTable, $staffId)

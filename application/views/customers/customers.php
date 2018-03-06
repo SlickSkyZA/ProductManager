@@ -3,6 +3,7 @@ defined('BASEPATH') OR exit('');
 
 $current_regions = [];
 $current_priorities = [];
+$current_types = [];
 
 if(isset($priorities) && !empty($priorities)){
     foreach($priorities as $get){
@@ -15,6 +16,13 @@ if(isset($product_regions) && !empty($product_regions)){
         $current_regions[$get->id] = $get->Name;
     }
 }
+
+if(isset($customer_types) && !empty($customer_types)){
+    foreach($customer_types as $get){
+        $current_types[$get->id] = $get->Name;
+    }
+}
+
 ?>
 
 <style href="<?=base_url('public/ext/datetimepicker/bootstrap-datepicker.min.css')?>" rel="stylesheet"></style>
@@ -22,6 +30,7 @@ if(isset($product_regions) && !empty($product_regions)){
 <script>
     var currentRegions = <?=json_encode($current_regions)?>;
     var currentPriorities = <?=json_encode($current_priorities)?>;
+    var currentTypes = <?=json_encode($current_types)?>;
 </script>
 
 <div class="pwell hidden-print">
@@ -53,10 +62,12 @@ if(isset($product_regions) && !empty($product_regions)){
                         <label for="itemsListSortBy">Sort by</label>
                         <select id="itemsListSortBy" class="form-control">
                             <option value="Name-ASC">Customer Name (A-Z)</option>
-                            <option value="RegionID-ASC">Region (Ascending)</option>
-                            <option value="PriorityValue-ASC">Priority (Ascending)</option>
                             <option value="Name-DESC">Customer Name (Z-A)</option>
+                            <option value="RegionID-ASC">Region (Ascending)</option>
                             <option value="RegionID-DESC">Region (Descending)</option>
+                            <option value="TypeID-ASC">Type (Ascending)</option>
+                            <option value="TypeID-DESC">Type (Descending)</option>
+                            <option value="PriorityValue-ASC">Priority (Ascending)</option>
                             <option value="PriorityValue-DESC">Priority (Descending)</option>
                         </select>
                     </div>
@@ -100,6 +111,14 @@ if(isset($product_regions) && !empty($product_regions)){
                                 <select class="form-control selectedGroupDefault" id="customerRegion" name="customerRegion" maxlength="80"
                                     onchange="checkField(this.value, 'customerRegionErr')"></select>
                                 <span class="help-block errMsg" id="customerRegionErr"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 form-group-sm">
+                                <label for="customerType">Customer Type</label>
+                                <select class="form-control selectedTypeDefault" id="customerType" name="customerType" maxlength="80"
+                                    onchange="checkField(this.value, 'customerTypeErr')"></select>
+                                <span class="help-block errMsg" id="customerTypeErr"></span>
                             </div>
                         </div>
 

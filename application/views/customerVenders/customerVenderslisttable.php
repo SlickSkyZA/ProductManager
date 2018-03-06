@@ -3,7 +3,7 @@
 <?= isset($range) && !empty($range) ? $range : ""; ?>
 <div class="panel panel-primary">
     <!-- Default panel contents -->
-    <div class="panel-heading">Platforms</div>
+    <div class="panel-heading">Venders</div>
     <?php if($allItems): ?>
     <div class="table table-responsive">
         <table class="table table-bordered table-striped" style="background-color: #f5f5f5">
@@ -11,7 +11,7 @@
                 <tr>
                     <th>SN</th>
                     <th>ID</th>
-                    <th>Platform Name</th>
+                    <th>Name</th>
                     <th>Create DATE</th>
                     <th>Update DATE</th>
                     <th>DESCRIPTION</th>

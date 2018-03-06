@@ -30,43 +30,6 @@ $(document).ready(function(){
         $("#itemsListDiv").toggleClass("col-sm-8", "col-sm-12");
         $("#createNewItemDiv").toggleClass('hidden');
         $("#itemName").focus();
-
-        //$(".selectedItemDefault").addClass("selectedItem").val("");
-
-        //loop through the currentItems variable to add the items to the select input
-		return new Promise((resolve, reject)=>{
-            $(".selectedGroupDefault").empty();
-			for(let key in currentRegions){
-				$(".selectedGroupDefault").append("<option value='"+key+"'>"+currentRegions[key]+"</option>");
-			}
-			//prepend 'select item' to the select option
-			$(".selectedGroupDefault").prepend("<option value='' selected>Select Region</option>");
-
-            $(".selectedPriorityDefault").empty();
-            for(let key in currentPriorities){
-				$(".selectedPriorityDefault").append("<option value='"+key+"'>"+currentPriorities[key]+"</option>");
-			}
-			//prepend 'select item' to the select option
-			$(".selectedPriorityDefault").prepend("<option value='' selected>Select Priority</option>");
-
-            $(".selectedTypeDefault").empty();
-            for(let key in currentTypes){
-				$(".selectedTypeDefault").append("<option value='"+key+"'>"+currentTypes[key]+"</option>");
-			}
-			//prepend 'select item' to the select option
-			$(".selectedTypeDefault").prepend("<option value='' selected>Select Type</option>");
-
-			resolve();
-		}).then(()=>{
-			//add select2 to the 'select input'
-		    $('.selectedGroupDefault').select2();
-            $('.selectedPriorityDefault').select2();
-            $('.selectedTypeDefault').select2();
-		}).catch(()=>{
-			console.log('outer promise err');
-		});
-
-        return false;
     });
 
 
@@ -91,58 +54,84 @@ $(document).ready(function(){
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    //execute when 'auto-generate' checkbox is clicked while trying to add a new item
+    $("#gen4me").click(function(){
+        //if checked, generate a unique item code for user. Else, clear field
+        if($("#gen4me").prop("checked")){
+            var codeExist = false;
+
+            do{
+                //generate random string, reduce the length to 10 and convert to uppercase
+                var rand = Math.random().toString(36).slice(2).substring(0, 10).toUpperCase();
+                $("#itemCode").val(rand);//paste the code in input
+                $("#itemCodeErr").text('');//remove the error message being displayed (if any)
+
+                //check whether code exist for another item
+                $.ajax({
+                    type: 'get',
+                    url: appRoot+"items/gettablecol/id/code/"+rand,
+                    success: function(returnedData){
+                        codeExist = returnedData.status;//returnedData.status could be either 1 or 0
+                    }
+                });
+            }
+
+            while(codeExist);
+
+        }
+
+        else{
+            $("#itemCode").val("");
+        }
+    });
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     //handles the submission of adding new item
     $("#addNewItem").click(function(e){
         e.preventDefault();
 
-        changeInnerHTML(['customerNameErr', 'customerTypeErr', 'customerRegionErr', 'priorityErr', 'addCustErrMsg'], "");
+        changeInnerHTML(['itemNameErr', 'addCustErrMsg'], "");
 
-        var customerName = $("#customerName").val();
-        var customerRegion = $("#customerRegion").val();
-        var customerType = $("#customerType").val();
-        var priority = $("#priority").val();
-        var description = $("#description").val();
+        var itemName = $("#itemName").val();
+        var itemDesc = $("#itemDesc").val();
 
-        if(!customerName || !customerRegion || !priority || !customerType){
-            !customerName ? $("#customerNameErr").text("required") : "";
-            !customerRegion ? $("#customerRegionErr").text("required") : "";
-            !customerType ? $("#customerTypeErr").text("required") : "";
-            !priority ? $("#priorityErr").text("required") : "";
+        if(!itemName){
+            !itemName ? $("#itemNameErr").text("required") : "";
 
             $("#addCustErrMsg").text("One or more required fields are empty");
 
             return;
         }
 
-        displayFlashMsg("Adding Customer '"+customerName+"'", "fa fa-spinner faa-spin animated", '', '');
+        displayFlashMsg("Adding type '"+itemName+"'", "fa fa-spinner faa-spin animated", '', '');
 
         $.ajax({
             type: "post",
-            url: appRoot+"customers/add",
-            data:{customerName:customerName, customerRegion:customerRegion, customerType:customerType, priority:priority, description:description},
+            url: appRoot+"customerTypes/add",
+            data:{itemName:itemName, itemDesc:itemDesc},
 
             success: function(returnedData){
                 if(returnedData.status === 1){
                     changeFlashMsgContent(returnedData.msg, "text-success", '', 1500);
                     document.getElementById("addNewItemForm").reset();
-                    $("#customerRegion").val(customerRegion);
-                    $("#customerType").val(customerType);
-                    $("#priority").val(priority);
+
                     //refresh the items list table
                     lilt();
 
                     //return focus to item code input to allow adding item with barcode scanner
-                    $("#customerName").focus();
+                    $("#itemName").focus();
                 }
 
                 else{
                     hideFlashMsg();
 
                     //display all errors
-                    $("#customerRegionErr").text(returnedData.customerRegion);
-                    $("#customerTypeErr").text(returnedData.customerType);
-                    $("#customerNameErr").text(returnedData.customerName);
-                    $("#priorityErr").text(returnedData.priority);
+                    $("#itemNameErr").text(returnedData.itemName);
                     $("#addCustErrMsg").text(returnedData.msg);
                 }
             },
@@ -183,7 +172,7 @@ $(document).ready(function(){
         //console.log("The Priority NAME value: %s", value);
         if(value){
             $.ajax({
-                url: appRoot+"search/customerSearch",
+                url: appRoot+"search/customerTypeSearch",
                 type: "get",
                 data: {v:value},
                 success: function(returnedData){
@@ -213,8 +202,6 @@ $(document).ready(function(){
         var itemId = $(this).attr('id').split("-")[1];
         var itemDesc = $("#itemDesc-"+itemId).attr('title');
         var itemName = $("#itemName-"+itemId).html();
-        var itemRegion = $("#itemRegion-"+itemId).html();
-        var itemPriority = $("#itemPriority-"+itemId).html();
 
         //prefill form with info
         $("#itemIdEdit").val(itemId);
@@ -227,67 +214,6 @@ $(document).ready(function(){
 
         //launch modal
         $("#editItemModal").modal('show');
-
-        //$(".selectedItemDefault").addClass("selectedItem").val("");
-
-        //loop through the currentItems variable to add the items to the select input
-		return new Promise((resolve, reject)=>{
-			//if an item has been selected (i.e. added to the current transaction), do not add it to the list. This way, an item will appear just once.
-			//We start by forming an array of all selected items, then skip that item in the loop appending items to select dropdown
-			var selectedGroupsArr = [];
-            var selectedPrioritysArr = [];
-
-			return new Promise((res, rej)=>{
-				//$(".selectedItem").each(function(){
-				//	//push the selected value (which is the item code [a key in currentItems object]) to the array
-				//	$(this).val() ? selectedItemsArr.push($(this).val()) : "";
-				//});
-
-				res();
-			}).then(()=>{
-                $(".selectedGroupDefault").empty();
-				for(let key in currentRegions){
-					//if the current key in the loop is in our 'selectedItemsArr' array
-					if(!inArray(key, selectedGroupsArr)){
-						//if the item has not been selected, append it to the select list
-                        if (currentRegions[key] == itemRegion) {
-                            $(".selectedGroupDefault").append("<option value='"+key+"' selected>"+currentRegions[key]+"</option>");
-                        } else {
-                            $(".selectedGroupDefault").append("<option value='"+key+"'>"+currentRegions[key]+"</option>");
-                        }
-					}
-				}
-
-				//prepend 'select item' to the select option
-				$(".selectedGroupDefault").prepend("<option value=''>Select Region</option>");
-
-                $(".selectedPriorityDefault").empty();
-                for(let key in currentPriorities){
-					//if the current key in the loop is in our 'selectedItemsArr' array
-					if(!inArray(key, selectedPrioritysArr)){
-						//if the item has not been selected, append it to the select list
-                        if (currentPriorities[key] == itemPriority) {
-	                        $(".selectedPriorityDefault").append("<option value='"+key+"' selected>"+currentPriorities[key]+"</option>");
-                        } else {
-                            $(".selectedPriorityDefault").append("<option value='"+key+"'>"+currentPriorities[key]+"</option>");
-                        }
-					}
-				}
-
-				//prepend 'select item' to the select option
-				$(".selectedPriorityDefault").prepend("<option value=''>Select Priority</option>");
-
-				resolve(selectedGroupsArr, selectedPrioritysArr);
-			});
-		}).then((selectedGroupsArray, selectedPrioritysArray)=>{
-				//add select2 to the 'select input'
-			    $('.selectedGroupDefault').select2({dropdownAutoWidth : true, width : "100%"});
-                $('.selectedPriorityDefault').select2({dropdownAutoWidth : true, width : "100%"});
-		}).catch(()=>{
-			console.log('outer promise err');
-		});
-
-        return false;
     });
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -298,31 +224,24 @@ $(document).ready(function(){
 
     $("#editItemSubmit").click(function(){
         var itemName = $("#itemNameEdit").val();
-        var itemRegion = $("#itemRegionEdit").val();
-        var itemPriority = $("#itemPriorityEdit").val();
         var itemDesc = $("#itemDescriptionEdit").val();
         var itemId = $("#itemIdEdit").val();
 
-        if(!itemName || !itemId || !itemRegion || !itemPriority){
-            !itemName ? $("#itemNameEditErr").html("Customer name cannot be empty") : "";
-            !itemRegion ? $("#itemRegionEditErr").html("Customer region cannot be empty") : "";
-            !itemPriority ? $("#itemPriorityEditErr").html("Customer priority cannot be empty") : "";
-            !itemId ? $("#editItemFMsg").html("Unknown Customer") : "";
+        if(!itemName || !itemId ){
+            !itemName ? $("#itemNameEditErr").html("Type name cannot be empty") : "";
+            !itemId ? $("#editItemFMsg").html("Unknown Priority") : "";
             return;
         }
-
-        var itemRegionID = itemRegion;
-        var itemPriorityID = itemPriority;
 
         $("#editItemFMsg").css('color', 'black').html("<i class='"+spinnerClass+"'></i> Processing your request....");
 
         $.ajax({
             method: "POST",
-            url: appRoot+"customers/edit",
-            data: {itemName:itemName, itemRegionID:itemRegionID, itemPriorityID:itemPriorityID, itemDesc:itemDesc, _iId:itemId}
+            url: appRoot+"customerTypes/edit",
+            data: {itemName:itemName, itemDesc:itemDesc, _iId:itemId}
         }).done(function(returnedData){
             if(returnedData.status === 1){
-                $("#editItemFMsg").css('color', 'green').html("Product successfully updated");
+                $("#editItemFMsg").css('color', 'green').html("Status successfully updated");
 
                 setTimeout(function(){
                     $("#editItemModal").modal('hide');
@@ -335,7 +254,6 @@ $(document).ready(function(){
                 $("#editItemFMsg").css('color', 'red').html("One or more required fields are empty or not properly filled");
 
                 $("#itemNameEditErr").html(returnedData.itemName);
-                $("#itemValueEditErr").html(returnedData.itemValue);
             }
         }).fail(function(){
             $("#editItemFMsg").css('color', 'red').html("Unable to process your request at this time. Please check your internet connection and try again");
@@ -398,7 +316,7 @@ $(document).ready(function(){
                 displayFlashMsg('Please wait...', spinnerClass, 'black');
 
                 $.ajax({
-                    url: appRoot+"customers/delete",
+                    url: appRoot+"customerTypes/delete",
                     method: "POST",
                     data: {i:itemId}
                 }).done(function(rd){
@@ -439,7 +357,7 @@ function lilt(url){
 
     $.ajax({
         type:'get',
-        url: url ? url : appRoot+"customers/lilt/",
+        url: url ? url : appRoot+"customerTypes/lilt/",
         data: {orderBy:orderBy, orderFormat:orderFormat, limit:limit},
 
         success: function(returnedData){

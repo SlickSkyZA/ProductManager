@@ -3,7 +3,7 @@
 <?= isset($range) && !empty($range) ? $range : ""; ?>
 <div class="panel panel-primary">
     <!-- Default panel contents -->
-    <div class="panel-heading">Product</div>
+    <div class="panel-heading">Types</div>
     <?php if($allItems): ?>
     <div class="table table-responsive">
         <table class="table table-bordered table-striped" style="background-color: #f5f5f5">
@@ -12,9 +12,6 @@
                     <th>SN</th>
                     <th>ID</th>
                     <th>Name</th>
-                    <th>Region</th>
-                    <th>Type</th>
-                    <th>Priority</th>
                     <th>Create DATE</th>
                     <th>Update DATE</th>
                     <th>DESCRIPTION</th>
@@ -29,9 +26,6 @@
                     <th class="itemSN"><?=$sn?>.</th>
                     <td><span id="itemID-<?=$get->id?>"><?=$get->id?></span></td>
                     <td><span id="itemName-<?=$get->id?>"><?=$get->Name?></td>
-                    <td><span id="itemRegion-<?=$get->id?>"><?=$get->RegionName?></td>
-                    <td><span id="itemType-<?=$get->id?>"><?=$get->TypeName?></td>
-                    <td><span id="itemPriority-<?=$get->id?>"><?=$get->PriorityName?></td>
                     <td><span id="itemAddDate-<?=$get->id?>"><?=$get->AddedDate?></td>
                     <td><span id="itemUpdateDate-<?=$get->id?>"><?=$get->UpdatedDate?></td>
                     <td>

@@ -177,6 +177,13 @@ defined('BASEPATH') OR exit('');
                             </a>
                         </li>
 
+                        <li class="<?= $pageTitle == 'Customer Types' ? 'active' : '' ?>">
+                            <a href="<?= site_url('customerTypes') ?>">
+                                <i class="fa fa-tag"></i>
+                                Customer Types
+                            </a>
+                        </li>
+
                         <li class="<?= $pageTitle == 'Priority' ? 'active' : '' ?>">
                             <a href="<?= site_url('priorities') ?>">
                                 <i class="fa fa-tag"></i>
