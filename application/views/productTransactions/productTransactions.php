@@ -180,14 +180,16 @@ if(isset($customer_venders) && !empty($customer_venders)){
                     <div class="col-sm-5 form-group-sm form-inline">
                         <label for="transListSortBy">Sort by</label>
                         <select id="transListSortBy" class="form-control">
-                            <option value="AddedDate-DESC">date(Latest First)</option>
-                            <option value="AddedDate-ASC">date(Oldest First)</option>
-                            <option value="quantity-DESC">Quantity (Highest first)</option>
-                            <option value="quantity-ASC">Quantity (Lowest first)</option>
-                            <option value="totalPrice-DESC">Total Price (Highest first)</option>
-                            <option value="totalPrice-ASC">Total Price (Lowest first)</option>
-                            <option value="totalMoneySpent-DESC">Total Amount Spent (Highest first)</option>
-                            <option value="totalMoneySpent-ASC">Total Amount Spent (Lowest first)</option>
+                            <option value="AddedDate-DESC">AddedDate(Latest First)</option>
+                            <option value="AddedDate-ASC">AddedDate(Oldest First)</option>
+                            <option value="ProductID-DESC">Product (Highest first)</option>
+                            <option value="ProductID-ASC">Product (Lowest first)</option>
+                            <option value="CustomerID-DESC">Customer (Highest first)</option>
+                            <option value="CustomerID-ASC">Customer (Lowest first)</option>
+                            <option value="PlatformID-DESC">Platform (Highest first)</option>
+                            <option value="PlatformID-ASC">Platform (Lowest first)</option>
+                            <option value="StatusID-DESC">Status (Highest first)</option>
+                            <option value="StatusID-ASC">Status (Lowest first)</option>
                         </select>
                     </div>
 
@@ -219,45 +221,61 @@ if(isset($customer_venders) && !empty($customer_venders)){
         <div class="modal-content">
             <div class="modal-header">
                 <button class="close" data-dismiss="modal">&times;</button>
-                <h4 class="text-center">Edit Product Info</h4>
+                <h4 class="text-center">Edit Product Transaction Info</h4>
                 <div id="editItemFMsg" class="text-center"></div>
             </div>
             <div class="modal-body">
                 <form name="addNewItemForm" id="addNewItemForm" role="form">
                     <div class="row">
                         <div class="col-sm-4 form-group-sm">
-                            <label for="itemNameEdit">Product Name</label>
-                            <input type="text" id="itemNameEdit" placeholder="Priority Name" autofocus class="form-control  checkField">
-                            <span class="help-block errMsg" id="itemNameEditErr"></span>
+                            <label for="itemProductEdit">Product</label>
+                            <select class="form-control selectedProductDefault checkField" id="itemProductEdit" name="itemProductEdit"></select>
+                            <span class="help-block errMsg" id="itemProductEditErr"></span>
                         </div>
-                    </div>
-                    <div class="row">
+
                         <div class="col-sm-4 form-group-sm">
-                            <label for="itemGroupEdit">Product Group</label>
-                            <select class="form-control selectedGroupDefault checkField" id="itemGroupEdit" name="itemGroupEdit"></select>
-                            <span class="help-block errMsg" id="itemGroupEditErr"></span>
+                            <label for="itemCustomerEdit">Customer</label>
+                            <select class="form-control selectedCustomerDefault checkField" id="itemCustomerEdit" name="itemCustomerEdit"></select>
+                            <span class="help-block errMsg" id="itemCustomerEditErr"></span>
+                        </div>
+
+                        <div class="col-sm-4 form-group-sm">
+                            <label for="itemPlatformEdit">Platform</label>
+                            <select class="form-control selectedPlatformDefault checkField" id="itemPlatformEdit" name="itemPlatformEdit"></select>
+                            <span class="help-block errMsg" id="itemPlatformEditErr"></span>
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-sm-4 form-group-sm">
-                            <label for="itemPriorityEdit">Product Priority</label>
+                            <label for="itemPriorityEdit">Priority</label>
                             <select class="form-control selectedPriorityDefault checkField" id="itemPriorityEdit" name="itemPriorityEdit"></select>
                             <span class="help-block errMsg" id="itemPriorityEditErr"></span>
                         </div>
+
+                        <div class="col-sm-4 form-group-sm">
+                            <label for="itemStatusEdit">Status</label>
+                            <select class="form-control selectedStatusDefault checkField" id="itemStatusEdit" name="itemStatusEdit"></select>
+                            <span class="help-block errMsg" id="itemStatusEditErr"></span>
+                        </div>
+
+                        <div class="col-sm-4 form-group-sm">
+                            <label for="itemCompetitorEdit">Competitor (Optional)</label>
+                            <select class="form-control selectedCompetitorDefault" id="itemCompetitorEdit" name="itemCompetitorEdit"></select>
+                        </div>
                     </div>
 
                     <div class="row">
                         <div class="col-sm-4 form-group-sm">
-                            <label for="itemVersionEdit">Version (Optional)</label>
-                            <input type="text" id="itemVersionEdit" name="itemVersionEdit" placeholder="Version" class="form-control">
-                            <span class="help-block errMsg" id="itemVersionEditErr"></span>
+                            <label for="itemProjectNameEdit">Project Name (Optional)</label>
+                            <input type="text" id="itemProjectNameEdit" class="form-control" placeholder="Customer Project Name">
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-sm-12 form-group-sm">
-                            <label for="itemDescriptionEdit" class="">Description (Optional)</label>
-                            <textarea class="form-control" id="itemDescriptionEdit" placeholder="Optional Item Description"></textarea>
+                        <div class="col-sm-4 form-group-sm">
+                            <label for="itemDescEdit" class="">Description (Optional)</label>
+                            <textarea class="form-control" id="itemDescEdit" name="itemDescEdit" rows='4'
+                                placeholder="Optional Product Description"></textarea>
                         </div>
                     </div>
                     <input type="hidden" id="itemIdEdit">

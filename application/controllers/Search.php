@@ -18,7 +18,7 @@ class Search extends CI_Controller{
 
         $this->genlib->ajaxOnly();
 
-        $this->load->model(['transaction', 'item', 'productGroup', 'priority', 'product', 'region', 'platform', 'customer', 'productStatus', 'customerVender']);
+        $this->load->model(['transaction', 'item', 'productGroup', 'priority', 'product', 'region', 'platform', 'customer', 'productStatus', 'customerVender', 'productTransaction']);
 
         $this->load->helper('text');
 
@@ -181,6 +181,24 @@ class Search extends CI_Controller{
         //set final output
         $this->output->set_content_type('application/json')->set_output(json_encode($json));
     }
+
+    /*
+    ********************************************************************************************************************************
+    ********************************************************************************************************************************
+    ********************************************************************************************************************************
+    ********************************************************************************************************************************
+    ********************************************************************************************************************************
+    */
+    public function productTransactionsearch(){
+        $data['allItems'] = $this->productTransaction->itemsearch($this->value);
+        $data['sn'] = 1;
+
+        $json['itemsListTable'] = $data['allItems'] ? $this->load->view('productTransactions/productTranstable', $data, TRUE) : "No match found {$this->value}";
+
+        //set final output
+        $this->output->set_content_type('application/json')->set_output(json_encode($json));
+    }
+
     /*
     ********************************************************************************************************************************
     ********************************************************************************************************************************

@@ -97,11 +97,16 @@ class ProductTransaction extends CI_Model{
      * @return boolean
      */
     public function itemsearch($value){
-        $q = "SELECT product.id, product.Name, product_group.Name GroupName, product.Version,
-                priority.Name PriorityName, priority.Value PriorityValue, product.AddedDate, product.UpdatedDate, product.Notes
-                FROM product
-                JOIN product_group ON product.GroupID = product_group.id
-                JOIN priority ON product.PriorityID = priority.id
+        $q = "SELECT xscp.id, product.Name ProductName, customer.Name CustomerName, IFNULL(customer_vender.Name,'') CompetitorName,
+                    priority.Name PriorityName, product_status.Name StatusName, priority.Value PriorityValue, product_platform.Name PlatformName,
+                    xscp.ProjectName, xscp.AddedDate, xscp.UpdatedDate, xscp.Notes
+                FROM xscp
+                join product ON xscp.ProductID = product.id
+                join customer ON xscp.CustomerID = customer.id
+                left join customer_vender ON xscp.VenderID = customer_vender.id
+                join product_status ON xscp.StatusID = product_status.id
+                join priority ON xscp.PriorityID = priority.id
+                join product_platform ON xscp.PlatformID = product_platform.id
                 WHERE
                 product.Name LIKE '%".$this->db->escape_like_str($value)."%'";
 
@@ -229,11 +234,12 @@ class ProductTransaction extends CI_Model{
     * @param type $itemDesc
     * @param type $itemPrice
     */
-   public function edit($itemId, $itemName, $itemGroupID, $itemPriorityID, $itemVersion, $itemDesc){
-       $data = ['Name'=>$itemName, 'GroupID'=>$itemGroupID, 'PriorityID'=>$itemPriorityID, 'Version'=>$itemVersion, 'Notes'=>$itemDesc];
+   public function edit($itemId, $itemProductID, $itemCustomerID, $itemPriorityID, $itemPlatformID, $itemStatusID, $itemCompetitorID, $itemProjectName, $itemDesc){
+       $data = ['ProductID'=>$itemProductID, 'CustomerID'=>$itemCustomerID, 'PriorityID'=>$itemPriorityID, 'PlatformID'=>$itemPlatformID,
+       'StatusID'=>$itemStatusID, 'VenderID'=>$itemCompetitorID, 'ProjectName'=>$itemProjectName, 'Notes'=>$itemDesc];
 
        $this->db->where('id', $itemId);
-       $this->db->update('product', $data);
+       $this->db->update('xscp', $data);
 
        return TRUE;
    }

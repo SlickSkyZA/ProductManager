@@ -173,6 +173,57 @@ class ProductTransactions extends CI_Controller{
     }
 
     /*
+     ********************************************************************************************************************************
+     ********************************************************************************************************************************
+     ********************************************************************************************************************************
+     ********************************************************************************************************************************
+     ********************************************************************************************************************************
+     */
+
+     public function edit(){
+         $this->genlib->ajaxOnly();
+
+         $this->load->library('form_validation');
+
+         $this->form_validation->set_error_delimiters('', '');
+        //itemName:itemName, itemGroupID:itemGroupID, itemPriorityID:itemPriorityID, itemVersion:itemVersion, itemDesc:itemDesc, _iId:itemId
+         $this->form_validation->set_rules('_iId', 'Item ID', ['required', 'trim', 'numeric']);
+         $this->form_validation->set_rules('itemDesc', 'Product Description', ['trim']);
+         $this->form_validation->set_rules('itemProject', 'Project', ['trim']);
+
+         if($this->form_validation->run() !== FALSE){
+             $itemId = set_value('_iId');
+             $itemProductID = set_value('itemProduct');
+             $itemCustomerID = set_value('itemCustomer');
+             $itemPriorityID = set_value('itemPriority');
+             $itemPlatformID = set_value('itemPlatform');
+             $itemStatusID = set_value('itemStatus');
+             $itemCompetitorID = set_value('itemCompetitor');
+             $itemProjectName = set_value('itemProjectName');
+             $itemDesc = set_value('itemDesc');
+
+             //update item in db
+             $updated = $this->productTransaction->edit($itemId, $itemProductID, $itemCustomerID,
+             $itemPriorityID, $itemPlatformID, $itemStatusID, $itemCompetitorID, $itemProjectName, $itemDesc);
+
+             $json['status'] = $updated ? 1 : 0;
+
+             //add event to log
+             //function header: addevent($event, $eventRowId, $eventDesc, $eventTable, $staffId)
+             $desc = "Details of item with code '$itemId' was updated";
+
+             $this->genmod->addevent("Product transaction Update", $itemId, $desc, 'Product transaction', $this->session->admin_id);
+         }
+
+         else{
+             $json['status'] = 0;
+             $json = $this->form_validation->error_array();
+         }
+
+         $this->output->set_content_type('application/json')->set_output(json_encode($json));
+    }
+
+    /*
     ********************************************************************************************************************************
     ********************************************************************************************************************************
     ********************************************************************************************************************************

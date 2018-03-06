@@ -141,7 +141,7 @@ $(document).ready(function(){
     //reload transactions table when events occur
     $("#transListPerPage, #transListSortBy").change(function(){
         displayFlashMsg("Please wait...", spinnerClass, "", "");
-        latr_();
+        lilt();
     });
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -156,18 +156,19 @@ $(document).ready(function(){
 
         if(value){
             $.ajax({
-                url: appRoot+"search/transsearch",
+                url: appRoot+"search/productTransactionsearch",
                 type: "get",
                 data: {v:value},
                 success: function(returnedData){
-                    $("#transListTable").html(returnedData.transTable);
+                    $("#transListTable").html(returnedData.itemsListTable);
                 }
             });
         }
 
         else{
             //reload the table if all text in search box has been cleared
-            latr_();
+            displayFlashMsg("Loading page...", spinnerClass, "", "");
+            lilt();
         }
     });
 
@@ -488,83 +489,131 @@ $(document).ready(function(){
 
         //get item info
         var itemId = $(this).attr('id').split("-")[1];
-        var itemDesc = $("#itemDesc-"+itemId).attr('title');
-        var itemName = $("#itemName-"+itemId).html();
-        var itemGroup = $("#itemGroup-"+itemId).html();
+        var itemProduct = $("#itemProduct-"+itemId).html();
+        var itemCustomer = $("#itemCustomer-"+itemId).html();
+        var itemPlatform = $("#itemPlatform-"+itemId).html();
         var itemPriority = $("#itemPriority-"+itemId).html();
-        var itemVersion = $("#itemVersion-"+itemId).html();
+        var itemStatus = $("#itemStatus-"+itemId).html();
+        var itemCompetitor = $("#itemCompetitor-"+itemId).html();
+        var itemProject = $("#itemProject-"+itemId).html();
+        var itemDesc = $("#itemDesc-"+itemId).attr('title');
 
         //prefill form with info
         $("#itemIdEdit").val(itemId);
-        $("#itemNameEdit").val(itemName);
-        $("#itemVersionEdit").val(itemVersion);
-        $("#itemDescriptionEdit").val(itemDesc);
+        $("#itemProjectName").val(itemProject);
+        $("#itemDescEdit").val(itemDesc);
 
         //remove all error messages that might exist
         $("#editItemFMsg").html("");
-        $("#itemNameEditErr").html("");
+        $("#itemProductEditErr").html("");
+        $("#itemCustomerEditErr").html("");
+        $("#itemPlatformEditErr").html("");
+        $("#itemPriorityEditErr").html("");
+        $("#itemStatusEditErr").html("");
+        $("#itemCompetitorEditErr").html("");
 
         //launch modal
         $("#editItemModal").modal('show');
 
-        //$(".selectedItemDefault").addClass("selectedItem").val("");
-
-        //loop through the currentItems variable to add the items to the select input
         return new Promise((resolve, reject)=>{
-            //if an item has been selected (i.e. added to the current transaction), do not add it to the list. This way, an item will appear just once.
-            //We start by forming an array of all selected items, then skip that item in the loop appending items to select dropdown
-            var selectedGroupsArr = [];
-            var selectedPrioritysArr = [];
+			//if an item has been selected (i.e. added to the current transaction), do not add it to the list. This way, an item will appear just once.
+			//We start by forming an array of all selected items, then skip that item in the loop appending items to select dropdown
+			return new Promise((res, rej)=>{
+				//$(".selectedItem").each(function(){
+				//	//push the selected value (which is the item code [a key in currentItems object]) to the array
+				//	$(this).val() ? selectedItemsArr.push($(this).val()) : "";
+				//});
 
-            return new Promise((res, rej)=>{
-                //$(".selectedItem").each(function(){
-                //	//push the selected value (which is the item code [a key in currentItems object]) to the array
-                //	$(this).val() ? selectedItemsArr.push($(this).val()) : "";
-                //});
-
-                res();
-            }).then(()=>{
-                $(".selectedGroupDefault").empty();
-                for(let key in currentGroups){
-                    //if the current key in the loop is in our 'selectedItemsArr' array
-                    if(!inArray(key, selectedGroupsArr)){
-                        //if the item has not been selected, append it to the select list
-                        if (currentGroups[key] == itemGroup) {
-                            $(".selectedGroupDefault").append("<option value='"+key+"' selected>"+currentGroups[key]+"</option>");
-                        } else {
-                            $(".selectedGroupDefault").append("<option value='"+key+"'>"+currentGroups[key]+"</option>");
-                        }
+				res();
+			}).then(()=>{
+                $(".selectedProductDefault").empty();
+				for(let key in currentProducts){
+					//if the current key in the loop is in our 'selectedItemsArr' array
+                    if (currentProducts[key] == itemProduct) {
+                        $(".selectedProductDefault").append("<option value='"+key+"' selected>"+itemProduct+"</option>");
+                    } else {
+                        $(".selectedProductDefault").append("<option value='"+key+"'>"+currentProducts[key]+"</option>");
                     }
-                }
+				}
+				//prepend 'select item' to the select option
+				$(".selectedProductDefault").prepend("<option value=''>Select Product</option>");
 
-                //prepend 'select item' to the select option
-                $(".selectedGroupDefault").prepend("<option value=''>Select Group</option>");
+                $(".selectedCustomerDefault").empty();
+                for(let key in currentCustomers){
+					//if the current key in the loop is in our 'selectedItemsArr' array
+					if (currentCustomers[key] == itemCustomer) {
+                        $(".selectedCustomerDefault").append("<option value='"+key+"' selected>"+currentCustomers[key]+"</option>");
+                    } else {
+                        $(".selectedCustomerDefault").append("<option value='"+key+"'>"+currentCustomers[key]+"</option>");
+                    }
+				}
+				//prepend 'select item' to the select option
+				$(".selectedCustomerDefault").prepend("<option value=''>Select Customer</option>");
+
+                $(".selectedPlatformDefault").empty();
+                for(let key in currentPlatforms){
+					//if the current key in the loop is in our 'selectedItemsArr' array
+                    if (currentPlatforms[key] == itemPlatform) {
+                        $(".selectedPlatformDefault").append("<option value='"+key+"' selected>"+currentPlatforms[key]+"</option>");
+                    } else {
+                        $(".selectedPlatformDefault").append("<option value='"+key+"'>"+currentPlatforms[key]+"</option>");
+                    }
+				}
+				//prepend 'select item' to the select option
+				$(".selectedPlatformDefault").prepend("<option value=''>Select Platform</option>");
 
                 $(".selectedPriorityDefault").empty();
                 for(let key in currentPriorities){
-                    //if the current key in the loop is in our 'selectedItemsArr' array
-                    if(!inArray(key, selectedPrioritysArr)){
-                        //if the item has not been selected, append it to the select list
-                        if (currentPriorities[key] == itemPriority) {
-                            $(".selectedPriorityDefault").append("<option value='"+key+"' selected>"+currentPriorities[key]+"</option>");
-                        } else {
-                            $(".selectedPriorityDefault").append("<option value='"+key+"'>"+currentPriorities[key]+"</option>");
-                        }
+					//if the current key in the loop is in our 'selectedItemsArr' array
+                    if (currentPriorities[key] == itemPriority) {
+                        $(".selectedPriorityDefault").append("<option value='"+key+"' selected>"+currentPriorities[key]+"</option>");
+                    } else {
+                        $(".selectedPriorityDefault").append("<option value='"+key+"'>"+currentPriorities[key]+"</option>");
                     }
+				}
+				//prepend 'select item' to the select option
+				$(".selectedPriorityDefault").prepend("<option value=''>Select Priority</option>");
+
+                $(".selectedStatusDefault").empty();
+                for(let key in currentStatuses){
+                    if (currentStatuses[key] == itemStatus) {
+                        $(".selectedStatusDefault").append("<option value='"+key+"' selected>"+currentStatuses[key]+"</option>");
+                    } else {
+                        $(".selectedStatusDefault").append("<option value='"+key+"'>"+currentStatuses[key]+"</option>");
+                    }
+				}
+				//prepend 'select item' to the select option
+				$(".selectedStatusDefault").prepend("<option value=''>Select Status</option>");
+
+                $(".selectedCompetitorDefault").empty();
+                for(let key in currentCompetitors){
+					//if the current key in the loop is in our 'selectedItemsArr' array
+                    if (currentCompetitors[key] == itemCompetitor) {
+                        $(".selectedCompetitorDefault").append("<option value='"+key+"' selected>"+currentCompetitors[key]+"</option>");
+                    } else {
+                        $(".selectedCompetitorDefault").append("<option value='"+key+"'>"+currentCompetitors[key]+"</option>");
+                    }
+				}
+                if (itemCompetitor == "") {
+                    itemCompetitor = "selected";
                 }
+				//prepend 'select item' to the select option
+				$(".selectedCompetitorDefault").prepend("<option value='' "+itemCompetitor+">Select Competitor</option>");
 
-                //prepend 'select item' to the select option
-                $(".selectedPriorityDefault").prepend("<option value=''>Select Priority</option>");
 
-                resolve(selectedGroupsArr, selectedPrioritysArr);
-            });
-        }).then((selectedGroupsArray, selectedPrioritysArray)=>{
-                //add select2 to the 'select input'
-                $('.selectedGroupDefault').select2({dropdownAutoWidth : true, width : "100%"});
+				resolve(); //selectedGroupsArr, selectedPrioritysArr
+			});
+		}).then(()=>{ //selectedGroupsArray, selectedPrioritysArray
+				//add select2 to the 'select input'
+			    $('.selectedCompetitorDefault').select2({dropdownAutoWidth : true, width : "100%"});
+                $('.selectedStatusDefault').select2({dropdownAutoWidth : true, width : "100%"});
+                $('.selectedPlatformDefault').select2({dropdownAutoWidth : true, width : "100%"});
+                $('.selectedCustomerDefault').select2({dropdownAutoWidth : true, width : "100%"});
+                $('.selectedProductDefault').select2({dropdownAutoWidth : true, width : "100%"});
                 $('.selectedPriorityDefault').select2({dropdownAutoWidth : true, width : "100%"});
-        }).catch(()=>{
-            console.log('outer promise err');
-        });
+		}).catch(()=>{
+			console.log('outer promise err');
+		});
 
         return false;
     });
@@ -576,33 +625,39 @@ $(document).ready(function(){
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     $("#editItemSubmit").click(function(){
-        var itemName = $("#itemNameEdit").val();
-        var itemGroup = $("#itemGroupEdit").val();
+        var itemProduct = $("#itemProductEdit").val();
+        var itemCustomer = $("#itemCustomerEdit").val();
+        var itemPlatform = $("#itemPlatformEdit").val();
         var itemPriority = $("#itemPriorityEdit").val();
-        var itemVersion = $("#itemVersionEdit").val();
-        var itemDesc = $("#itemDescriptionEdit").val();
+        var itemStatus = $("#itemStatusEdit").val();
+        var itemCompetitor = $("#itemCompetitorEdit").val();
+        var itemProjectName = $("#itemProjectNameEdit").val();
+        var itemDesc = $("#itemDescEdit").val();
         var itemId = $("#itemIdEdit").val();
 
-        if(!itemName || !itemId || !itemGroup || !itemPriority){
-            !itemName ? $("#itemNameEditErr").html("Product name cannot be empty") : "";
-            !itemGroup ? $("#itemGroupEditErr").html("Product group cannot be empty") : "";
-            !itemPriority ? $("#itemPriorityEditErr").html("Product priority cannot be empty") : "";
-            !itemId ? $("#editItemFMsg").html("Unknown Priority") : "";
+        if(!itemProduct || !itemCustomer || !itemPlatform || !itemPriority || !itemStatus){
+            !itemProduct ? $("#itemProductEditErr").text("required") : "";
+            !itemCustomer ? $("#itemCustomerEditErr").text("required") : "";
+            !itemPlatform ? $("#itemPlatformEditErr").text("required") : "";
+            !itemPriority ? $("#itemPriorityEditErr").text("required") : "";
+            !itemStatus ? $("#itemStatusEditErr").text("required") : "";
+
+            $("#newTransErrMsg").text("One or more required fields are empty");
+
             return;
         }
-
-        var itemGroupID = itemGroup;
-        var itemPriorityID = itemPriority;
 
         $("#editItemFMsg").css('color', 'black').html("<i class='"+spinnerClass+"'></i> Processing your request....");
 
         $.ajax({
             method: "POST",
-            url: appRoot+"products/edit",
-            data: {itemName:itemName, itemGroupID:itemGroupID, itemPriorityID:itemPriorityID, itemVersion:itemVersion, itemDesc:itemDesc, _iId:itemId}
+            url: appRoot+"productTransactions/edit",
+            data: {itemProduct:itemProduct, itemCustomer:itemCustomer, itemPlatform:itemPlatform,
+                itemPriority:itemPriority, itemStatus:itemStatus, itemCompetitor:itemCompetitor,
+                itemProjectName:itemProjectName, itemDesc:itemDesc, _iId:itemId}
         }).done(function(returnedData){
             if(returnedData.status === 1){
-                $("#editItemFMsg").css('color', 'green').html("Product successfully updated");
+                $("#editItemFMsg").css('color', 'green').html("Product transaction successfully updated");
 
                 setTimeout(function(){
                     $("#editItemModal").modal('hide');
@@ -614,8 +669,12 @@ $(document).ready(function(){
             else{
                 $("#editItemFMsg").css('color', 'red').html("One or more required fields are empty or not properly filled");
 
-                $("#itemNameEditErr").html(returnedData.itemName);
-                $("#itemValueEditErr").html(returnedData.itemValue);
+                $("#itemProductEditErr").html(returnedData.itemProduct);
+                $("#itemCustomerEditErr").html(returnedData.itemCustomer);
+                $("#itemPlatformEditErr").html(returnedData.itemPlatform);
+                $("#itemPriorityEditErr").html(returnedData.itemPriority);
+                $("#itemStatusEditErr").html(returnedData.itemStatus);
+
             }
         }).fail(function(){
             $("#editItemFMsg").css('color', 'red').html("Unable to process your request at this time. Please check your internet connection and try again");
