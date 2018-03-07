@@ -10,127 +10,12 @@ $(document).ready(function(){
     //load all items once the page is ready
     lilt();
 
-
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    //when text/btn ("Add item") to clone the div to add an item is clicked
-    $("#clickToClone").on('click', function(e){
-        e.preventDefault();
-
-        var cloned = $("#divToClone").clone();
-
-        //remove the id 'divToClone' from the cloned div
-        cloned.addClass('transItemList').removeClass('hidden').attr('id', '');
-
-        //reset the form values (in the cloned div) to default
-        cloned.find(".selectedItemDefault").addClass("selectedItem").val("");
-        cloned.find(".itemAvailQty").html("0");
-        cloned.find(".itemTransQty").val("0");
-        cloned.find(".itemTotalPrice").html("0.00");
-
-        //loop through the currentItems variable to add the items to the select input
-		return new Promise((resolve, reject)=>{
-			//if an item has been selected (i.e. added to the current transaction), do not add it to the list. This way, an item will appear just once.
-			//We start by forming an array of all selected items, then skip that item in the loop appending items to select dropdown
-			var selectedItemsArr = [];
-
-			return new Promise((res, rej)=>{
-				$(".selectedItem").each(function(){
-					//push the selected value (which is the item code [a key in currentItems object]) to the array
-					$(this).val() ? selectedItemsArr.push($(this).val()) : "";
-				});
-
-				res();
-			}).then(()=>{
-				for(let key in currentItems){
-					//if the current key in the loop is in our 'selectedItemsArr' array
-					if(!inArray(key, selectedItemsArr)){
-						//if the item has not been selected, append it to the select list
-						cloned.find(".selectedItemDefault").append("<option value='"+key+"'>"+currentItems[key]+"</option>");
-					}
-				}
-
-				//prepend 'select item' to the select option
-				cloned.find(".selectedItemDefault").prepend("<option value='' selected>Select Item</option>");
-
-				resolve(selectedItemsArr);
-			});
-		}).then((selectedItemsArray)=>{
-			//If the input is from the barcode scanner, we need to check if the item has already been added to the list and just increment the qty instead of
-			//re-adding it to the list, thus duplicating the item.
-			if($("#barcodeText").val()){
-				//This means our clickToClone btn was triggered after an item was scanned by the barcode scanner
-				//Check the gotten selected items array if the item scanned has already been selected
-				if(inArray($("#barcodeText").val().trim(), selectedItemsArray)){
-					//increment it
-					$(".selectedItem").each(function(){
-						if($(this).val() === $("#barcodeText").val()){
-							var newVal = parseInt($(this).closest('div').siblings('.itemTransQtyDiv').find('.itemTransQty').val()) + 1;
-
-							$(this).closest('div').siblings('.itemTransQtyDiv').find('.itemTransQty').val(newVal);
-
-							//unset value in barcode input
-							$("#barcodeText").val('');
-
-							return false;
-						}
-					});
-				}
-
-				else{
-					//if it has not been selected previously, append it to the list and set it as the selected item
-					//then append our cloned div to div with id 'appendClonedDivHere'
-					cloned.appendTo("#appendClonedDivHere");
-
-					//add select2 to the 'select input'
-					cloned.find('.selectedItemDefault').select2();
-
-					//set it as the selected item
-					changeSelectedItemWithBarcodeText($("#barcodeText"), $("#barcodeText").val());
-				}
-			}
-
-			else{//i.e. clickToClone clicked manually by user
-				//do not append if no item is selected in the last select list
-				if($(".selectedItem").length > 0 && (!$(".selectedItem").last().val())){
-					//do nothing
-				}
-
-				else{
-					//then append our cloned div to div with id 'appendClonedDivHere'
-					cloned.appendTo("#appendClonedDivHere");
-
-					//add select2 to the 'select input'
-					cloned.find('.selectedItemDefault').select2();
-				}
-			}
-		}).catch(()=>{
-			console.log('outer promise err');
-		});
-
-        return false;
-    });
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-    //WHEN USER CLICKS BTN TO REMOVE AN ITEM FROM THE TRANSACTION LIST
-    $("#appendClonedDivHere").on('click', '.retrit', function(e){
-        e.preventDefault();
-
-        $(this).closest(".transItemList").remove();
-
-        ceipacp();//recalculate price
-        calchadue();//also recalculate change due
-    });
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -178,132 +63,7 @@ $(document).ready(function(){
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    //enable/disable amount tendered input field based on the selected mode of payment
-    $("#modeOfPayment").change(function(){
-        var modeOfPayment = $(this).val();
 
-        //remove any error message we might have
-        $("#amountTenderedErr").html("");
-
-        //unset the values of cashAmount and posAmount
-        $("#cashAmount, #posAmount").val("");
-
-        if(modeOfPayment === "POS"){
-            /**
-             * Change the Label
-             * set the "cumulative amount" value field as the value of "amount tendered" and make the amountTendered field disabled
-             * change "changeDue" to 0.00
-             * hide "cash" an "pos" fields
-             *
-             */
-            $("#amountTenderedLabel").html("Amount Tendered");
-            $("#amountTendered").val($("#cumAmount").html()).prop('disabled', true);
-            $("#changeDue").html('0.00');
-            $(".cashAndPos").addClass('hidden');
-        }
-
-        else if(modeOfPayment === "Cash and POS"){
-            /*
-             * Change the label
-             * make empty "amount tendered" field's value and also make it writable
-             * unset any value that might be in "changeDue"
-             * display "cash" an "pos" fields
-             */
-            $("#amountTenderedLabel").html("Total");
-            $("#amountTendered").val('').prop('disabled', true);
-            $("#changeDue").html('');
-            $(".cashAndPos").removeClass('hidden');
-        }
-
-        else{//if cash. If something not recognise, we assume it is cash
-            /*
-             * change the label
-             * empty and make amountTendered field writable
-             * unset any value that might be in "changeDue"
-             * hide "cash" an "pos" fields
-             */
-            $("#amountTenderedLabel").html("Amount Tendered");
-            $("#amountTendered").val('').prop('disabled', false);
-            $("#changeDue").html('');
-            $(".cashAndPos").addClass('hidden');
-        }
-    });
-
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-    //calculate the change due based on the amount tendered. Also ensure amount tendered is not less than the cumulative amount
-    $("#amountTendered").on('change focusout keyup keydown keypress', calchadue);
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    /*
-     * unset mode of payment each time ".itemTransQty" changes
-     * This will allow the user to be able to reselect the mode of payment,
-     * thus enabling us to recalculate change due based on amount tendered
-     */
-    $("#appendClonedDivHere").on("change", ".itemTransQty", function(e){
-        e.preventDefault();
-
-		return new Promise((resolve, reject)=>{
-			$("#modeOfPayment").val("");
-
-			resolve();
-		}).then(()=>{
-			ceipacp();
-		}).catch();
-
-		//recalculate
-	    ceipacp();
-
-        $("#modeOfPayment").val("");
-    });
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    /**
-     * If mode of payment is "Cash and POS", both #cashAmount and #posAmount fields will be visible to user to add values
-     * The addition of both will be set as the amount tendered
-     */
-    $("#cashAmount, #posAmount").on("change", function(e){
-        e.preventDefault();
-
-        var totalAmountTendered = parseFloat($("#posAmount").val()) + parseFloat($("#cashAmount").val());
-
-        //set amount tendered as the value of "totalAmountTendered" and then trigger the change event on it
-        $("#amountTendered").val(isNaN(totalAmountTendered) ? "" : totalAmountTendered).change();
-    });
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    //calcuate cumulative amount if the percentage of VAT is changed
-    $("#vat").change(ceipacp);
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    //calcuate cumulative amount if the percentage of discount is changed
-    $("#discount").change(ceipacp);
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -322,7 +82,8 @@ $(document).ready(function(){
         var itemPriority = $("#itemPriority").val();
         var itemStatus = $("#itemStatus").val();
         var itemCompetitor = $("#itemCompetitor").val();
-        var itemProjectName = $("#itemProjectName").val();
+        var itemProjectName = $("#itemProject").val();
+        var itemMilestone = $("#itemMilestone").val();
         var itemDesc = $("#description").val();
 
         if(!itemProduct || !itemCustomer || !itemPlatform || !itemPriority || !itemStatus){
@@ -343,7 +104,7 @@ $(document).ready(function(){
             type: "post",
             url: appRoot+"productTransactions/add",
             data:{itemProduct:itemProduct, itemCustomer:itemCustomer, itemPlatform:itemPlatform, itemPriority:itemPriority,
-                itemStatus:itemStatus, itemCompetitor:itemCompetitor, itemProjectName:itemProjectName, itemDesc:itemDesc},
+                itemStatus:itemStatus, itemCompetitor:itemCompetitor, itemProjectName:itemProjectName, itemMilestone:itemMilestone, itemDesc:itemDesc},
 
             success: function(returnedData){
                 if(returnedData.status === 1){
@@ -355,7 +116,7 @@ $(document).ready(function(){
                     $("#itemPriority").val(itemPriority);
                     $("#itemStatus").val(itemStatus);
                     $("#itemCompetitor").val(itemCompetitor);
-
+                    $("#itemProject").val(itemProjectName);
                     //refresh the items list table
                     lilt();
 
@@ -460,6 +221,14 @@ $(document).ready(function(){
 				//prepend 'select item' to the select option
 				$(".selectedCompetitorDefault").prepend("<option value='' selected>Select Competitor</option>");
 
+                $(".selectedProjectDefault").empty();
+                for(let key in currentProjects){
+					//if the current key in the loop is in our 'selectedItemsArr' array
+					$(".selectedProjectDefault").append("<option value='"+key+"'>"+currentProjects[key]+"</option>");
+				}
+				//prepend 'select item' to the select option
+				$(".selectedProjectDefault").prepend("<option value='' selected>Select Project</option>");
+
 
 				resolve(); //selectedGroupsArr, selectedPrioritysArr
 			});
@@ -471,6 +240,7 @@ $(document).ready(function(){
                 $('.selectedCustomerDefault').select2({dropdownAutoWidth : true, width : "100%"});
                 $('.selectedProductDefault').select2({dropdownAutoWidth : true, width : "100%"});
                 $('.selectedPriorityDefault').select2({dropdownAutoWidth : true, width : "100%"});
+                $('.selectedProjectDefault').select2({dropdownAutoWidth : true, width : "100%"});
 		}).catch(()=>{
 			console.log('outer promise err');
 		});
@@ -500,7 +270,6 @@ $(document).ready(function(){
 
         //prefill form with info
         $("#itemIdEdit").val(itemId);
-        $("#itemProjectName").val(itemProject);
         $("#itemDescEdit").val(itemDesc);
 
         //remove all error messages that might exist
@@ -518,91 +287,99 @@ $(document).ready(function(){
         return new Promise((resolve, reject)=>{
 			//if an item has been selected (i.e. added to the current transaction), do not add it to the list. This way, an item will appear just once.
 			//We start by forming an array of all selected items, then skip that item in the loop appending items to select dropdown
-			return new Promise((res, rej)=>{
-				//$(".selectedItem").each(function(){
-				//	//push the selected value (which is the item code [a key in currentItems object]) to the array
-				//	$(this).val() ? selectedItemsArr.push($(this).val()) : "";
-				//});
 
-				res();
-			}).then(()=>{
-                $(".selectedProductDefault").empty();
-				for(let key in currentProducts){
-					//if the current key in the loop is in our 'selectedItemsArr' array
-                    if (currentProducts[key] == itemProduct) {
-                        $(".selectedProductDefault").append("<option value='"+key+"' selected>"+itemProduct+"</option>");
-                    } else {
-                        $(".selectedProductDefault").append("<option value='"+key+"'>"+currentProducts[key]+"</option>");
-                    }
-				}
-				//prepend 'select item' to the select option
-				$(".selectedProductDefault").prepend("<option value=''>Select Product</option>");
-
-                $(".selectedCustomerDefault").empty();
-                for(let key in currentCustomers){
-					//if the current key in the loop is in our 'selectedItemsArr' array
-					if (currentCustomers[key] == itemCustomer) {
-                        $(".selectedCustomerDefault").append("<option value='"+key+"' selected>"+currentCustomers[key]+"</option>");
-                    } else {
-                        $(".selectedCustomerDefault").append("<option value='"+key+"'>"+currentCustomers[key]+"</option>");
-                    }
-				}
-				//prepend 'select item' to the select option
-				$(".selectedCustomerDefault").prepend("<option value=''>Select Customer</option>");
-
-                $(".selectedPlatformDefault").empty();
-                for(let key in currentPlatforms){
-					//if the current key in the loop is in our 'selectedItemsArr' array
-                    if (currentPlatforms[key] == itemPlatform) {
-                        $(".selectedPlatformDefault").append("<option value='"+key+"' selected>"+currentPlatforms[key]+"</option>");
-                    } else {
-                        $(".selectedPlatformDefault").append("<option value='"+key+"'>"+currentPlatforms[key]+"</option>");
-                    }
-				}
-				//prepend 'select item' to the select option
-				$(".selectedPlatformDefault").prepend("<option value=''>Select Platform</option>");
-
-                $(".selectedPriorityDefault").empty();
-                for(let key in currentPriorities){
-					//if the current key in the loop is in our 'selectedItemsArr' array
-                    if (currentPriorities[key] == itemPriority) {
-                        $(".selectedPriorityDefault").append("<option value='"+key+"' selected>"+currentPriorities[key]+"</option>");
-                    } else {
-                        $(".selectedPriorityDefault").append("<option value='"+key+"'>"+currentPriorities[key]+"</option>");
-                    }
-				}
-				//prepend 'select item' to the select option
-				$(".selectedPriorityDefault").prepend("<option value=''>Select Priority</option>");
-
-                $(".selectedStatusDefault").empty();
-                for(let key in currentStatuses){
-                    if (currentStatuses[key] == itemStatus) {
-                        $(".selectedStatusDefault").append("<option value='"+key+"' selected>"+currentStatuses[key]+"</option>");
-                    } else {
-                        $(".selectedStatusDefault").append("<option value='"+key+"'>"+currentStatuses[key]+"</option>");
-                    }
-				}
-				//prepend 'select item' to the select option
-				$(".selectedStatusDefault").prepend("<option value=''>Select Status</option>");
-
-                $(".selectedCompetitorDefault").empty();
-                for(let key in currentCompetitors){
-					//if the current key in the loop is in our 'selectedItemsArr' array
-                    if (currentCompetitors[key] == itemCompetitor) {
-                        $(".selectedCompetitorDefault").append("<option value='"+key+"' selected>"+currentCompetitors[key]+"</option>");
-                    } else {
-                        $(".selectedCompetitorDefault").append("<option value='"+key+"'>"+currentCompetitors[key]+"</option>");
-                    }
-				}
-                if (itemCompetitor == "") {
-                    itemCompetitor = "selected";
+            $(".selectedProductDefault").empty();
+			for(let key in currentProducts){
+				//if the current key in the loop is in our 'selectedItemsArr' array
+                if (currentProducts[key] == itemProduct) {
+                    $(".selectedProductDefault").append("<option value='"+key+"' selected>"+itemProduct+"</option>");
+                } else {
+                    $(".selectedProductDefault").append("<option value='"+key+"'>"+currentProducts[key]+"</option>");
                 }
-				//prepend 'select item' to the select option
-				$(".selectedCompetitorDefault").prepend("<option value='' "+itemCompetitor+">Select Competitor</option>");
+			}
+			//prepend 'select item' to the select option
+			$(".selectedProductDefault").prepend("<option value=''>Select Product</option>");
 
+            $(".selectedCustomerDefault").empty();
+            for(let key in currentCustomers){
+				//if the current key in the loop is in our 'selectedItemsArr' array
+				if (currentCustomers[key] == itemCustomer) {
+                    $(".selectedCustomerDefault").append("<option value='"+key+"' selected>"+currentCustomers[key]+"</option>");
+                } else {
+                    $(".selectedCustomerDefault").append("<option value='"+key+"'>"+currentCustomers[key]+"</option>");
+                }
+			}
+			//prepend 'select item' to the select option
+			$(".selectedCustomerDefault").prepend("<option value=''>Select Customer</option>");
 
-				resolve(); //selectedGroupsArr, selectedPrioritysArr
-			});
+            $(".selectedPlatformDefault").empty();
+            for(let key in currentPlatforms){
+				//if the current key in the loop is in our 'selectedItemsArr' array
+                if (currentPlatforms[key] == itemPlatform) {
+                    $(".selectedPlatformDefault").append("<option value='"+key+"' selected>"+currentPlatforms[key]+"</option>");
+                } else {
+                    $(".selectedPlatformDefault").append("<option value='"+key+"'>"+currentPlatforms[key]+"</option>");
+                }
+			}
+			//prepend 'select item' to the select option
+			$(".selectedPlatformDefault").prepend("<option value=''>Select Platform</option>");
+
+            $(".selectedPriorityDefault").empty();
+            for(let key in currentPriorities){
+				//if the current key in the loop is in our 'selectedItemsArr' array
+                if (currentPriorities[key] == itemPriority) {
+                    $(".selectedPriorityDefault").append("<option value='"+key+"' selected>"+currentPriorities[key]+"</option>");
+                } else {
+                    $(".selectedPriorityDefault").append("<option value='"+key+"'>"+currentPriorities[key]+"</option>");
+                }
+			}
+			//prepend 'select item' to the select option
+			$(".selectedPriorityDefault").prepend("<option value=''>Select Priority</option>");
+
+            $(".selectedStatusDefault").empty();
+            for(let key in currentStatuses){
+                if (currentStatuses[key] == itemStatus) {
+                    $(".selectedStatusDefault").append("<option value='"+key+"' selected>"+currentStatuses[key]+"</option>");
+                } else {
+                    $(".selectedStatusDefault").append("<option value='"+key+"'>"+currentStatuses[key]+"</option>");
+                }
+			}
+			//prepend 'select item' to the select option
+			$(".selectedStatusDefault").prepend("<option value=''>Select Status</option>");
+
+            $(".selectedCompetitorDefault").empty();
+            for(let key in currentCompetitors){
+				//if the current key in the loop is in our 'selectedItemsArr' array
+                if (currentCompetitors[key] == itemCompetitor) {
+                    $(".selectedCompetitorDefault").append("<option value='"+key+"' selected>"+currentCompetitors[key]+"</option>");
+                } else {
+                    $(".selectedCompetitorDefault").append("<option value='"+key+"'>"+currentCompetitors[key]+"</option>");
+                }
+			}
+            if (itemCompetitor == "") {
+                itemCompetitor = "selected";
+            }
+			//prepend 'select item' to the select option
+			$(".selectedCompetitorDefault").prepend("<option value='' "+itemCompetitor+">Select Competitor</option>");
+
+            $(".selectedProjectDefault").empty();
+            for(let key in currentProjects){
+                if (currentProjects[key] == itemProject) {
+                    //if the current key in the loop is in our 'selectedItemsArr' array
+                    $(".selectedProjectDefault").append("<option value='"+key+"' selected>"+currentProjects[key]+"</option>");
+                } else {
+                    //if the current key in the loop is in our 'selectedItemsArr' array
+                    $(".selectedProjectDefault").append("<option value='"+key+"'>"+currentProjects[key]+"</option>");
+                }
+
+            }
+            if (itemProject == "") {
+                itemProject = "selected";
+            }
+            //prepend 'select item' to the select option
+            $(".selectedProjectDefault").prepend("<option value='' "+ itemProject+">Select Project</option>");
+
+			resolve(); //selectedGroupsArr, selectedPrioritysArr
 		}).then(()=>{ //selectedGroupsArray, selectedPrioritysArray
 				//add select2 to the 'select input'
 			    $('.selectedCompetitorDefault').select2({dropdownAutoWidth : true, width : "100%"});
@@ -611,6 +388,7 @@ $(document).ready(function(){
                 $('.selectedCustomerDefault').select2({dropdownAutoWidth : true, width : "100%"});
                 $('.selectedProductDefault').select2({dropdownAutoWidth : true, width : "100%"});
                 $('.selectedPriorityDefault').select2({dropdownAutoWidth : true, width : "100%"});
+                $('.selectedProjectDefault').select2({dropdownAutoWidth : true, width : "100%"});
 		}).catch(()=>{
 			console.log('outer promise err');
 		});
@@ -631,7 +409,7 @@ $(document).ready(function(){
         var itemPriority = $("#itemPriorityEdit").val();
         var itemStatus = $("#itemStatusEdit").val();
         var itemCompetitor = $("#itemCompetitorEdit").val();
-        var itemProjectName = $("#itemProjectNameEdit").val();
+        var itemProject = $("#itemProjectEdit").val();
         var itemDesc = $("#itemDescEdit").val();
         var itemId = $("#itemIdEdit").val();
 
@@ -654,7 +432,7 @@ $(document).ready(function(){
             url: appRoot+"productTransactions/edit",
             data: {itemProduct:itemProduct, itemCustomer:itemCustomer, itemPlatform:itemPlatform,
                 itemPriority:itemPriority, itemStatus:itemStatus, itemCompetitor:itemCompetitor,
-                itemProjectName:itemProjectName, itemDesc:itemDesc, _iId:itemId}
+                itemProjectName:itemProject, itemDesc:itemDesc, _iId:itemId}
         }).done(function(returnedData){
             if(returnedData.status === 1){
                 $("#editItemFMsg").css('color', 'green').html("Product transaction successfully updated");
@@ -814,65 +592,64 @@ $(document).ready(function(){
         return new Promise((resolve, reject)=>{
 			//if an item has been selected (i.e. added to the current transaction), do not add it to the list. This way, an item will appear just once.
 			//We start by forming an array of all selected items, then skip that item in the loop appending items to select dropdown
-			return new Promise((res, rej)=>{
-				//$(".selectedItem").each(function(){
-				//	//push the selected value (which is the item code [a key in currentItems object]) to the array
-				//	$(this).val() ? selectedItemsArr.push($(this).val()) : "";
-				//});
+            $(".selectedProductDefault").empty();
+			for(let key in currentProducts){
+				//if the current key in the loop is in our 'selectedItemsArr' array
+				$(".selectedProductDefault").append("<option value='"+key+"'>"+currentProducts[key]+"</option>");
+			}
+			//prepend 'select item' to the select option
+			$(".selectedProductDefault").prepend("<option value='' selected>Select Prodcut</option>");
 
-				res();
-			}).then(()=>{
-                $(".selectedProductDefault").empty();
-				for(let key in currentProducts){
-					//if the current key in the loop is in our 'selectedItemsArr' array
-					$(".selectedProductDefault").append("<option value='"+key+"'>"+currentProducts[key]+"</option>");
-				}
-				//prepend 'select item' to the select option
-				$(".selectedProductDefault").prepend("<option value='' selected>Select Prodcut</option>");
+            $(".selectedPriorityDefault").empty();
+            for(let key in currentPriorities){
+				//if the current key in the loop is in our 'selectedItemsArr' array
+				$(".selectedPriorityDefault").append("<option value='"+key+"'>"+currentPriorities[key]+"</option>");
+			}
+			//prepend 'select item' to the select option
+			$(".selectedPriorityDefault").prepend("<option value='' selected>Select Priority</option>");
 
-                $(".selectedPriorityDefault").empty();
-                for(let key in currentPriorities){
-					//if the current key in the loop is in our 'selectedItemsArr' array
-					$(".selectedPriorityDefault").append("<option value='"+key+"'>"+currentPriorities[key]+"</option>");
-				}
-				//prepend 'select item' to the select option
-				$(".selectedPriorityDefault").prepend("<option value='' selected>Select Priority</option>");
+            $(".selectedCustomerDefault").empty();
+            for(let key in currentCustomers){
+				//if the current key in the loop is in our 'selectedItemsArr' array
+				$(".selectedCustomerDefault").append("<option value='"+key+"'>"+currentCustomers[key]+"</option>");
+			}
+			//prepend 'select item' to the select option
+			$(".selectedCustomerDefault").prepend("<option value='' selected>Select Customer</option>");
 
-                $(".selectedCustomerDefault").empty();
-                for(let key in currentCustomers){
-					//if the current key in the loop is in our 'selectedItemsArr' array
-					$(".selectedCustomerDefault").append("<option value='"+key+"'>"+currentCustomers[key]+"</option>");
-				}
-				//prepend 'select item' to the select option
-				$(".selectedCustomerDefault").prepend("<option value='' selected>Select Customer</option>");
+            $(".selectedPlatformDefault").empty();
+            for(let key in currentPlatforms){
+				//if the current key in the loop is in our 'selectedItemsArr' array
+				$(".selectedPlatformDefault").append("<option value='"+key+"'>"+currentPlatforms[key]+"</option>");
+			}
+			//prepend 'select item' to the select option
+			$(".selectedPlatformDefault").prepend("<option value='' selected>Select Platforms</option>");
 
-                $(".selectedPlatformDefault").empty();
-                for(let key in currentPlatforms){
-					//if the current key in the loop is in our 'selectedItemsArr' array
-					$(".selectedPlatformDefault").append("<option value='"+key+"'>"+currentPlatforms[key]+"</option>");
-				}
-				//prepend 'select item' to the select option
-				$(".selectedPlatformDefault").prepend("<option value='' selected>Select Platforms</option>");
+            $(".selectedStatusDefault").empty();
+            for(let key in currentStatuses){
+				//if the current key in the loop is in our 'selectedItemsArr' array
+				$(".selectedStatusDefault").append("<option value='"+key+"'>"+currentStatuses[key]+"</option>");
+			}
+			//prepend 'select item' to the select option
+			$(".selectedStatusDefault").prepend("<option value='' selected>Select Status</option>");
 
-                $(".selectedStatusDefault").empty();
-                for(let key in currentStatuses){
-					//if the current key in the loop is in our 'selectedItemsArr' array
-					$(".selectedStatusDefault").append("<option value='"+key+"'>"+currentStatuses[key]+"</option>");
-				}
-				//prepend 'select item' to the select option
-				$(".selectedStatusDefault").prepend("<option value='' selected>Select Status</option>");
+            $(".selectedCompetitorDefault").empty();
+            for(let key in currentCompetitors){
+				//if the current key in the loop is in our 'selectedItemsArr' array
+				$(".selectedCompetitorDefault").append("<option value='"+key+"'>"+currentCompetitors[key]+"</option>");
+			}
+			//prepend 'select item' to the select option
+			$(".selectedCompetitorDefault").prepend("<option value='' selected>Select Competitor</option>");
 
-                $(".selectedCompetitorDefault").empty();
-                for(let key in currentCompetitors){
-					//if the current key in the loop is in our 'selectedItemsArr' array
-					$(".selectedCompetitorDefault").append("<option value='"+key+"'>"+currentCompetitors[key]+"</option>");
-				}
-				//prepend 'select item' to the select option
-				$(".selectedCompetitorDefault").prepend("<option value='' selected>Select Competitor</option>");
+            $(".selectedProjectDefault").empty();
+            for(let key in currentProjects){
+                //if the current key in the loop is in our 'selectedItemsArr' array
+                $(".selectedProjectDefault").append("<option value='"+key+"'>"+currentProjects[key]+"</option>");
+            }
+            //prepend 'select item' to the select option
+            $(".selectedProjectDefault").prepend("<option value='' selected>Select Project</option>");
 
+			resolve(); //selectedGroupsArr, selectedPrioritysArr
 
-				resolve(); //selectedGroupsArr, selectedPrioritysArr
-			});
 		}).then(()=>{ //selectedGroupsArray, selectedPrioritysArray
 				//add select2 to the 'select input'
 			    $('.selectedCompetitorDefault').select2({dropdownAutoWidth : true, width : "100%"});
@@ -881,6 +658,7 @@ $(document).ready(function(){
                 $('.selectedCustomerDefault').select2({dropdownAutoWidth : true, width : "100%"});
                 $('.selectedProductDefault').select2({dropdownAutoWidth : true, width : "100%"});
                 $('.selectedPriorityDefault').select2({dropdownAutoWidth : true, width : "100%"});
+                $('.selectedProjectDefault').select2({dropdownAutoWidth : true, width : "100%"});
 		}).catch(()=>{
 			console.log('outer promise err');
 		});
@@ -915,13 +693,6 @@ $(document).ready(function(){
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-    //PREVENT AUTO-SUBMISSION BY THE BARCODE SCANNER (this shouldn't matter but just to be on the safe side)
-    $("#barcodeText").keypress(function(e){
-        if(e.which === 13){
-            e.preventDefault();
-        }
-    });
-
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -929,13 +700,11 @@ $(document).ready(function(){
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     //INITIALISE datepicker on the "From date" and "To date" fields
-    $('#datePair .date').datepicker({
-        format: 'yyyy-mm-dd',
-        autoclose: true,
-        assumeNearbyYear: true,
-        todayBtn: 'linked',
-        todayHighlight: true,
-        endDate: 'today'
+    $('#itemMilestone').datepicker({
+        dateFormat: 'yy-mm-dd',
+        changeMonth: true,
+        changeYear: true,
+        autoSize: true
     });
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -943,9 +712,6 @@ $(document).ready(function(){
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    //INITIALISE datepair on the "From date" and "To date" fields
-    $("#datePair").datepair();
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -12,14 +12,14 @@ defined('BASEPATH') OR exit('');
         <!-- favicon ends -->
 
         <!-- LOAD FILES -->
-        <?php if((stristr($_SERVER['HTTP_HOST'], "localhost") !== FALSE) || (stristr($_SERVER['HTTP_HOST'], "192.168.") !== FALSE)|| (stristr($_SERVER['HTTP_HOST'], "127.0.0.") !== FALSE)): ?>
+        <?php if((stristr($_SERVER['HTTP_HOST'], "localhost") !== FALSE) || (stristr($_SERVER['HTTP_HOST'], "172.17.") !== FALSE) || (stristr($_SERVER['HTTP_HOST'], "192.168.") !== FALSE)|| (stristr($_SERVER['HTTP_HOST'], "127.0.0.") !== FALSE)): ?>
         <link rel="stylesheet" href="<?=base_url()?>public/bootstrap/css/bootstrap.min.css">
         <link rel="stylesheet" href="<?=base_url()?>public/bootstrap/css/bootstrap-theme.min.css" media="screen">
         <link rel="stylesheet" href="<?=base_url()?>public/font-awesome/css/font-awesome.min.css">
         <link rel="stylesheet" href="<?=base_url()?>public/font-awesome/css/font-awesome-animation.min.css">
         <link rel="stylesheet" href="<?=base_url()?>public/ext/select2/select2.min.css">
 
-        <script src="<?=base_url()?>public/js/jquery.min.js"></script>
+        <script src="<?=base_url()?>public/jquery/jquery.min.js"></script>
         <script src="<?=base_url()?>public/bootstrap/js/bootstrap.min.js"></script>
         <script src="<?=base_url()?>public/ext/select2/select2.min.js"></script>
 
@@ -31,9 +31,9 @@ defined('BASEPATH') OR exit('');
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome-animation/0.0.8/font-awesome-animation.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css">
 
-        <script src="<?=base_url()?>public/js/jquery.min.js"></script>
-        <script src="<?=base_url()?>public/js/bootstrap.min.js"></script>
-        <script src="<?=base_url()?>public/js/select2.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
 
         <?php endif; ?>
 
@@ -301,7 +301,7 @@ defined('BASEPATH') OR exit('');
                                 </div>
                                 <div class="col-sm-12 form-group">
                                     <label for='logInPassword' class="control-label">Password</label>
-                                    <input type="password" id='logInModalPassword'class="form-control checkField" placeholder="Password">
+                                    <input type="password" id='logInModalPassword'class="form-control checkField" placeholder="Password" autocomplete="password" required>
                                     <span class="help-block errMsg" id="logInModalPasswordErr"></span>
                                 </div>
                             </div>

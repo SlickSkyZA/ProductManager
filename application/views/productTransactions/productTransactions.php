@@ -7,6 +7,7 @@ $current_products = [];
 $current_platforms = [];
 $current_statuses = [];
 $current_competitors = [];
+$current_projects = [];
 
 if(isset($priorities) && !empty($priorities)){
     foreach($priorities as $get){
@@ -38,10 +39,21 @@ if(isset($customer_venders) && !empty($customer_venders)){
         $current_competitors[$get->id] = $get->Name;
     }
 }
+if(isset($customer_projects) && !empty($customer_projects)){
+    foreach($customer_projects as $get){
+        $current_projects[$get->id] = $get->Name;
+    }
+}
+
 ?>
+<!-- LOAD FILES -->
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
-<style href="<?=base_url('public/ext/datetimepicker/bootstrap-datepicker.min.css')?>" rel="stylesheet"></style>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
+<!-- custom CSS -->
+
+<!-- custom JS -->
 <script>
     var currentPriorities = <?=json_encode($current_priorities)?>;
     var currentCustomers = <?=json_encode($current_customers)?>;
@@ -49,6 +61,7 @@ if(isset($customer_venders) && !empty($customer_venders)){
     var currentPlatforms = <?=json_encode($current_platforms)?>;
     var currentStatuses = <?=json_encode($current_statuses)?>;
     var currentCompetitors = <?=json_encode($current_competitors)?>;
+    var currentProjects = <?=json_encode($current_projects)?>;
 </script>
 
 <div class="pwell hidden-print">
@@ -123,8 +136,19 @@ if(isset($customer_venders) && !empty($customer_venders)){
 
                                     <div class="row">
                                         <div class="col-sm-4 form-group-sm">
-                                            <label for="itemProjectName">Project Name (Optional)</label>
-                                            <input type="text" id="itemProjectName" class="form-control" placeholder="Customer Project Name">
+                                            <label for="itemProject">Customer Project (Optional)</label>
+                                            <select class="form-control selectedProjectDefault" id="itemProject" name="itemProject"></select>
+                                        </div>
+
+                                        <div class="col-sm-4 form-group-sm">
+                                            <label for="itemMilestone">Milestone Date (Optional)</label>
+                                            <div class="input-group date">
+                                                <div class="input-group-addon">
+                                                    <span><i class="fa fa-calendar"></i></span>
+                                                </div>
+                                                <input type="text" class="form-control" value="" id="itemMilestone" name="itemMilestone" >
+                                            </div>
+                                            <span class="help-block errMsg" id='itemMilestoneErr'></span>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -267,12 +291,12 @@ if(isset($customer_venders) && !empty($customer_venders)){
 
                     <div class="row">
                         <div class="col-sm-4 form-group-sm">
-                            <label for="itemProjectNameEdit">Project Name (Optional)</label>
-                            <input type="text" id="itemProjectNameEdit" class="form-control" placeholder="Customer Project Name">
+                            <label for="itemProjectEdit">Customer Project (Optional)</label>
+                            <select class="form-control selectedProjectDefault" id="itemProjectEdit" name="itemProjectEdit"></select>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-sm-4 form-group-sm">
+                        <div class="col-sm-12 form-group-sm">
                             <label for="itemDescEdit" class="">Description (Optional)</label>
                             <textarea class="form-control" id="itemDescEdit" name="itemDescEdit" rows='4'
                                 placeholder="Optional Product Description"></textarea>
@@ -332,9 +356,4 @@ if(isset($customer_venders) && !empty($customer_venders)){
     </div>
 </div>
 
-<!---End of copy of div to clone when adding more items to sales transaction---->
 <script src="<?=base_url()?>public/js/producttransactions.js"></script>
-<script src="<?=base_url('public/ext/datetimepicker/bootstrap-datepicker.min.js')?>"></script>
-<script src="<?=base_url('public/ext/datetimepicker/jquery.timepicker.min.js')?>"></script>
-<script src="<?=base_url()?>public/ext/datetimepicker/datepair.min.js"></script>
-<script src="<?=base_url()?>public/ext/datetimepicker/jquery.datepair.min.js"></script>

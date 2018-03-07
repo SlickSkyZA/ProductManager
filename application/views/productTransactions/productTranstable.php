@@ -17,9 +17,8 @@
                     <th>Platform</th>
                     <th>Status</th>
                     <th>Competitor</th>
-                    <th>Project Name</th>
-                    <th>Create DATE</th>
-                    <th>Update DATE</th>
+                    <th>Project</th>
+                    <th>CodeFreeze</th>
                     <th>DESCRIPTION</th>
                     <th>EDIT</th>
                     <th>DELETE</th>
@@ -38,8 +37,7 @@
                     <td><span id="itemStatus-<?=$get->id?>"><?=$get->StatusName?></td>
                     <td><span id="itemCompetitor-<?=$get->id?>"><?=$get->CompetitorName?></td>
                     <td><span id="itemProject-<?=$get->id?>"><?=$get->ProjectName?></td>
-                    <td><span id="itemAddDate-<?=$get->id?>"><?= date('jS M, Y h:ia', strtotime($get->AddedDate)) ?> </td>
-                    <td><span id="itemUpdateDate-<?=$get->id?>"><?= date('jS M, Y h:ia', strtotime($get->UpdatedDate)) ?></td>
+                    <td><span id="itemMilestone-<?=$get->id?>"><?= $get->MilestoneDate == '' ? '' : date('jS M, Y', strtotime($get->MilestoneDate)) ?> </td>
                     <td>
                         <span id="itemDesc-<?=$get->id?>" data-toggle="tooltip" title="<?=$get->Notes?>" data-placement="auto">
                             <?=character_limiter($get->Notes, 15)?>

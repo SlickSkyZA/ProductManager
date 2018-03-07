@@ -170,15 +170,27 @@ class CustomerProjects extends CI_Controller{
         $this->form_validation->set_rules('_iId', 'Item ID', ['required', 'trim', 'numeric']);
         $this->form_validation->set_rules('itemName', 'Vender Name', ['required', 'trim',
             'callback_crosscheckName['.$this->input->post('_iId', TRUE).']'], ['required'=>'required']);
+        $this->form_validation->set_rules('itemCustomer', 'Customer ID', ['required', 'trim', 'numeric']);
+        $this->form_validation->set_rules('itemSOCCompany', 'SOCCompany', ['trim']);
+        $this->form_validation->set_rules('itemSOCName', 'SOCName', ['trim']);
         $this->form_validation->set_rules('itemDesc', 'Item Description', ['trim']);
 
         if($this->form_validation->run() !== FALSE){
             $itemId = set_value('_iId');
             $itemDesc = set_value('itemDesc');
+            $itemCustomer = set_value('itemCustomer');
+            $itemSOCCompany = set_value('itemSOCCompany');
+            $itemSOCName = set_value('itemSOCName');
+            $itemGPU = set_value('itemGPU');
+            $itemDSP = set_value('itemDSP');
+            $itemRAM = set_value('itemRAM');
+            $itemCamera0 = set_value('itemCamera0');
+            $itemCamera1 = set_value('itemCamera1');
             $itemName = set_value('itemName');
 
             //update item in db
-            $updated = $this->customerType->edit($itemId, $itemName, $itemDesc);
+            $updated = $this->customerProject->edit($itemId, $itemName, $itemCustomer, $itemSOCCompany, $itemSOCName,
+            $itemGPU, $itemDSP, $itemRAM, $itemCamera0, $itemCamera1, $itemDesc);
 
             $json['status'] = $updated ? 1 : 0;
 
@@ -186,7 +198,7 @@ class CustomerProjects extends CI_Controller{
             //function header: addevent($event, $eventRowId, $eventDesc, $eventTable, $staffId)
             $desc = "Details of item with code '$itemId' was updated";
 
-            $this->genmod->addevent("Vender Info Update", $itemId, $desc, 'Customer Type', $this->session->admin_id);
+            $this->genmod->addevent("Customer Project Info Update", $itemId, $desc, 'Customer Project', $this->session->admin_id);
         }
 
         else{
@@ -207,7 +219,7 @@ class CustomerProjects extends CI_Controller{
 
     public function crosscheckName($itemName, $itemId){
         //check db to ensure name was previously used for the item we are updating
-        $itemWithName = $this->genmod->getTableCol('customer_type', 'id', 'Name', $itemName);
+        $itemWithName = $this->genmod->getTableCol('customer_project', 'id', 'Name', $itemName);
 
         //if item name does not exist or it exist but it's the name of current item
         if(!$itemWithName || ($itemWithName == $itemId)){

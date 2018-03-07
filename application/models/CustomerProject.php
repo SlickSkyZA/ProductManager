@@ -92,9 +92,13 @@ class CustomerProject extends CI_Model{
      * @return boolean
      */
     public function itemsearch($value){
-        $q = "SELECT * FROM customer_type
+        $q = "SELECT customer_project.id, customer_project.Name, customer.Name CustomerName, customer_project.SOCCompany,
+        customer_project.SOCName, customer_project.GPU, customer_project.DSP, customer_project.RAM, customer_project.FrontCameraType,
+        customer_project.RearCameraType, customer_project.AddedDate, customer_project.UpdatedDate, customer_project.Notes
+            FROM customer_project
+            JOIN customer ON customer_project.CustomerID = customer.id
             WHERE
-            Name LIKE '%".$this->db->escape_like_str($value)."%'";
+            customer_project.Name LIKE '%".$this->db->escape_like_str($value)."%'";
 
         $run_q = $this->db->query($q, [$value, $value]);
 
@@ -122,11 +126,11 @@ class CustomerProject extends CI_Model{
     * @param type $itemDesc
     * @param type $itemPrice
     */
-   public function edit($itemId, $itemName, $itemDesc){
-       $data = ['Name'=>$itemName, 'Notes'=>$itemDesc];
+   public function edit($itemId, $itemName, $itemCustomer, $itemSOCCompany, $itemSOCName, $itemGPU, $itemDSP, $itemRAM, $itemCamera0, $itemCamera1, $itemDesc) {
+       $data = ['Name'=>$itemName, 'CustomerID'=>$itemCustomer, 'SOCCompany'=>$itemSOCCompany, 'SOCName'=>$itemSOCName, 'GPU'=>$itemGPU, 'DSP'=>$itemDSP, 'RAM'=>$itemRAM, 'FrontCameraType'=>$itemCamera0, 'RearCameraType'=>$itemCamera1, 'Notes'=>$itemDesc];
 
        $this->db->where('id', $itemId);
-       $this->db->update('customer_type', $data);
+       $this->db->update('customer_project', $data);
 
        return TRUE;
    }

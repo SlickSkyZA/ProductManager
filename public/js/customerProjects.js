@@ -102,8 +102,10 @@ $(document).ready(function(){
 
         var itemName = $("#itemName").val();
         var itemCustomer = $("#itemCustomer").val();
-        var itemSOCCompany = $("#itemSOCCompany").val();
-        var itemSOCName = $("#itemSOCName").val();
+        var itemSOCCompany = $("#itemSOCCompany").find("option:selected").text();
+        var itemSOCCompanyVal = $("#itemSOCCompany").val();
+        var itemSOCName = $("#itemSOCName").find("option:selected").text();
+        var itemSOCNameVal = $("#itemSOCName").val();
         var itemGPU = $("#itemGPU").val();
         var itemDSP = $("#itemDSP").val();
         var itemRAM = $("#itemRAM").val();
@@ -111,11 +113,11 @@ $(document).ready(function(){
         var itemCamera1 = $("#itemCamera1").val();
         var itemDesc = $("#itemDesc").val();
 
-        if(!itemName || !itemSOCCompany || !itemSOCName){
+        if(!itemName || !itemSOCCompanyVal || !itemSOCNameVal){
             !itemName ? $("#itemNameErr").text("required") : "";
             !itemCustomer ? $("#itemCustomerErr").text("required") : "";
-            !itemSOCCompany ? $("#itemSOCCompanyErr").text("required") : "";
-            !itemSOCName ? $("#itemSOCNameErr").text("required") : "";
+            !itemSOCCompanyVal ? $("#itemSOCCompanyErr").text("required") : "";
+            !itemSOCNameVal ? $("#itemSOCNameErr").text("required") : "";
 
             $("#addCustErrMsg").text("One or more required fields are empty");
 
@@ -136,11 +138,37 @@ $(document).ready(function(){
                     changeFlashMsgContent(returnedData.msg, "text-success", '', 1500);
                     document.getElementById("addNewItemForm").reset();
                     $("#itemCustomer").val(itemCustomer);
-                    $("#itemSOCCompany").val(itemSOCCompany);
-                    $("#itemSOCName").val(itemSOCName);
 
-                    currentSOCCompanies.push(itemSOCCompany);
-                    currentSOCNames.push(itemSOCName);
+                    if(!inArray(itemSOCCompany, currentSOCCompanies)){
+                        currentSOCCompanies.push(itemSOCCompany);
+                        $(".selectedSOCCompanyDefault").empty();
+                        for(let key in currentSOCCompanies){
+                            if (currentSOCCompanies[key] == itemSOCCompany) {
+                            	$(".selectedSOCCompanyDefault").append("<option value='"+key+"' selected>"+currentSOCCompanies[key]+"</option>");
+                            } else {
+                            	$(".selectedSOCCompanyDefault").append("<option value='"+key+"'>"+currentSOCCompanies[key]+"</option>");
+                            }
+            			}
+            			$(".selectedSOCCompanyDefault").prepend("<option value=''>Select SOC Company</option>");
+                    } else {
+                        $("#itemSOCCompany").val(itemSOCCompanyVal);
+                    }
+
+                    if(!inArray(itemSOCName, currentSOCNames)){
+                        //add into select2 data.
+                        currentSOCNames.push(itemSOCName);
+                        $(".selectedSOCNameDefault").empty();
+                        for(let key in currentSOCNames){
+                            if (currentSOCNames[key] == itemSOCName) {
+    			                $(".selectedSOCNameDefault").append("<option value='"+key+"' selected>"+currentSOCNames[key]+"</option>");
+                            } else {
+                                $(".selectedSOCNameDefault").append("<option value='"+key+"'>"+currentSOCNames[key]+"</option>");
+                            }
+            			}
+            			$(".selectedSOCNameDefault").prepend("<option value=''>Select SOC</option>");
+                    } else {
+                        $("#itemSOCName").val(itemSOCNameVal);
+                    }
                     //refresh the items list table
                     lilt();
 
@@ -196,7 +224,7 @@ $(document).ready(function(){
         //console.log("The Priority NAME value: %s", value);
         if(value){
             $.ajax({
-                url: appRoot+"search/customerTypeSearch",
+                url: appRoot+"search/customerProjectSearch",
                 type: "get",
                 data: {v:value},
                 success: function(returnedData){
@@ -226,11 +254,27 @@ $(document).ready(function(){
         var itemId = $(this).attr('id').split("-")[1];
         var itemDesc = $("#itemDesc-"+itemId).attr('title');
         var itemName = $("#itemName-"+itemId).html();
+        var itemCustomer = $("#itemCustomer-"+itemId).html();
+        var itemSOCCompany = $("#itemSOCCompany-"+itemId).html();
+        var itemSOCName = $("#itemSOCName-"+itemId).html();
+        var itemGPU = $("#itemGPU-"+itemId).html();
+        var itemDSP = $("#itemDSP-"+itemId).html();
+        var itemRAM = $("#itemRAM-"+itemId).html();
+        var itemCamera0 = $("#itemCamera0-"+itemId).html();
+        var itemCamera1 = $("#itemCamera1-"+itemId).html();
 
         //prefill form with info
         $("#itemIdEdit").val(itemId);
         $("#itemNameEdit").val(itemName);
-        $("#itemDescriptionEdit").val(itemDesc);
+        $("#itemDescEdit").val(itemDesc);
+        $("#itemCustomerEdit").val(itemCustomer);
+        $("#itemSOCCompanyEdit").val(itemSOCCompany);
+        $("#itemSOCNameEdit").val(itemSOCName);
+        $("#itemGPUEdit").val(itemGPU);
+        $("#itemDSPEdit").val(itemDSP);
+        $("#itemRAMEdit").val(itemRAM);
+        $("#itemCamera0Edit").val(itemCamera0);
+        $("#itemCamera1Edit").val(itemCamera1);
 
         //remove all error messages that might exist
         $("#editItemFMsg").html("");
@@ -238,6 +282,53 @@ $(document).ready(function(){
 
         //launch modal
         $("#editItemModal").modal('show');
+
+        return new Promise((resolve, reject)=>{
+			//if an item has been selected (i.e. added to the current transaction), do not add it to the list. This way, an item will appear just once.
+			//We start by forming an array of all selected items, then skip that item in the loop appending items to select dropdown
+
+            $(".selectedCustomerDefault").empty();
+            for(let key in currentCustomers){
+				if (currentCustomers[key] == itemCustomer) {
+                    $(".selectedCustomerDefault").append("<option value='"+key+"' selected>"+currentCustomers[key]+"</option>");
+                } else {
+                    $(".selectedCustomerDefault").append("<option value='"+key+"'>"+currentCustomers[key]+"</option>");
+                }
+
+			}
+			$(".selectedCustomerDefault").prepend("<option value=''>Select Customer</option>");
+
+            $(".selectedSOCCompanyDefault").empty();
+            for(let key in currentSOCCompanies){
+				if (currentSOCCompanies[key] == itemSOCCompany) {
+	                $(".selectedSOCCompanyDefault").append("<option value='"+key+"' selected>"+currentSOCCompanies[key]+"</option>");
+                } else {
+                    $(".selectedSOCCompanyDefault").append("<option value='"+key+"'>"+currentSOCCompanies[key]+"</option>");
+                }
+			}
+			$(".selectedSOCCompanyDefault").prepend("<option value='' >Select SOC Company</option>");
+
+            $(".selectedSOCNameDefault").empty();
+            for(let key in currentSOCNames){
+    			if (currentSOCNames[key] == itemSOCName) {
+    				$(".selectedSOCNameDefault").append("<option value='"+key+"' selected>"+currentSOCNames[key]+"</option>");
+                } else {
+                    $(".selectedSOCNameDefault").append("<option value='"+key+"'>"+currentSOCNames[key]+"</option>");
+                }
+			}
+			$(".selectedSOCNameDefault").prepend("<option value='' >Select SOC</option>");
+
+			resolve(); //selectedGroupsArr, selectedPrioritysArr
+		}).then(()=>{ //selectedGroupsArray, selectedPrioritysArray
+			//add select2 to the 'select input'
+			$('.selectedCustomerDefault').select2({dropdownAutoWidth : true, width : "100%"});
+            $('.selectedSOCCompanyDefault').select2({dropdownAutoWidth : true, width : "100%", tags : true});
+            $('.selectedSOCNameDefault').select2({dropdownAutoWidth : true, width : "100%", tags : true});
+		}).catch(()=>{
+			console.log('outer promise err');
+		});
+
+        return false;
     });
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -248,11 +339,24 @@ $(document).ready(function(){
 
     $("#editItemSubmit").click(function(){
         var itemName = $("#itemNameEdit").val();
-        var itemDesc = $("#itemDescriptionEdit").val();
+        var itemDesc = $("#itemDescEdit").val();
         var itemId = $("#itemIdEdit").val();
+        var itemCustomer = $("#itemCustomerEdit").val();
+        var itemSOCCompany = $("#itemSOCCompanyEdit").find("option:selected").text();
+        var itemSOCCompanyVal = $("#itemSOCCompanyEdit").val();
+        var itemSOCName = $("#itemSOCNameEdit").find("option:selected").text();
+        var itemSOCNameVal = $("#itemSOCNameEdit").val();
+        var itemGPU = $("#itemGPUEdit").val();
+        var itemDSP = $("#itemDSPEdit").val();
+        var itemRAM = $("#itemRAMEdit").val();
+        var itemCamera0 = $("#itemCamera0Edit").val();
+        var itemCamera1 = $("#itemCamera1Edit").val();
 
-        if(!itemName || !itemId ){
+        if(!itemName || !itemId || !itemCustomer || !itemSOCCompanyVal || !itemSOCNameVal){
             !itemName ? $("#itemNameEditErr").html("Type name cannot be empty") : "";
+            !itemCustomer ? $("#itemCustomerEditErr").html("required") : "";
+            !itemSOCCompanyVal ? $("#itemSOCCompanyEditErr").html("required") : "";
+            !itemSOCNameVal ? $("#itemSOCNameEditErr").html("required") : "";
             !itemId ? $("#editItemFMsg").html("Unknown Priority") : "";
             return;
         }
@@ -261,11 +365,13 @@ $(document).ready(function(){
 
         $.ajax({
             method: "POST",
-            url: appRoot+"customerTypes/edit",
-            data: {itemName:itemName, itemDesc:itemDesc, _iId:itemId}
+            url: appRoot+"customerProjects/edit",
+            data: {itemName:itemName, itemCustomer:itemCustomer, itemSOCCompany:itemSOCCompany,
+                itemSOCName:itemSOCName, itemGPU:itemGPU, itemDSP:itemDSP, itemRAM:itemRAM,
+                itemCamera0:itemCamera0, itemCamera1:itemCamera1, itemDesc:itemDesc, _iId:itemId}
         }).done(function(returnedData){
             if(returnedData.status === 1){
-                $("#editItemFMsg").css('color', 'green').html("Status successfully updated");
+                $("#editItemFMsg").css('color', 'green').html("successfully updated");
 
                 setTimeout(function(){
                     $("#editItemModal").modal('hide');

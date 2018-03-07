@@ -18,7 +18,9 @@ class Search extends CI_Controller{
 
         $this->genlib->ajaxOnly();
 
-        $this->load->model(['transaction', 'item', 'productGroup', 'priority', 'product', 'region', 'platform', 'customer', 'productStatus', 'customerVender', 'productTransaction', 'customerType']);
+        $this->load->model(['transaction', 'item', 'productGroup', 'priority', 'product', 'region',
+        'platform', 'customer', 'productStatus', 'customerVender', 'productTransaction', 'customerType',
+        'customerProject']);
 
         $this->load->helper('text');
 
@@ -194,6 +196,23 @@ class Search extends CI_Controller{
         $data['sn'] = 1;
 
         $json['itemsListTable'] = $data['allItems'] ? $this->load->view('customerTypes/customerTypeslisttable', $data, TRUE) : "No match found {$this->value}";
+
+        //set final output
+        $this->output->set_content_type('application/json')->set_output(json_encode($json));
+    }
+
+    /*
+    ********************************************************************************************************************************
+    ********************************************************************************************************************************
+    ********************************************************************************************************************************
+    ********************************************************************************************************************************
+    ********************************************************************************************************************************
+    */
+    public function customerProjectSearch(){
+        $data['allItems'] = $this->customerProject->itemsearch($this->value);
+        $data['sn'] = 1;
+
+        $json['itemsListTable'] = $data['allItems'] ? $this->load->view('customerProjects/customerProjectslisttable', $data, TRUE) : "No match found {$this->value}";
 
         //set final output
         $this->output->set_content_type('application/json')->set_output(json_encode($json));

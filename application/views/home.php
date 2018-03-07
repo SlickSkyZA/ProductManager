@@ -1,4 +1,4 @@
-<?php 
+<?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 ?>
 
@@ -15,25 +15,25 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <!-- Favicon -->
         <link rel="shortcut icon" href="<?=base_url()?>public/images/icon.ico">
         <!-- favicon ends --->
-        
+
         <!--- LOAD FILES -->
-        <?php if($_SERVER['HTTP_HOST'] == "localhost" || (stristr($_SERVER['HTTP_HOST'], "192.168.") !== FALSE)|| (stristr($_SERVER['HTTP_HOST'], "127.0.0.") !== FALSE)): ?>
+        <?php if($_SERVER['HTTP_HOST'] == "localhost" || (stristr($_SERVER['HTTP_HOST'], "192.168.") !== FALSE) || (stristr($_SERVER['HTTP_HOST'], "172.17.") !== FALSE) || (stristr($_SERVER['HTTP_HOST'], "127.0.0.") !== FALSE)): ?>
         <link rel="stylesheet" href="<?=base_url()?>public/bootstrap/css/bootstrap.min.css">
         <link rel="stylesheet" href="<?=base_url()?>public/font-awesome/css/font-awesome.min.css">
 
-        <script src="<?=base_url()?>public/js/jquery.min.js"></script>
+        <script src="<?=base_url()?>public/jquery/jquery.min.js"></script>
         <script src="<?=base_url()?>public/bootstrap/js/bootstrap.min.js"></script>
 
         <?php else: ?>
-        
+
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
 
-        <script src="<?=base_url()?>public/js/jquery.min.js"></script>
-        <script src="<?=base_url()?>public/js/bootstrap.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-        <?php endif; ?> 
-        
+        <?php endif; ?>
+
         <!-- CSS -->
         <link rel="stylesheet" href="<?=base_url()?>public/css/form-elements.css">
         <link rel="stylesheet" href="<?=base_url()?>public/css/style.css">
@@ -45,6 +45,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
             <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
+
+
+        <script src="<?=base_url()?>public/jquery/jquery.backstretch.min.js"></script>
+
 
     </head>
 
@@ -82,7 +86,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="row">
                         <div class="col-sm-12 text-center" style="color:white">
                             Designed and Developed by <a href="http://www.amirsanni.com/" target='_blank' class="text-primary">Amir Sanni</a> (2016)
@@ -93,13 +97,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
         </div>
 
-
         <!-- Javascript -->
         <script src="<?=base_url()?>public/js/main.js"></script>
         <script src="<?=base_url()?>public/js/access.js"></script>
-        <script src="<?=base_url()?>public/js/jquery.backstretch.min.js"></script>
         <!--Javascript--->
 
     </body>
-
 </html>

@@ -23,11 +23,12 @@ class ProductTransaction extends CI_Model{
         $this->db->order_by($orderBy, $orderFormat);
         $this->db->select('xscp.id, product.Name ProductName, customer.Name CustomerName, IFNULL(customer_vender.Name,"") CompetitorName,
         priority.Name PriorityName, product_status.Name StatusName, priority.Value PriorityValue, product_platform.Name PlatformName,
-        xscp.ProjectName, xscp.AddedDate, xscp.UpdatedDate, xscp.Notes');
+        IFNULL(customer_project.Name,"") ProjectName, xscp.MilestoneDate, xscp.AddedDate, xscp.UpdatedDate, xscp.Notes');
 
         $this->db->join('product', 'xscp.ProductID = product.id');
         $this->db->join('customer', 'xscp.CustomerID = customer.id');
         $this->db->join('customer_vender', 'xscp.VenderID = customer_vender.id', 'left');
+        $this->db->join('customer_project', 'xscp.ProjectID = customer_project.id', 'left');
         $this->db->join('product_status', 'xscp.StatusID = product_status.id');
         $this->db->join('priority', 'xscp.PriorityID = priority.id');
         $this->db->join('product_platform', 'xscp.PlatformID = product_platform.id');
@@ -61,9 +62,9 @@ class ProductTransaction extends CI_Model{
      * @param type $itemCode
      * @return boolean
      */
-    public function add($product, $customer, $priority, $platform, $status, $competitor, $projectName, $description){
+    public function add($product, $customer, $priority, $platform, $status, $competitor, $projectName, $itemMilestone, $description){
         $data = ['ProductID'=>$product, 'CustomerID'=>$customer, 'PriorityID'=>$priority, 'PlatformID'=>$platform,
-        'StatusID'=>$status, 'VenderID'=>$competitor, 'ProjectName'=>$projectName, 'Notes'=>$description];
+        'StatusID'=>$status, 'VenderID'=>$competitor, 'ProjectID'=>$projectName, 'MilestoneDate'=>$itemMilestone, 'Notes'=>$description];
 
         //set the datetime based on the db driver in use
         $this->db->platform() == "sqlite3"
@@ -99,7 +100,7 @@ class ProductTransaction extends CI_Model{
     public function itemsearch($value){
         $q = "SELECT xscp.id, product.Name ProductName, customer.Name CustomerName, IFNULL(customer_vender.Name,'') CompetitorName,
                     priority.Name PriorityName, product_status.Name StatusName, priority.Value PriorityValue, product_platform.Name PlatformName,
-                    xscp.ProjectName, xscp.AddedDate, xscp.UpdatedDate, xscp.Notes
+                    IFNULL(customer_project.Name,'') ProjectName, xscp.MilestoneDate, xscp.AddedDate, xscp.UpdatedDate, xscp.Notes
                 FROM xscp
                 join product ON xscp.ProductID = product.id
                 join customer ON xscp.CustomerID = customer.id
@@ -122,103 +123,6 @@ class ProductTransaction extends CI_Model{
     }
 
 
-    /*
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    */
-
-    /**
-     * To add to the number of an item in stock
-     * @param type $itemId
-     * @param type $numberToadd
-     * @return boolean
-     */
-    public function incrementItem($itemId, $numberToadd){
-        $q = "UPDATE items SET quantity = quantity + ? WHERE id = ?";
-
-        $this->db->query($q, [$numberToadd, $itemId]);
-
-        if($this->db->affected_rows() > 0){
-            return TRUE;
-        }
-
-        else{
-            return FALSE;
-        }
-    }
-
-    /*
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    */
-
-    public function decrementItem($itemCode, $numberToRemove){
-        $q = "UPDATE items SET quantity = quantity - ? WHERE code = ?";
-
-        $this->db->query($q, [$numberToRemove, $itemCode]);
-
-        if($this->db->affected_rows() > 0){
-            return TRUE;
-        }
-
-        else{
-            return FALSE;
-        }
-    }
-
-
-    /*
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    */
-
-
-   public function newstock($itemId, $qty){
-       $q = "UPDATE items SET quantity = quantity + $qty WHERE id = ?";
-
-       $this->db->query($q, [$itemId]);
-
-       if($this->db->affected_rows()){
-           return TRUE;
-       }
-
-       else{
-           return FALSE;
-       }
-   }
-
-
-   /*
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    */
-
-   public function deficit($itemId, $qty){
-       $q = "UPDATE items SET quantity = quantity - $qty WHERE id = ?";
-
-       $this->db->query($q, [$itemId]);
-
-       if($this->db->affected_rows()){
-           return TRUE;
-       }
-
-       else{
-           return FALSE;
-       }
-   }
-
    /*
     ********************************************************************************************************************************
     ********************************************************************************************************************************
@@ -234,9 +138,9 @@ class ProductTransaction extends CI_Model{
     * @param type $itemDesc
     * @param type $itemPrice
     */
-   public function edit($itemId, $itemProductID, $itemCustomerID, $itemPriorityID, $itemPlatformID, $itemStatusID, $itemCompetitorID, $itemProjectName, $itemDesc){
+   public function edit($itemId, $itemProductID, $itemCustomerID, $itemPriorityID, $itemPlatformID, $itemStatusID, $itemCompetitorID, $itemProjectName, $itemMilestone, $itemDesc){
        $data = ['ProductID'=>$itemProductID, 'CustomerID'=>$itemCustomerID, 'PriorityID'=>$itemPriorityID, 'PlatformID'=>$itemPlatformID,
-       'StatusID'=>$itemStatusID, 'VenderID'=>$itemCompetitorID, 'ProjectName'=>$itemProjectName, 'Notes'=>$itemDesc];
+       'StatusID'=>$itemStatusID, 'VenderID'=>$itemCompetitorID, 'ProjectID'=>$itemProjectName, 'MilestoneDate'=>$itemMilestone, 'Notes'=>$itemDesc];
 
        $this->db->where('id', $itemId);
        $this->db->update('xscp', $data);
@@ -244,50 +148,4 @@ class ProductTransaction extends CI_Model{
        return TRUE;
    }
 
-   /*
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    */
-
-	public function getActiveItems($orderBy, $orderFormat){
-        $this->db->order_by($orderBy, $orderFormat);
-
-        $run_q = $this->db->get('product');
-
-        if($run_q->num_rows() > 0){
-            return $run_q->result();
-        }
-
-        else{
-            return FALSE;
-        }
-    }
-
-
-    /*
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    */
-
-    /**
-     * array $where_clause
-     * array $fields_to_fetch
-     *
-     * return array | FALSE
-     */
-    public function getItemInfo($where_clause, $fields_to_fetch){
-        $this->db->select($fields_to_fetch);
-
-        $this->db->where($where_clause);
-
-        $run_q = $this->db->get('product group');
-
-        return $run_q->num_rows() ? $run_q->row() : FALSE;
-    }
 }

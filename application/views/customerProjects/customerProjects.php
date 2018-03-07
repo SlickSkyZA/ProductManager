@@ -202,23 +202,82 @@ if(isset($soc_names) && !empty($soc_names)){
         <div class="modal-content">
             <div class="modal-header">
                 <button class="close" data-dismiss="modal">&times;</button>
-                <h4 class="text-center">Edit Type Name</h4>
+                <h4 class="text-center">Edit Customer Project</h4>
                 <div id="editItemFMsg" class="text-center"></div>
             </div>
             <div class="modal-body">
                 <form name="addNewItemForm" id="addNewItemForm" role="form">
                     <div class="row">
                         <div class="col-sm-4 form-group-sm">
-                            <label for="itemNameEdit">Type Name</label>
-                            <input type="text" id="itemNameEdit" placeholder="Platform Name" autofocus class="form-control checkField">
+                            <label for="itemNameEdit">Project Name</label>
+                            <input type="text" id="itemNameEdit" name="itemNameEdit" placeholder="Project Name" maxlength="80"
+                                class="form-control" onchange="checkField(this.value, 'itemNameEditErr')">
                             <span class="help-block errMsg" id="itemNameEditErr"></span>
+                        </div>
+
+                        <div class="col-sm-4 form-group-sm">
+                            <label for="itemCustomerEdit">Customer</label>
+                            <select class="form-control selectedCustomerDefault checkField" id="itemCustomerEdit" name="itemCustomerEdit"> </select>
+                            <span class="help-block errMsg" id="itemCustomerEditErr"></span>
+                        </div>
+
+                        <div class="col-sm-4 form-group-sm">
+                            <label for="itemSOCCompanyEdit">SOC-Company</label>
+                            <select class="form-control selectedSOCCompanyDefault checkField" id="itemSOCCompanyEdit" name="itemSOCCompanyEdit"> </select>
+                            <span class="help-block errMsg" id="itemSOCCompanyEditErr"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-4 form-group-sm">
+                            <label for="itemSOCNameEdit">SOC-Name</label>
+                            <select class="form-control selectedSOCNameDefault checkField" id="itemSOCNameEdit" name="itemSOCNameEdit"> </select>
+                            <span class="help-block errMsg" id="itemSOCNameEditErr"></span>
+                        </div>
+
+                        <div class="col-sm-4 form-group-sm">
+                            <label for="itemGPUEdit">GPU</label>
+                            <input type="text" id="itemGPUEdit" name="itemGPUEdit" placeholder="GPU (Optional)" maxlength="80"
+                                class="form-control" onchange="checkField(this.value, 'itemGPUEditErr')">
+                            <span class="help-block errMsg" id="itemGPUEditErr"></span>
+                        </div>
+
+                        <div class="col-sm-4 form-group-sm">
+                            <label for="itemDSPEdit">DSP</label>
+                            <input type="text" id="itemDSPEdit" name="itemDSPEdit" placeholder="DSP (Optional)" maxlength="80"
+                                class="form-control" onchange="checkField(this.value, 'itemDSPEditErr')">
+                            <span class="help-block errMsg" id="itemDSPEditErr"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-4 form-group-sm">
+                            <label for="itemRAMEdit">RAM</label>
+                            <input type="text" id="itemRAMEdit" name="itemRAMEdit" placeholder="RAM (Optional)" maxlength="80"
+                                class="form-control" onchange="checkField(this.value, 'itemRAMEditErr')">
+                            <span class="help-block errMsg" id="itemRAMEditErr"></span>
+                        </div>
+
+                        <div class="col-sm-4 form-group-sm">
+                            <label for="itemCamera0Edit">Camera Front</label>
+                            <input type="text" id="itemCamera0Edit" name="itemCamera0Edit" placeholder="Camera Type (Optional)" maxlength="80"
+                                class="form-control" onchange="checkField(this.value, 'itemCamera0EditErr')">
+                            <span class="help-block errMsg" id="itemCamera0EditErr"></span>
+                        </div>
+
+                        <div class="col-sm-4 form-group-sm">
+                            <label for="itemCamera1Edit">Camera Rear</label>
+                            <input type="text" id="itemCamera1Edit" name="itemCamera1Edit" placeholder="Camera Type (Optional)" maxlength="80"
+                                class="form-control" onchange="checkField(this.value, 'itemCamera1EditErr')">
+                            <span class="help-block errMsg" id="itemCamera1EditErr"></span>
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-sm-12 form-group-sm">
-                            <label for="itemDescriptionEdit" class="">Description (Optional)</label>
-                            <textarea class="form-control" id="itemDescriptionEdit" placeholder="Optional Item Description"></textarea>
+                            <label for="itemDescEdit" class="">Description (Optional)</label>
+                            <textarea class="form-control" id="itemDescEdit" name="itemDescEdit" rows='4'
+                                placeholder="Optional Product Description"></textarea>
                         </div>
                     </div>
                     <input type="hidden" id="itemIdEdit">
