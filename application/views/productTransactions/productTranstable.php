@@ -37,7 +37,7 @@
                     <td><span id="itemStatus-<?=$get->id?>"><?=$get->StatusName?></td>
                     <td><span id="itemCompetitor-<?=$get->id?>"><?=$get->CompetitorName?></td>
                     <td><span id="itemProject-<?=$get->id?>"><?=$get->ProjectName?></td>
-                    <td><span id="itemMilestone-<?=$get->id?>"><?= $get->MilestoneDate == '' ? '' : date('jS M, Y', strtotime($get->MilestoneDate)) ?> </td>
+                    <td><span id="itemMilestone-<?=$get->id?>"><?= $get->MilestoneDate?> </td>
                     <td>
                         <span id="itemDesc-<?=$get->id?>" data-toggle="tooltip" title="<?=$get->Notes?>" data-placement="auto">
                             <?=character_limiter($get->Notes, 15)?>

@@ -64,8 +64,11 @@ class ProductTransaction extends CI_Model{
      */
     public function add($product, $customer, $priority, $platform, $status, $competitor, $projectName, $itemMilestone, $description){
         $data = ['ProductID'=>$product, 'CustomerID'=>$customer, 'PriorityID'=>$priority, 'PlatformID'=>$platform,
-        'StatusID'=>$status, 'VenderID'=>$competitor, 'ProjectID'=>$projectName, 'MilestoneDate'=>$itemMilestone, 'Notes'=>$description];
+        'StatusID'=>$status, 'VenderID'=>$competitor, 'ProjectID'=>$projectName, 'Notes'=>$description];
 
+        if ($itemMilestone !== "") {
+            $this->db->set('MilestoneDate', "{$itemMilestone}");
+        }
         //set the datetime based on the db driver in use
         $this->db->platform() == "sqlite3"
                 ?
@@ -140,8 +143,10 @@ class ProductTransaction extends CI_Model{
     */
    public function edit($itemId, $itemProductID, $itemCustomerID, $itemPriorityID, $itemPlatformID, $itemStatusID, $itemCompetitorID, $itemProjectName, $itemMilestone, $itemDesc){
        $data = ['ProductID'=>$itemProductID, 'CustomerID'=>$itemCustomerID, 'PriorityID'=>$itemPriorityID, 'PlatformID'=>$itemPlatformID,
-       'StatusID'=>$itemStatusID, 'VenderID'=>$itemCompetitorID, 'ProjectID'=>$itemProjectName, 'MilestoneDate'=>$itemMilestone, 'Notes'=>$itemDesc];
-
+       'StatusID'=>$itemStatusID, 'VenderID'=>$itemCompetitorID, 'ProjectID'=>$itemProjectName, 'Notes'=>$itemDesc];
+       if ($itemMilestone !== "") {
+           $this->db->set('MilestoneDate', "{$itemMilestone}");
+       }
        $this->db->where('id', $itemId);
        $this->db->update('xscp', $data);
 

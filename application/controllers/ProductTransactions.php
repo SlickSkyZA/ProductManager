@@ -192,6 +192,7 @@ class ProductTransactions extends CI_Controller{
          $this->form_validation->set_rules('_iId', 'Item ID', ['required', 'trim', 'numeric']);
          $this->form_validation->set_rules('itemDesc', 'Product Description', ['trim']);
          $this->form_validation->set_rules('itemProject', 'Project', ['trim']);
+         $this->form_validation->set_rules('itemMilestone', 'Project Milestone', ['trim']);
 
          if($this->form_validation->run() !== FALSE){
              $itemId = set_value('_iId');
@@ -213,7 +214,7 @@ class ProductTransactions extends CI_Controller{
 
              //add event to log
              //function header: addevent($event, $eventRowId, $eventDesc, $eventTable, $staffId)
-             $desc = "Details of item with code '$itemId' was updated";
+             $desc = "Details of item with code '$itemId' was updated, $itemMilestone";
 
              $this->genmod->addevent("Product transaction Update", $itemId, $desc, 'Product transaction', $this->session->admin_id);
          }

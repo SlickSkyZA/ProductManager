@@ -46,14 +46,11 @@ if(isset($customer_projects) && !empty($customer_projects)){
 }
 
 ?>
-<!-- LOAD FILES -->
+<!-- LOAD FILES
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
-<!-- custom CSS -->
-
-<!-- custom JS -->
+ -->
 <script>
     var currentPriorities = <?=json_encode($current_priorities)?>;
     var currentCustomers = <?=json_encode($current_customers)?>;
@@ -293,6 +290,16 @@ if(isset($customer_projects) && !empty($customer_projects)){
                         <div class="col-sm-4 form-group-sm">
                             <label for="itemProjectEdit">Customer Project (Optional)</label>
                             <select class="form-control selectedProjectDefault" id="itemProjectEdit" name="itemProjectEdit"></select>
+                        </div>
+                        <div class="col-sm-4 form-group-sm">
+                            <label for="itemMilestoneEdit">Milestone Date (Optional)</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <span><i class="fa fa-calendar"></i></span>
+                                </div>
+                                <input type="text" class="form-control" value="" id="itemMilestoneEdit" name="itemMilestoneEdit" >
+                            </div>
+                            <span class="help-block errMsg" id='itemMilestoneEditErr'></span>
                         </div>
                     </div>
                     <div class="row">
