@@ -2,24 +2,24 @@
 
 $(document).ready(function() {
     checkDocumentVisibility(checkLogin);//check document visibility in order to confirm user's log in status
-    
+
     //get earnings for current  year on page load
     getEarnings();
-    
+
     //load payment method pie charts
     loadPaymentMethodChart();
-    
-    
+
+
     //WHEN "YEAR" IS CHANGED IN ORDER TO CHANGE THE YEAR OF ACCOUNT BEING SHOWN
     $("#earningAndExpenseYear").change(function(){
         var year = $(this).val();
-        
+
         if(year){
             $("#yearAccountLoading").html("<i class='"+spinnerClass+"'></i> Loading...");
-            
+
             //get earnings for current  year on page load
             getEarnings(year);
-            
+
             //also get the payment menthods for that year
             loadPaymentMethodChart(year);
         }
@@ -43,13 +43,13 @@ $(document).ready(function() {
 */
 
 /**
- * 
+ *
  * @param {type} year
  * @returns {undefined}
  */
 function getEarnings(year){
     var yearToFetch = year || '';
-    
+
     $.ajax({
         type: 'GET',
         url: appRoot+"dashboard/earningsGraph/"+yearToFetch,
@@ -73,14 +73,20 @@ function getEarnings(year){
 
         var earningsGraph = document.getElementById("earningsGraph").getContext("2d");
 
-        window.myBar = new Chart(earningsGraph).Bar(barChartData, {
-          responsive : true,
-          scaleGridLineColor : "rgba(255,255,255,1)",
-          scaleShowHorizontalLines: true,
-          scaleShowVerticalLines: false,
-          barStrokeWidth : 1,
-          barValueSpacing : 20
-        });
+        window.myBar = new Chart(earningsGraph, {
+				type: 'bar',
+				data: barChartData,
+				options: {
+					responsive: true,
+					legend: {
+						position: 'top',
+					},
+					title: {
+						display: true,
+						text: 'Chart.js Bar Chart'
+					}
+				}
+			});
 
         //remove the loading info
         $("#yearAccountLoading").html("");
@@ -99,12 +105,20 @@ function getEarnings(year){
 
 
 /**
- * 
+ *
  * @returns {undefined}
  */
 function loadPaymentMethodChart(year){
     var yearToGet = year ? year : "";
-    
+    window.chartColors = {
+        red: 'rgb(255, 99, 132)',
+        orange: 'rgb(255, 159, 64)',
+        yellow: 'rgb(255, 205, 86)',
+        green: 'rgb(75, 192, 192)',
+        blue: 'rgb(54, 162, 235)',
+        purple: 'rgb(153, 102, 255)',
+        grey: 'rgb(201, 203, 207)'
+    };
     $.ajax({
         type: 'GET',
         url: appRoot+"dashboard/paymentmethodchart/"+yearToGet,
@@ -117,49 +131,103 @@ function loadPaymentMethodChart(year){
 
             if(response.status === 1) {
                 if((cash === 0 && pos === 0 && cashAndPos === 0)) {
-                  var paymentMethodData = [{
-                    value: 1,
-                    color:"#4D5360",
-                    highlight: "#616774",
-                    label: "No Payment"
-                  }];
-                } 
+                  var paymentMethodData = {
+                      type: 'pie',
+                      data: {
+                          datasets: [{
+                              data: [
+                                  cash,
+                                  pos,
+                                  cashAndPos,
+                              ],
+                              backgroundColor: [
+                                  window.chartColors.red,
+                                  window.chartColors.orange,
+                                  window.chartColors.yellow,
+                          //		window.chartColors.green,
+                          //		window.chartColors.blue,
+                              ],
+                              label: 'Dataset 1'
+                          }],
+                          labels: [
+                              'No Payment',
+                              'POS Only',
+                              'Cash and POS'
+                          ]
+                      },
+                      options: {
+                          responsive: true
+                      }
+                 };
+                } else {
+                    var per1 = cash / (cash + pos + cashAndPos) * 100;
+                    var paymentMethodData = {
+            			type: 'pie',
+            			data: {
+            				datasets: [{
+            					data: [
+            						cash,
+            						pos,
+            						cashAndPos,
+            					],
+            					backgroundColor: [
+            						window.chartColors.red,
+            						window.chartColors.orange,
+            						window.chartColors.yellow,
+            				//		window.chartColors.green,
+            				//		window.chartColors.blue,
+            					],
+            					label: 'Dataset 1'
+            				}],
+            				labels: [
+            					'Cash Only ' + per1 + '%',
+            					'POS Only',
+            					'Cash and POS'
+            				]
+            			},
+            			options: {
+            				responsive: true
+            			}
+            	   };
+               }
 
-                else {
-                  var paymentMethodData = [{
-                    value: cash,
-                    color:"#084D5F",
-                    highlight: "#0B6B85",
-                    label: "Cash Only"
-                  }, {
-                    value: pos,
-                    color: "#557f7c",
-                    highlight: "#556f7c",
-                    label: "POS Only"
-                  }, {
-                    value: cashAndPos,
-                    color: "#333",
-                    highlight: "pink",
-                    label: "Cash and POS"
-                  }];
-                }
-            } 
-
-            else {//if status is 0
-                var paymentMethodData = [{
-                  value: 1,
-                  color:"#4D5360",
-                  highlight: "#616774",
-                  label: "No Payment"
-                }];
+           } else {//if status is 0
+                var paymentMethodData = {
+                    type: 'pie',
+                    data: {
+                        datasets: [{
+                            data: [
+                                cash,
+                                pos,
+                                cashAndPos,
+                            ],
+                            backgroundColor: [
+                                window.chartColors.red,
+                                window.chartColors.orange,
+                                window.chartColors.yellow,
+                        //		window.chartColors.green,
+                        //		window.chartColors.blue,
+                            ],
+                            label: 'Dataset 1'
+                        }],
+                        labels: [
+                            'Cash Only',
+                            'POS Only',
+                            'Cash and POS'
+                        ]
+                    },
+                    options: {
+                        responsive: true
+                    }
+               };
             }
-          
+
             var ctx = document.getElementById("paymentMethodChart").getContext("2d");
-            window.myPie = new Chart(ctx).Pie(paymentMethodData);
+            window.myPie = new Chart(ctx, paymentMethodData);
 
             //remove the loading info
             $("#yearAccountLoading").html("");
-            
+
             //append the year we are showing
             $("#paymentMethodYear").html(" - "+response.year);
         }

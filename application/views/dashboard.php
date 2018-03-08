@@ -67,7 +67,7 @@ defined('BASEPATH') OR exit('');
             </select>
             <span id="yearAccountLoading"></span>
         </section>
-        
+
         <section class="panel">
           <center>
               <canvas id="paymentMethodChart" width="200" height="200"/></canvas><br>Payment Methods(%)<span id="paymentMethodYear"></span>
@@ -104,7 +104,7 @@ defined('BASEPATH') OR exit('');
             <?php endif; ?>
         </div>
     </div>
-    
+
     <div class="col-sm-3">
         <div class="panel panel-hash">
             <div class="panel-heading"><i class="fa fa-cart-arrow-down"></i> LOW IN DEMAND</div>
@@ -130,7 +130,7 @@ defined('BASEPATH') OR exit('');
             <?php endif; ?>
         </div>
     </div>
-    
+
     <div class="col-sm-3">
         <div class="panel panel-hash">
             <div class="panel-heading"><i class="fa fa-money"></i> HIGHEST EARNING</div>
@@ -153,10 +153,10 @@ defined('BASEPATH') OR exit('');
             </table>
             <?php else: ?>
             No Transactions
-            <?php endif; ?> 
+            <?php endif; ?>
         </div>
     </div>
-    
+
     <div class="col-sm-3">
         <div class="panel panel-hash">
             <div class="panel-heading"><i class="fa fa-money"></i> LOWEST EARNING</div>
@@ -179,7 +179,7 @@ defined('BASEPATH') OR exit('');
             </table>
             <?php else: ?>
             No Transactions
-            <?php endif; ?> 
+            <?php endif; ?>
         </div>
     </div>
 </div>
@@ -206,9 +206,9 @@ defined('BASEPATH') OR exit('');
                         <tr>
                             <td><?=
                                     date('l jS M, Y', strtotime($get->transDate)) === date('l jS M, Y', time())
-                                    ? 
-                                    "Today" 
-                                    : 
+                                    ?
+                                    "Today"
+                                    :
                                     date('l jS M, Y', strtotime($get->transDate));
                                 ?>
                             </td>
@@ -225,8 +225,8 @@ defined('BASEPATH') OR exit('');
             </div>
         </div>
     </div>
-    
-    
+
+
     <div class="col-sm-6">
         <div class="panel panel-hash">
             <div class="panel-heading">Transactions by Days</div>
@@ -296,8 +296,8 @@ defined('BASEPATH') OR exit('');
             </div>
         </div>
     </div>
-    
-    
+
+
     <div class="col-sm-6">
         <div class="panel panel-hash">
             <div class="panel-heading">Transactions by Years</div>
@@ -332,5 +332,6 @@ defined('BASEPATH') OR exit('');
     </div>
 </div>
 
-<script src="<?=base_url('public/js/chart.js'); ?>"></script>
+
+<script src="<?=base_url('public/chart/chart.js'); ?>"></script>
 <script src="<?=base_url('public/js/dashboard.js')?>"></script>

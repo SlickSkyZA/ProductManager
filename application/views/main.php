@@ -126,7 +126,7 @@ defined('BASEPATH') OR exit('');
                         <li class="<?= $pageTitle == 'Product Transactions' ? 'active' : '' ?>">
                             <a href="<?= site_url('ProductTransactions') ?>">
                                 <i class="fa fa-exchange"></i>
-                                Product Transactions
+                                Product-Records
                             </a>
                         </li>
 
