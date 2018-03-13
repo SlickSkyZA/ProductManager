@@ -108,6 +108,7 @@ class ProductTransaction extends CI_Model{
                 join product ON xscp.ProductID = product.id
                 join customer ON xscp.CustomerID = customer.id
                 left join customer_vender ON xscp.VenderID = customer_vender.id
+                left join customer_project ON xscp.ProjectID = customer_project.id
                 join product_status ON xscp.StatusID = product_status.id
                 join priority ON xscp.PriorityID = priority.id
                 join product_platform ON xscp.PlatformID = product_platform.id
