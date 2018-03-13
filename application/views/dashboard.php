@@ -333,5 +333,5 @@ defined('BASEPATH') OR exit('');
 </div>
 
 
-<script src="<?=base_url('public/chart/chart.js'); ?>"></script>
+<script src="<?=base_url('public/chart/chart.min.js'); ?>"></script>
 <script src="<?=base_url('public/js/dashboard.js')?>"></script>
