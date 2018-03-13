@@ -203,14 +203,14 @@ if(isset($customer_projects) && !empty($customer_projects)){
                         <select id="transListSortBy" class="form-control">
                             <option value="AddedDate-DESC">AddedDate(Latest First)</option>
                             <option value="AddedDate-ASC">AddedDate(Oldest First)</option>
-                            <option value="ProductID-DESC">Product (Highest first)</option>
-                            <option value="ProductID-ASC">Product (Lowest first)</option>
-                            <option value="CustomerID-DESC">Customer (Highest first)</option>
-                            <option value="CustomerID-ASC">Customer (Lowest first)</option>
-                            <option value="PlatformID-DESC">Platform (Highest first)</option>
-                            <option value="PlatformID-ASC">Platform (Lowest first)</option>
-                            <option value="StatusID-DESC">Status (Highest first)</option>
-                            <option value="StatusID-ASC">Status (Lowest first)</option>
+                            <option value="ProductName-DESC">Product (Highest first)</option>
+                            <option value="ProductName-ASC">Product (Lowest first)</option>
+                            <option value="CustomerName-DESC">Customer (Highest first)</option>
+                            <option value="CustomerName-ASC">Customer (Lowest first)</option>
+                            <option value="PlatformName-DESC">Platform (Highest first)</option>
+                            <option value="PlatformName-ASC">Platform (Lowest first)</option>
+                            <option value="StatusName-DESC">Status (Highest first)</option>
+                            <option value="StatusName-ASC">Status (Lowest first)</option>
                         </select>
                     </div>
 
