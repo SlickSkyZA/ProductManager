@@ -25,12 +25,78 @@ if(isset($soc_names) && !empty($soc_names)){
         $id = $id + 1;
     }
 }
+
+$current_DSP = [];
+if(isset($hardware_DSP) && !empty($hardware_DSP)){
+    $id = 0;
+    foreach($hardware_DSP as $get){
+        $current_DSP[$id] = $get->DSP;
+        $id = $id + 1;
+    }
+}
+$current_GPU = [];
+if(isset($hardware_GPU) && !empty($hardware_GPU)){
+    $id = 0;
+    foreach($hardware_GPU as $get){
+        $current_GPU[$id] = $get->GPU;
+        $id = $id + 1;
+    }
+}
+$current_RAM = [];
+if(isset($hardware_RAM) && !empty($hardware_RAM)){
+    $id = 0;
+    foreach($hardware_RAM as $get){
+        $current_RAM[$id] = $get->RAM;
+        $id = $id + 1;
+    }
+}
+
+$current_Camera0Types = [];
+if(isset($camera_type0) && !empty($camera_type0)){
+    $id = 0;
+    foreach($camera_type0 as $get){
+        $current_Camera0Types[$id] = $get->FrontCameraType;
+        $id = $id + 1;
+    }
+}
+$current_Camera1Types = [];
+if(isset($camera_type1) && !empty($camera_type1)){
+    $id = 0;
+    foreach($camera_type1 as $get){
+        $current_Camera1Types[$id] = $get->RearCameraType;
+        $id = $id + 1;
+    }
+}
+$current_Camera0Res = [];
+if(isset($camera_res0) && !empty($camera_res0)){
+    $id = 0;
+    foreach($camera_res0 as $get){
+        $current_Camera0Res[$id] = $get->FrontCameraRes;
+        $id = $id + 1;
+    }
+}
+$current_Camera1Res = [];
+if(isset($camera_res1) && !empty($camera_res1)){
+    $id = 0;
+    foreach($camera_res1 as $get){
+        $current_Camera1Res[$id] = $get->RearCameraRes;
+        $id = $id + 1;
+    }
+}
+
 ?>
 
 <script>
     var currentCustomers = <?=json_encode($current_customers)?>;
     var currentSOCCompanies = <?=json_encode($current_soccompanies)?>;
     var currentSOCNames = <?=json_encode($current_socnames)?>;
+    var currentDSPs = <?=json_encode($current_DSP)?>;
+    var currentGPUs = <?=json_encode($current_GPU)?>;
+    var currentRAMs = <?=json_encode($current_RAM)?>;
+    var currentCamera0Types = <?=json_encode($current_Camera0Types)?>;
+    var currentCamera1Types = <?=json_encode($current_Camera1Types)?>;
+    var currentCamera0Res = <?=json_encode($current_Camera0Res)?>;
+    var currentCamera1Res = <?=json_encode($current_Camera1Res)?>;
 </script>
 
 <div class="pwell hidden-print">
@@ -86,9 +152,7 @@ if(isset($soc_names) && !empty($soc_names)){
                 <button class="close cancelAddItem">&times;</button><br>
                 <form name="addNewItemForm" id="addNewItemForm" role="form">
                     <div class="text-center errMsg" id='addCustErrMsg'></div>
-
                     <br>
-
                     <div class="row">
                         <div class="col-sm-4 form-group-sm">
                             <label for="itemName">Project Name</label>
@@ -102,56 +166,87 @@ if(isset($soc_names) && !empty($soc_names)){
                             <select class="form-control selectedCustomerDefault checkField" id="itemCustomer" name="itemCustomer"> </select>
                             <span class="help-block errMsg" id="itemCustomerErr"></span>
                         </div>
-
+                    </div>
+                    <div class="row">
                         <div class="col-sm-4 form-group-sm">
                             <label for="itemSOCCompany">SOC-Company</label>
                             <select class="form-control selectedSOCCompanyDefault checkField" id="itemSOCCompany" name="itemSOCCompany"> </select>
                             <span class="help-block errMsg" id="itemSOCCompanyErr"></span>
                         </div>
-                    </div>
-
-                    <div class="row">
                         <div class="col-sm-4 form-group-sm">
                             <label for="itemSOCName">SOC-Name</label>
                             <select class="form-control selectedSOCNameDefault checkField" id="itemSOCName" name="itemSOCName"> </select>
                             <span class="help-block errMsg" id="itemSOCNameErr"></span>
                         </div>
-
-                        <div class="col-sm-4 form-group-sm">
-                            <label for="itemGPU">GPU</label>
-                            <input type="text" id="itemGPU" name="itemGPU" placeholder="GPU (Optional)" maxlength="80"
-                                class="form-control" onchange="checkField(this.value, 'itemGPUErr')">
-                            <span class="help-block errMsg" id="itemGPUErr"></span>
-                        </div>
-
+                    </div>
+                    <div class="row">
                         <div class="col-sm-4 form-group-sm">
                             <label for="itemDSP">DSP</label>
-                            <input type="text" id="itemDSP" name="itemDSP" placeholder="DSP (Optional)" maxlength="80"
-                                class="form-control" onchange="checkField(this.value, 'itemDSPErr')">
-                            <span class="help-block errMsg" id="itemDSPErr"></span>
+                            <select class="form-control selectedDSPDefault checkField" id="itemDSP" name="itemDSP"> </select>
+                        </div>
+                        <div class="col-sm-4 form-group-sm">
+                            <label for="itemGPU">GPU</label>
+                            <select class="form-control selectedGPUDefault checkField" id="itemGPU" name="itemGPU"> </select>
+                        </div>
+                        <div class="col-sm-4 form-group-sm">
+                            <label for="itemRAM">RAM</label>
+                            <select class="form-control selectedRAMDefault checkField" id="itemRAM" name="itemRAM"> </select>
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-sm-4 form-group-sm">
-                            <label for="itemRAM">RAM</label>
-                            <input type="text" id="itemRAM" name="itemRAM" placeholder="RAM (Optional)" maxlength="80"
-                                class="form-control" onchange="checkField(this.value, 'itemRAMErr')">
-                            <span class="help-block errMsg" id="itemRAMErr"></span>
-                        </div>
-
-                        <div class="col-sm-4 form-group-sm">
                             <label for="itemCamera0">Camera Front</label>
-                            <input type="text" id="itemCamera0" name="itemCamera0" placeholder="Camera Type (Optional)" maxlength="80"
-                                class="form-control" onchange="checkField(this.value, 'itemCamera0Err')">
-                            <span class="help-block errMsg" id="itemCamera0Err"></span>
+                            <select class="form-control selectedCamera0Default checkField" id="itemCamera0" name="itemCamera0"> </select>
+                        </div>
+                        <div class="col-sm-4 form-group-sm">
+                            <label for="itemCamera0Res">Camera Front Resolution</label>
+                            <select class="form-control selectedCamera0ResDefault checkField" id="itemCamera0Res" name="itemCamera0Res"> </select>
                         </div>
 
+                    </div>
+
+                    <div class="row">
                         <div class="col-sm-4 form-group-sm">
                             <label for="itemCamera1">Camera Rear</label>
-                            <input type="text" id="itemCamera1" name="itemCamera1" placeholder="Camera Type (Optional)" maxlength="80"
-                                class="form-control" onchange="checkField(this.value, 'itemCamera1Err')">
-                            <span class="help-block errMsg" id="itemCamera1Err"></span>
+                            <select class="form-control selectedCamera1Default checkField" id="itemCamera1" name="itemCamera1"> </select>
+                        </div>
+                        <div class="col-sm-4 form-group-sm">
+                            <label for="itemCamera1Res">Camera Rear Resolution</label>
+                            <select class="form-control selectedCamera1ResDefault checkField" id="itemCamera1Res" name="itemCamera1Res"> </select>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-4 form-group-sm">
+                            <label for="itemStartDate">Start</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <span><i class="fa fa-calendar"></i></span>
+                                </div>
+                                <input type="text" class="form-control" value="" id="itemStartDate" name="itemStartDate" >
+                            </div>
+                            <span class="help-block errMsg" id='itemStartDateErr'></span>
+                        </div>
+                        <div class="col-sm-4 form-group-sm">
+                            <label for="itemMPDate">Mass Production</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <span><i class="fa fa-calendar"></i></span>
+                                </div>
+                                <input type="text" class="form-control" value="" id="itemMPDate" name="itemMPDate" >
+                            </div>
+                            <span class="help-block errMsg" id='itemMPDateErr'></span>
+                        </div>
+                        <div class="col-sm-4 form-group-sm">
+                            <label for="itemShipDate">Shipments</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <span><i class="fa fa-calendar"></i></span>
+                                </div>
+                                <input type="text" class="form-control" value="" id="itemShipDate" name="itemShipDate" >
+                            </div>
+                            <span class="help-block errMsg" id='itemShipDateErr'></span>
                         </div>
                     </div>
 
@@ -206,7 +301,7 @@ if(isset($soc_names) && !empty($soc_names)){
                 <div id="editItemFMsg" class="text-center"></div>
             </div>
             <div class="modal-body">
-                <form name="addNewItemForm" id="addNewItemForm" role="form">
+                <form name="editItemForm" id="editItemForm" role="form">
                     <div class="row">
                         <div class="col-sm-4 form-group-sm">
                             <label for="itemNameEdit">Project Name</label>
@@ -220,56 +315,87 @@ if(isset($soc_names) && !empty($soc_names)){
                             <select class="form-control selectedCustomerDefault checkField" id="itemCustomerEdit" name="itemCustomerEdit"> </select>
                             <span class="help-block errMsg" id="itemCustomerEditErr"></span>
                         </div>
-
+                    </div>
+                    <div class="row">
                         <div class="col-sm-4 form-group-sm">
                             <label for="itemSOCCompanyEdit">SOC-Company</label>
                             <select class="form-control selectedSOCCompanyDefault checkField" id="itemSOCCompanyEdit" name="itemSOCCompanyEdit"> </select>
                             <span class="help-block errMsg" id="itemSOCCompanyEditErr"></span>
                         </div>
-                    </div>
-
-                    <div class="row">
                         <div class="col-sm-4 form-group-sm">
                             <label for="itemSOCNameEdit">SOC-Name</label>
                             <select class="form-control selectedSOCNameDefault checkField" id="itemSOCNameEdit" name="itemSOCNameEdit"> </select>
                             <span class="help-block errMsg" id="itemSOCNameEditErr"></span>
                         </div>
-
-                        <div class="col-sm-4 form-group-sm">
-                            <label for="itemGPUEdit">GPU</label>
-                            <input type="text" id="itemGPUEdit" name="itemGPUEdit" placeholder="GPU (Optional)" maxlength="80"
-                                class="form-control" onchange="checkField(this.value, 'itemGPUEditErr')">
-                            <span class="help-block errMsg" id="itemGPUEditErr"></span>
-                        </div>
-
+                    </div>
+                    <div class="row">
                         <div class="col-sm-4 form-group-sm">
                             <label for="itemDSPEdit">DSP</label>
-                            <input type="text" id="itemDSPEdit" name="itemDSPEdit" placeholder="DSP (Optional)" maxlength="80"
-                                class="form-control" onchange="checkField(this.value, 'itemDSPEditErr')">
-                            <span class="help-block errMsg" id="itemDSPEditErr"></span>
+                            <select class="form-control selectedDSPDefault checkField" id="itemDSPEdit" name="itemDSPEdit"> </select>
+                        </div>
+                        <div class="col-sm-4 form-group-sm">
+                            <label for="itemGPUEdit">GPU</label>
+                            <select class="form-control selectedGPUDefault checkField" id="itemGPUEdit" name="itemGPUEdit"> </select>
+                        </div>
+                        <div class="col-sm-4 form-group-sm">
+                            <label for="itemRAMEdit">RAM</label>
+                            <select class="form-control selectedRAMDefault checkField" id="itemRAMEdit" name="itemRAMEdit"> </select>
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-sm-4 form-group-sm">
-                            <label for="itemRAMEdit">RAM</label>
-                            <input type="text" id="itemRAMEdit" name="itemRAMEdit" placeholder="RAM (Optional)" maxlength="80"
-                                class="form-control" onchange="checkField(this.value, 'itemRAMEditErr')">
-                            <span class="help-block errMsg" id="itemRAMEditErr"></span>
-                        </div>
-
-                        <div class="col-sm-4 form-group-sm">
                             <label for="itemCamera0Edit">Camera Front</label>
-                            <input type="text" id="itemCamera0Edit" name="itemCamera0Edit" placeholder="Camera Type (Optional)" maxlength="80"
-                                class="form-control" onchange="checkField(this.value, 'itemCamera0EditErr')">
-                            <span class="help-block errMsg" id="itemCamera0EditErr"></span>
+                            <select class="form-control selectedCamera0Default checkField" id="itemCamera0Edit" name="itemCamera0Edit"> </select>
+                        </div>
+                        <div class="col-sm-4 form-group-sm">
+                            <label for="itemCamera0ResEdit">Camera Front Resolution</label>
+                            <select class="form-control selectedCamera0ResDefault checkField" id="itemCamera0ResEdit" name="itemCamera0ResEdit"> </select>
                         </div>
 
+                    </div>
+
+                    <div class="row">
                         <div class="col-sm-4 form-group-sm">
                             <label for="itemCamera1Edit">Camera Rear</label>
-                            <input type="text" id="itemCamera1Edit" name="itemCamera1Edit" placeholder="Camera Type (Optional)" maxlength="80"
-                                class="form-control" onchange="checkField(this.value, 'itemCamera1EditErr')">
-                            <span class="help-block errMsg" id="itemCamera1EditErr"></span>
+                            <select class="form-control selectedCamera1Default checkField" id="itemCamera1Edit" name="itemCamera1Edit"> </select>
+                        </div>
+                        <div class="col-sm-4 form-group-sm">
+                            <label for="itemCamera1ResEdit">Camera Rear Resolution</label>
+                            <select class="form-control selectedCamera1ResDefault checkField" id="itemCamera1ResEdit" name="itemCamera1ResEdit"> </select>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-4 form-group-sm">
+                            <label for="itemStartDateEdit">Start</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <span><i class="fa fa-calendar"></i></span>
+                                </div>
+                                <input type="text" class="form-control" value="" id="itemStartDateEdit" name="itemStartDateEdit" >
+                            </div>
+                            <span class="help-block errMsg" id='itemStartDateEditErr'></span>
+                        </div>
+                        <div class="col-sm-4 form-group-sm">
+                            <label for="itemMPDateEdit">Mass Production</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <span><i class="fa fa-calendar"></i></span>
+                                </div>
+                                <input type="text" class="form-control" value="" id="itemMPDateEdit" name="itemMPDateEdit" >
+                            </div>
+                            <span class="help-block errMsg" id='itemMPDateEditErr'></span>
+                        </div>
+                        <div class="col-sm-4 form-group-sm">
+                            <label for="itemShipDateEdit">Shipments</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <span><i class="fa fa-calendar"></i></span>
+                                </div>
+                                <input type="text" class="form-control" value="" id="itemShipDateEdit" name="itemShipDateEdit" >
+                            </div>
+                            <span class="help-block errMsg" id='itemShipDateEditErr'></span>
                         </div>
                     </div>
 

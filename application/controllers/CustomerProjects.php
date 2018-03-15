@@ -22,8 +22,15 @@ class CustomerProjects extends CI_Controller{
      */
     public function index(){
         $transData['customers'] = $this->customer->getActiveItems('Name', 'ASC');//get items with at least one qty left, to be used when doing a new transaction
-        $transData['soc_companies'] = $this->customerProject->getSOCCompanies('SOCCompany', 'ASC');//get items with at least one qty left, to be used when doing a new transaction
-        $transData['soc_names'] = $this->customerProject->getSOCNames('SOCName', 'ASC');//get items with at least one qty left, to be used when doing a new transaction
+        $transData['soc_companies'] = $this->customerProject->getActiveItems('SOCCompany', 'ASC');//get items with at least one qty left, to be used when doing a new transaction
+        $transData['soc_names'] = $this->customerProject->getActiveItems('SOCName', 'ASC');//get items with at least one qty left, to be used when doing a new transaction
+        $transData['hardware_DSP'] = $this->customerProject->getActiveItems('DSP', 'ASC');//get items with at least one qty left, to be used when doing a new transaction
+        $transData['hardware_GPU'] = $this->customerProject->getActiveItems('GPU', 'ASC');//get items with at least one qty left, to be used when doing a new transaction
+        $transData['hardware_RAM'] = $this->customerProject->getActiveItems('RAM', 'ASC');//get items with at least one qty left, to be used when doing a new transaction
+        $transData['camera_type0'] = $this->customerProject->getActiveItems('FrontCameraType', 'ASC');//get items with at least one qty left, to be used when doing a new transaction
+        $transData['camera_res0'] = $this->customerProject->getActiveItems('FrontCameraRes', 'ASC');//get items with at least one qty left, to be used when doing a new transaction
+        $transData['camera_type1'] = $this->customerProject->getActiveItems('RearCameraType', 'ASC');//get items with at least one qty left, to be used when doing a new transaction
+        $transData['camera_res1'] = $this->customerProject->getActiveItems('RearCameraRes','ASC');//get items with at least one qty left, to be used when doing a new transaction
 
         $data['pageContent'] = $this->load->view('customerProjects/customerProjects', $transData, TRUE);
         $data['pageTitle'] = "Customer Projects";
@@ -96,6 +103,16 @@ class CustomerProjects extends CI_Controller{
 
         $this->form_validation->set_rules('itemName', 'Project Name', ['required', 'trim', 'max_length[80]', 'is_unique[customer_project.Name]'], //numeric
                 ['required'=>"required"]);
+        $this->form_validation->set_rules('itemSOCCompany', 'SOCCompany', ['trim']);
+        $this->form_validation->set_rules('itemSOCName', 'SOCName', ['trim']);
+        $this->form_validation->set_rules('itemGPU', 'GPU', ['trim']);
+        $this->form_validation->set_rules('itemDSP', 'DSP', ['trim']);
+        $this->form_validation->set_rules('itemRAM', 'RAM', ['trim']);
+        $this->form_validation->set_rules('itemCamera0', 'Camera0', ['trim']);
+        $this->form_validation->set_rules('itemCamera1', 'Camera1', ['trim']);
+        $this->form_validation->set_rules('itemCamera0Res', 'Camera0Res', ['trim']);
+        $this->form_validation->set_rules('itemCamera1Res', 'Camera1Res', ['trim']);
+        $this->form_validation->set_rules('itemDesc', 'Item Description', ['trim']);
 
         if($this->form_validation->run() !== FALSE){
             $this->db->trans_start();//start transaction
@@ -108,13 +125,19 @@ class CustomerProjects extends CI_Controller{
             $itemRAM = set_value('itemRAM');
             $itemCamera0 = set_value('itemCamera0');
             $itemCamera1 = set_value('itemCamera1');
+            $itemCamera0Res = set_value('itemCamera0Res');
+            $itemCamera1Res = set_value('itemCamera1Res');
+            $itemStartDate = set_value('itemStartDate');
+            $itemMPDate = set_value('itemMPDate');
+            $itemShipDate = set_value('itemShipDate');
             $itemDesc = set_value('itemDesc');
 
             /**
              * insert info into db
              * function header: add($itemName, $itemQuantity, $itemPrice, $itemDescription, $itemCode)
              */
-            $insertedId = $this->customerProject->add($itemName, $itemCustomer, $itemSOCCompany, $itemSOCName, $itemGPU, $itemDSP, $itemRAM, $itemCamera0, $itemCamera1, $itemDesc);
+            $insertedId = $this->customerProject->add($itemName, $itemCustomer, $itemSOCCompany, $itemSOCName, $itemGPU,
+            $itemCamera0Res, $itemCamera1Res, $itemStartDate, $itemMPDate, $itemShipDate, $itemDSP, $itemRAM, $itemCamera0, $itemCamera1, $itemDesc);
 
             $itemName = set_value('itemName');
 
@@ -168,11 +191,17 @@ class CustomerProjects extends CI_Controller{
         $this->form_validation->set_error_delimiters('', '');
 
         $this->form_validation->set_rules('_iId', 'Item ID', ['required', 'trim', 'numeric']);
-        $this->form_validation->set_rules('itemName', 'Vender Name', ['required', 'trim',
-            'callback_crosscheckName['.$this->input->post('_iId', TRUE).']'], ['required'=>'required']);
+        $this->form_validation->set_rules('itemName', 'Vender Name', ['required', 'trim', 'max_length[80]'], ['required'=>'required']);
         $this->form_validation->set_rules('itemCustomer', 'Customer ID', ['required', 'trim', 'numeric']);
         $this->form_validation->set_rules('itemSOCCompany', 'SOCCompany', ['trim']);
         $this->form_validation->set_rules('itemSOCName', 'SOCName', ['trim']);
+        $this->form_validation->set_rules('itemGPU', 'GPU', ['trim']);
+        $this->form_validation->set_rules('itemDSP', 'DSP', ['trim']);
+        $this->form_validation->set_rules('itemRAM', 'RAM', ['trim']);
+        $this->form_validation->set_rules('itemCamera0', 'Camera0', ['trim']);
+        $this->form_validation->set_rules('itemCamera1', 'Camera1', ['trim']);
+        $this->form_validation->set_rules('itemCamera0Res', 'Camera0Res', ['trim']);
+        $this->form_validation->set_rules('itemCamera1Res', 'Camera1Res', ['trim']);
         $this->form_validation->set_rules('itemDesc', 'Item Description', ['trim']);
 
         if($this->form_validation->run() !== FALSE){
@@ -186,11 +215,17 @@ class CustomerProjects extends CI_Controller{
             $itemRAM = set_value('itemRAM');
             $itemCamera0 = set_value('itemCamera0');
             $itemCamera1 = set_value('itemCamera1');
+            $itemCamera0Res = set_value('itemCamera0Res');
+            $itemCamera1Res = set_value('itemCamera1Res');
+            $itemStartDate = set_value('itemStartDate');
+            $itemMPDate = set_value('itemMPDate');
+            $itemShipDate = set_value('itemShipDate');
             $itemName = set_value('itemName');
 
             //update item in db
             $updated = $this->customerProject->edit($itemId, $itemName, $itemCustomer, $itemSOCCompany, $itemSOCName,
-            $itemGPU, $itemDSP, $itemRAM, $itemCamera0, $itemCamera1, $itemDesc);
+            $itemGPU, $itemDSP, $itemRAM, $itemCamera0, $itemCamera1, $itemCamera0Res, $itemCamera1Res, $itemStartDate,
+            $itemMPDate, $itemShipDate, $itemDesc);
 
             $json['status'] = $updated ? 1 : 0;
 
@@ -209,29 +244,6 @@ class CustomerProjects extends CI_Controller{
         $this->output->set_content_type('application/json')->set_output(json_encode($json));
     }
 
-   /*
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    */
-
-    public function crosscheckName($itemName, $itemId){
-        //check db to ensure name was previously used for the item we are updating
-        $itemWithName = $this->genmod->getTableCol('customer_project', 'id', 'Name', $itemName);
-
-        //if item name does not exist or it exist but it's the name of current item
-        if(!$itemWithName || ($itemWithName == $itemId)){
-            return TRUE;
-        }
-
-        else{//if it exist
-            $this->form_validation->set_message('crosscheckName', 'There is an item with this name');
-
-            return FALSE;
-        }
-    }
 
     /*
     ********************************************************************************************************************************

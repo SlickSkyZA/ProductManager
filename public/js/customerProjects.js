@@ -59,12 +59,75 @@ $(document).ready(function(){
 			//prepend 'select item' to the select option
 			$(".selectedSOCNameDefault").prepend("<option value='' selected>Select SOC</option>");
 
+            $(".selectedDSPDefault").empty();
+            for(let key in currentDSPs){
+				//if the current key in the loop is in our 'selectedItemsArr' array
+				$(".selectedDSPDefault").append("<option value='"+key+"'>"+currentDSPs[key]+"</option>");
+			}
+			//prepend 'select item' to the select option
+			$(".selectedDSPDefault").prepend("<option value='' selected>Select DSP</option>");
+
+            $(".selectedGPUDefault").empty();
+            for(let key in currentGPUs){
+				//if the current key in the loop is in our 'selectedItemsArr' array
+				$(".selectedGPUDefault").append("<option value='"+key+"'>"+currentGPUs[key]+"</option>");
+			}
+			//prepend 'select item' to the select option
+			$(".selectedGPUDefault").prepend("<option value='' selected>Select GPU</option>");
+
+            $(".selectedRAMDefault").empty();
+            for(let key in currentRAMs){
+				//if the current key in the loop is in our 'selectedItemsArr' array
+				$(".selectedRAMDefault").append("<option value='"+key+"'>"+currentRAMs[key]+"</option>");
+			}
+			//prepend 'select item' to the select option
+			$(".selectedRAMDefault").prepend("<option value='' selected>Select RAM</option>");
+
+            $(".selectedCamera0Default").empty();
+            for(let key in currentCamera0Types){
+				//if the current key in the loop is in our 'selectedItemsArr' array
+				$(".selectedCamera0Default").append("<option value='"+key+"'>"+currentCamera0Types[key]+"</option>");
+			}
+			//prepend 'select item' to the select option
+			$(".selectedCamera0Default").prepend("<option value='' selected>Select CameraType</option>");
+
+            $(".selectedCamera1Default").empty();
+            for(let key in currentCamera1Types){
+				//if the current key in the loop is in our 'selectedItemsArr' array
+				$(".selectedCamera1Default").append("<option value='"+key+"'>"+currentCamera1Types[key]+"</option>");
+			}
+			//prepend 'select item' to the select option
+			$(".selectedCamera1Default").prepend("<option value='' selected>Select CameraType</option>");
+
+            $(".selectedCamera0ResDefault").empty();
+            for(let key in currentCamera0Res){
+				//if the current key in the loop is in our 'selectedItemsArr' array
+				$(".selectedCamera0ResDefault").append("<option value='"+key+"'>"+currentCamera0Res[key]+"</option>");
+			}
+			//prepend 'select item' to the select option
+			$(".selectedCamera0ResDefault").prepend("<option value='' selected>Select Resolution</option>");
+
+            $(".selectedCamera1ResDefault").empty();
+            for(let key in currentCamera1Res){
+				//if the current key in the loop is in our 'selectedItemsArr' array
+				$(".selectedCamera1ResDefault").append("<option value='"+key+"'>"+currentCamera1Res[key]+"</option>");
+			}
+			//prepend 'select item' to the select option
+			$(".selectedCamera1ResDefault").prepend("<option value='' selected>Select Resolution</option>");
+
 			resolve(); //selectedGroupsArr, selectedPrioritysArr
 		}).then(()=>{ //selectedGroupsArray, selectedPrioritysArray
 			//add select2 to the 'select input'
 			$('.selectedCustomerDefault').select2({dropdownAutoWidth : true, width : "100%"});
             $('.selectedSOCCompanyDefault').select2({dropdownAutoWidth : true, width : "100%", tags : true});
             $('.selectedSOCNameDefault').select2({dropdownAutoWidth : true, width : "100%", tags : true});
+            $('.selectedDSPDefault').select2({dropdownAutoWidth : true, width : "100%", tags : true});
+            $('.selectedGPUDefault').select2({dropdownAutoWidth : true, width : "100%", tags : true});
+            $('.selectedRAMDefault').select2({dropdownAutoWidth : true, width : "100%", tags : true});
+            $('.selectedCamera0Default').select2({dropdownAutoWidth : true, width : "100%", tags : true});
+            $('.selectedCamera0ResDefault').select2({dropdownAutoWidth : true, width : "100%", tags : true});
+            $('.selectedCamera1Default').select2({dropdownAutoWidth : true, width : "100%", tags : true});
+            $('.selectedCamera1ResDefault').select2({dropdownAutoWidth : true, width : "100%", tags : true});
 		}).catch(()=>{
 			console.log('outer promise err');
 		});
@@ -72,6 +135,28 @@ $(document).ready(function(){
         return false;
     });
 
+
+    //INITIALISE datepicker on the "From date" and "To date" fields
+    $('#itemStartDate').datepicker({
+        dateFormat: 'yy-mm-dd',
+        changeMonth: true,
+        changeYear: true,
+        autoSize: true
+    });
+    //INITIALISE datepicker on the "From date" and "To date" fields
+    $('#itemMPDate').datepicker({
+        dateFormat: 'yy-mm-dd',
+        changeMonth: true,
+        changeYear: true,
+        autoSize: true
+    });
+    //INITIALISE datepicker on the "From date" and "To date" fields
+    $('#itemShipDate').datepicker({
+        dateFormat: 'yy-mm-dd',
+        changeMonth: true,
+        changeYear: true,
+        autoSize: true
+    });
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -102,16 +187,31 @@ $(document).ready(function(){
 
         var itemName = $("#itemName").val();
         var itemCustomer = $("#itemCustomer").val();
-        var itemSOCCompany = $("#itemSOCCompany").find("option:selected").text();
         var itemSOCCompanyVal = $("#itemSOCCompany").val();
-        var itemSOCName = $("#itemSOCName").find("option:selected").text();
         var itemSOCNameVal = $("#itemSOCName").val();
-        var itemGPU = $("#itemGPU").val();
-        var itemDSP = $("#itemDSP").val();
-        var itemRAM = $("#itemRAM").val();
-        var itemCamera0 = $("#itemCamera0").val();
-        var itemCamera1 = $("#itemCamera1").val();
+        var itemGPUVal = $("#itemGPU").val();
+        var itemDSPVal = $("#itemDSP").val();
+        var itemRAMVal = $("#itemRAM").val();
+        var itemCamera0Val = $("#itemCamera0").val();
+        var itemCamera1Val = $("#itemCamera1").val();
+        var itemCamera0ResVal = $("#itemCamera0Res").val();
+        var itemCamera1ResVal = $("#itemCamera1Res").val();
+
+        var itemStartDate = $("#itemStartDate").val();
+        var itemMPDate = $("#itemMPDate").val();
+        var itemShipDate = $("#itemShipDate").val();
         var itemDesc = $("#itemDesc").val();
+
+        var itemSOCCompany = $("#itemSOCCompany").find("option:selected").text();
+        var itemSOCName = $("#itemSOCName").find("option:selected").text();
+        var itemGPU = $("#itemGPU").find("option:selected").text();
+        var itemDSP = $("#itemDSP").find("option:selected").text();
+        var itemRAM = $("#itemRAM").find("option:selected").text();
+        var itemCamera0 = $("#itemCamera0").find("option:selected").text();
+        var itemCamera1 = $("#itemCamera1").find("option:selected").text();
+        var itemCamera0Res = $("#itemCamera0Res").find("option:selected").text();
+        var itemCamera1Res = $("#itemCamera1Res").find("option:selected").text();
+
 
         if(!itemName || !itemSOCCompanyVal || !itemSOCNameVal){
             !itemName ? $("#itemNameErr").text("required") : "";
@@ -131,7 +231,8 @@ $(document).ready(function(){
             url: appRoot+"customerProjects/add",
             data:{itemName:itemName, itemCustomer:itemCustomer, itemSOCCompany:itemSOCCompany,
                 itemSOCName:itemSOCName, itemGPU:itemGPU, itemDSP:itemDSP, itemRAM:itemRAM,
-                itemCamera0:itemCamera0, itemCamera1:itemCamera1, itemDesc:itemDesc},
+                itemCamera0:itemCamera0, itemCamera1:itemCamera1, itemDesc:itemDesc, itemCamera0Res:itemCamera0Res,
+                itemCamera1Res:itemCamera1Res, itemStartDate:itemStartDate, itemMPDate:itemMPDate, itemShipDate:itemShipDate},
 
             success: function(returnedData){
                 if(returnedData.status === 1){
@@ -155,7 +256,6 @@ $(document).ready(function(){
                     }
 
                     if(!inArray(itemSOCName, currentSOCNames)){
-                        //add into select2 data.
                         currentSOCNames.push(itemSOCName);
                         $(".selectedSOCNameDefault").empty();
                         for(let key in currentSOCNames){
@@ -249,7 +349,6 @@ $(document).ready(function(){
     //triggers when an item's "edit" icon is clicked
     $("#itemsListTable").on('click', ".editItem", function(e){
         e.preventDefault();
-
         //get item info
         var itemId = $(this).attr('id').split("-")[1];
         var itemDesc = $("#itemDesc-"+itemId).attr('title');
@@ -262,19 +361,20 @@ $(document).ready(function(){
         var itemRAM = $("#itemRAM-"+itemId).html();
         var itemCamera0 = $("#itemCamera0-"+itemId).html();
         var itemCamera1 = $("#itemCamera1-"+itemId).html();
+        var itemCamera0Res = $("#itemCamera0Res-"+itemId).html();
+        var itemCamera1Res = $("#itemCamera1Res-"+itemId).html();
+        var itemStartDate = $("#itemStartDate-"+itemId).html();
+        var itemMPDate = $("#itemMPDate-"+itemId).html();
+        var itemShipDate = $("#itemShipDate-"+itemId).html();
 
         //prefill form with info
         $("#itemIdEdit").val(itemId);
         $("#itemNameEdit").val(itemName);
         $("#itemDescEdit").val(itemDesc);
-        $("#itemCustomerEdit").val(itemCustomer);
-        $("#itemSOCCompanyEdit").val(itemSOCCompany);
-        $("#itemSOCNameEdit").val(itemSOCName);
-        $("#itemGPUEdit").val(itemGPU);
-        $("#itemDSPEdit").val(itemDSP);
-        $("#itemRAMEdit").val(itemRAM);
-        $("#itemCamera0Edit").val(itemCamera0);
-        $("#itemCamera1Edit").val(itemCamera1);
+
+        $("#itemStartDateEdit").val(itemStartDate);
+        $("#itemMPDateEdit").val(itemMPDate);
+        $("#itemShipDateEdit").val(itemShipDate);
 
         //remove all error messages that might exist
         $("#editItemFMsg").html("");
@@ -286,7 +386,6 @@ $(document).ready(function(){
         return new Promise((resolve, reject)=>{
 			//if an item has been selected (i.e. added to the current transaction), do not add it to the list. This way, an item will appear just once.
 			//We start by forming an array of all selected items, then skip that item in the loop appending items to select dropdown
-
             $(".selectedCustomerDefault").empty();
             for(let key in currentCustomers){
 				if (currentCustomers[key] == itemCustomer) {
@@ -296,7 +395,7 @@ $(document).ready(function(){
                 }
 
 			}
-			$(".selectedCustomerDefault").prepend("<option value=''>Select Customer</option>");
+			$(".selectedCustomerDefault").prepend("<option value=''>Select Customer" +  itemDSP + "</option>");
 
             $(".selectedSOCCompanyDefault").empty();
             for(let key in currentSOCCompanies){
@@ -318,17 +417,144 @@ $(document).ready(function(){
 			}
 			$(".selectedSOCNameDefault").prepend("<option value='' >Select SOC</option>");
 
+            $(".selectedDSPDefault").empty();
+            for(let key in currentDSPs){
+				if (currentDSPs[key] == itemDSP) {
+    				$(".selectedDSPDefault").append("<option value='"+key+"' selected>"+currentDSPs[key]+"</option>");
+                } else {
+                    $(".selectedDSPDefault").append("<option value='"+key+"'>"+currentDSPs[key]+"</option>");
+                }
+			}
+			if (itemDSP == '') {
+                $(".selectedDSPDefault").prepend("<option value='' selected>Select DSP</option>");
+            } else {
+                $(".selectedDSPDefault").prepend("<option value=''>Select DSP</option>");
+            }
+
+            $(".selectedGPUDefault").empty();
+            for(let key in currentGPUs){
+				if (currentGPUs[key] == itemGPU) {
+				    $(".selectedGPUDefault").append("<option value='"+key+"' selected>"+currentGPUs[key]+"</option>");
+                } else {
+                    $(".selectedGPUDefault").append("<option value='"+key+"'>"+currentGPUs[key]+"</option>");
+                }
+			}
+			if (itemGPU == '') {
+                $(".selectedGPUDefault").prepend("<option value='' selected>Select GPU</option>");
+            } else {
+                $(".selectedGPUDefault").prepend("<option value=''>Select GPU</option>");
+            }
+
+            $(".selectedRAMDefault").empty();
+            for(let key in currentRAMs){
+				if (currentRAMs[key] == itemRAM) {
+				    $(".selectedRAMDefault").append("<option value='"+key+"' selected>"+currentRAMs[key]+"</option>");
+                } else {
+                    $(".selectedRAMDefault").append("<option value='"+key+"'>"+currentRAMs[key]+"</option>");
+                }
+			}
+			if (itemRAM == '') {
+                $(".selectedRAMDefault").prepend("<option value='' selected>Select RAM</option>");
+            } else {
+                $(".selectedRAMDefault").prepend("<option value=''>Select RAM</option>");
+            }
+
+            $(".selectedCamera0Default").empty();
+            for(let key in currentCamera0Types){
+			    if (currentCamera0Types[key] == itemCamera0) {
+    				$(".selectedCamera0Default").append("<option value='"+key+"' selected>"+currentCamera0Types[key]+"</option>");
+                } else {
+                	$(".selectedCamera0Default").append("<option value='"+key+"'>"+currentCamera0Types[key]+"</option>");
+                }
+			}
+			if (itemCamera0 == '') {
+                $(".selectedCamera0Default").prepend("<option value='' selected>Select CameraType</option>");
+            } else {
+                $(".selectedCamera0Default").prepend("<option value=''>Select CameraType</option>");
+            }
+
+            $(".selectedCamera1Default").empty();
+            for(let key in currentCamera1Types){
+				if (currentCamera1Types[key] == itemCamera1) {
+                    $(".selectedCamera1Default").append("<option value='"+key+"' selected>"+currentCamera1Types[key]+"</option>");
+                } else {
+                    $(".selectedCamera1Default").append("<option value='"+key+"'>"+currentCamera1Types[key]+"</option>");
+                }
+			}
+			if (itemCamera1 == '') {
+                $(".selectedCamera1Default").prepend("<option value='' selected>Select CameraType</option>");
+            } else {
+                $(".selectedCamera1Default").prepend("<option value=''>Select CameraType</option>");
+            }
+
+            $(".selectedCamera0ResDefault").empty();
+            for(let key in currentCamera0Res){
+				if (currentCamera0Res[key] == itemCamera0Res) {
+    				$(".selectedCamera0ResDefault").append("<option value='"+key+"' selected>"+currentCamera0Res[key]+"</option>");
+                } else {
+                    $(".selectedCamera0ResDefault").append("<option value='"+key+"'>"+currentCamera0Res[key]+"</option>");
+                }
+			}
+			if (itemCamera0Res == '') {
+                $(".selectedCamera0ResDefault").prepend("<option value='' selected>Select Resolution</option>");
+            } else {
+                $(".selectedCamera0ResDefault").prepend("<option value=''>Select Resolution</option>");
+            }
+
+            $(".selectedCamera1ResDefault").empty();
+            for(let key in currentCamera1Res){
+				if (currentCamera1Res[key] == itemCamera1Res) {
+    				$(".selectedCamera1ResDefault").append("<option value='"+key+"' selected>"+currentCamera1Res[key]+"</option>");
+                } else {
+                	$(".selectedCamera1ResDefault").append("<option value='"+key+"'>"+currentCamera1Res[key]+"</option>");
+                }
+			}
+			if (itemCamera1Res == '') {
+                $(".selectedCamera1ResDefault").prepend("<option value='' selected>Select Resolution</option>");
+            } else {
+                $(".selectedCamera1ResDefault").prepend("<option value=''>Select Resolution</option>");
+            }
+
 			resolve(); //selectedGroupsArr, selectedPrioritysArr
 		}).then(()=>{ //selectedGroupsArray, selectedPrioritysArray
 			//add select2 to the 'select input'
 			$('.selectedCustomerDefault').select2({dropdownAutoWidth : true, width : "100%"});
             $('.selectedSOCCompanyDefault').select2({dropdownAutoWidth : true, width : "100%", tags : true});
             $('.selectedSOCNameDefault').select2({dropdownAutoWidth : true, width : "100%", tags : true});
+            $('.selectedDSPDefault').select2({dropdownAutoWidth : true, width : "100%", tags : true});
+            $('.selectedGPUDefault').select2({dropdownAutoWidth : true, width : "100%", tags : true});
+            $('.selectedRAMDefault').select2({dropdownAutoWidth : true, width : "100%", tags : true});
+            $('.selectedCamera0Default').select2({dropdownAutoWidth : true, width : "100%", tags : true});
+            $('.selectedCamera0ResDefault').select2({dropdownAutoWidth : true, width : "100%", tags : true});
+            $('.selectedCamera1Default').select2({dropdownAutoWidth : true, width : "100%", tags : true});
+            $('.selectedCamera1ResDefault').select2({dropdownAutoWidth : true, width : "100%", tags : true});
 		}).catch(()=>{
 			console.log('outer promise err');
 		});
 
         return false;
+    });
+
+    //INITIALISE datepicker on the "From date" and "To date" fields
+    $('#itemStartDateEdit').datepicker({
+        dateFormat: 'yy-mm-dd',
+        changeMonth: true,
+        changeYear: true,
+        autoSize: true
+    });
+    //INITIALISE datepicker on the "From date" and "To date" fields
+    $('#itemMPDateEdit').datepicker({
+        dateFormat: 'yy-mm-dd',
+        changeMonth: true,
+        changeYear: true,
+        autoSize: true
+    });
+    //INITIALISE datepicker on the "From date" and "To date" fields
+    $('#itemShipDateEdit').datepicker({
+        dateFormat: 'yy-mm-dd',
+        changeMonth: true,
+        changeYear: true,
+        autoSize: true
     });
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -338,19 +564,49 @@ $(document).ready(function(){
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     $("#editItemSubmit").click(function(){
-        var itemName = $("#itemNameEdit").val();
-        var itemDesc = $("#itemDescEdit").val();
+        //var itemName = $("#itemNameEdit").val();
+        //var itemDesc = $("#itemDescEdit").val();
+        //
+        //var itemCustomer = $("#itemCustomerEdit").val();
+        //var itemSOCCompany = $("#itemSOCCompanyEdit").find("option:selected").text();
+        //var itemSOCCompanyVal = $("#itemSOCCompanyEdit").val();
+        //var itemSOCName = $("#itemSOCNameEdit").find("option:selected").text();
+        //var itemSOCNameVal = $("#itemSOCNameEdit").val();
+        //var itemGPU = $("#itemGPUEdit").val();
+        //var itemDSP = $("#itemDSPEdit").val();
+        //var itemRAM = $("#itemRAMEdit").val();
+        //var itemCamera0 = $("#itemCamera0Edit").val();
+        //var itemCamera1 = $("#itemCamera1Edit").val();
+        //var itemCamera0 = $("#itemCamera0Edit").val();
+        //var itemCamera1 = $("#itemCamera1Edit").val();
+
         var itemId = $("#itemIdEdit").val();
+        var itemName = $("#itemNameEdit").val();
         var itemCustomer = $("#itemCustomerEdit").val();
-        var itemSOCCompany = $("#itemSOCCompanyEdit").find("option:selected").text();
         var itemSOCCompanyVal = $("#itemSOCCompanyEdit").val();
-        var itemSOCName = $("#itemSOCNameEdit").find("option:selected").text();
         var itemSOCNameVal = $("#itemSOCNameEdit").val();
-        var itemGPU = $("#itemGPUEdit").val();
-        var itemDSP = $("#itemDSPEdit").val();
-        var itemRAM = $("#itemRAMEdit").val();
-        var itemCamera0 = $("#itemCamera0Edit").val();
-        var itemCamera1 = $("#itemCamera1Edit").val();
+        var itemGPUVal = $("#itemGPUEdit").val();
+        var itemDSPVal = $("#itemDSPEdit").val();
+        var itemRAMVal = $("#itemRAMEdit").val();
+        var itemCamera0Val = $("#itemCamera0Edit").val();
+        var itemCamera1Val = $("#itemCamera1Edit").val();
+        var itemCamera0ResVal = $("#itemCamera0ResEdit").val();
+        var itemCamera1ResVal = $("#itemCamera1ResEdit").val();
+
+        var itemStartDate = $("#itemStartDateEdit").val();
+        var itemMPDate = $("#itemMPDateEdit").val();
+        var itemShipDate = $("#itemShipDateEdit").val();
+        var itemDesc = $("#itemDescEdit").val();
+
+        var itemSOCCompany = $("#itemSOCCompanyEdit").find("option:selected").text();
+        var itemSOCName = $("#itemSOCNameEdit").find("option:selected").text();
+        var itemGPU = itemGPUVal != '' ? $("#itemGPUEdit").find("option:selected").text() : '';
+        var itemDSP = itemDSPVal != '' ? $("#itemDSPEdit").find("option:selected").text() : '';
+        var itemRAM = itemRAMVal != '' ? $("#itemRAMEdit").find("option:selected").text() : '';
+        var itemCamera0 = itemCamera0Val != '' ? $("#itemCamera0Edit").find("option:selected").text() : '';
+        var itemCamera1 = itemCamera1Val != '' ? $("#itemCamera1Edit").find("option:selected").text() : '';
+        var itemCamera0Res = itemCamera0ResVal != '' ? $("#itemCamera0ResEdit").find("option:selected").text() : '';
+        var itemCamera1Res = itemCamera1ResVal != '' ? $("#itemCamera1ResEdit").find("option:selected").text() : '';
 
         if(!itemName || !itemId || !itemCustomer || !itemSOCCompanyVal || !itemSOCNameVal){
             !itemName ? $("#itemNameEditErr").html("Type name cannot be empty") : "";
@@ -368,7 +624,9 @@ $(document).ready(function(){
             url: appRoot+"customerProjects/edit",
             data: {itemName:itemName, itemCustomer:itemCustomer, itemSOCCompany:itemSOCCompany,
                 itemSOCName:itemSOCName, itemGPU:itemGPU, itemDSP:itemDSP, itemRAM:itemRAM,
-                itemCamera0:itemCamera0, itemCamera1:itemCamera1, itemDesc:itemDesc, _iId:itemId}
+                itemCamera0:itemCamera0, itemCamera1:itemCamera1, itemDesc:itemDesc, itemCamera0Res:itemCamera0Res,
+                itemCamera1Res:itemCamera1Res, itemStartDate:itemStartDate, itemMPDate:itemMPDate,
+                itemShipDate:itemShipDate, _iId:itemId}
         }).done(function(returnedData){
             if(returnedData.status === 1){
                 $("#editItemFMsg").css('color', 'green').html("successfully updated");

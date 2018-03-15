@@ -24,7 +24,8 @@ class CustomerProject extends CI_Model{
 
         $this->db->select('customer_project.id, customer_project.Name, customer.Name CustomerName, customer_project.SOCCompany,
         customer_project.SOCName, customer_project.GPU, customer_project.DSP, customer_project.RAM, customer_project.FrontCameraType,
-        customer_project.RearCameraType, customer_project.AddedDate, customer_project.UpdatedDate, customer_project.Notes');
+        customer_project.RearCameraType, customer_project.AddedDate, customer_project.UpdatedDate, customer_project.Notes,
+        customer_project.RearCameraRes, customer_project.FrontCameraRes, customer_project.Start, customer_project.MP, customer_project.Ship');
 
         $this->db->join('customer', 'customer_project.CustomerID = customer.id');
 
@@ -57,8 +58,21 @@ class CustomerProject extends CI_Model{
      * @param type $itemCode
      * @return boolean
      */
-    public function add($itemName, $itemCustomer, $itemSOCCompany, $itemSOCName, $itemGPU, $itemDSP, $itemRAM, $itemCamera0, $itemCamera1, $itemDesc){
-        $data = ['Name'=>$itemName, 'CustomerID'=>$itemCustomer, 'SOCCompany'=>$itemSOCCompany, 'SOCName'=>$itemSOCName, 'GPU'=>$itemGPU, 'DSP'=>$itemDSP, 'RAM'=>$itemRAM, 'FrontCameraType'=>$itemCamera0, 'RearCameraType'=>$itemCamera1, 'Notes'=>$itemDesc];
+    public function add($itemName, $itemCustomer, $itemSOCCompany, $itemSOCName, $itemGPU,
+        $itemCamera0Res, $itemCamera1Res, $itemStartDate, $itemMPDate, $itemShipDate, $itemDSP, $itemRAM, $itemCamera0, $itemCamera1, $itemDesc) {
+        $data = ['Name'=>$itemName, 'CustomerID'=>$itemCustomer, 'SOCCompany'=>$itemSOCCompany, 'SOCName'=>$itemSOCName,
+        'GPU'=>$itemGPU, 'DSP'=>$itemDSP, 'RAM'=>$itemRAM, 'FrontCameraType'=>$itemCamera0, 'RearCameraType'=>$itemCamera1,
+        'Notes'=>$itemDesc, 'FrontCameraRes'=>$itemCamera0Res, 'RearCameraRes'=>$itemCamera1Res];
+
+        if ($itemStartDate !== "") {
+            $this->db->set('Start', "{$itemStartDate}");
+        }
+        if ($itemMPDate !== "") {
+            $this->db->set('MP', "{$itemMPDate}");
+        }
+        if ($itemShipDate !== "") {
+            $this->db->set('Ship', "{$itemShipDate}");
+        }
 
         //set the datetime based on the db driver in use
         $this->db->platform() == "sqlite3"
@@ -126,8 +140,21 @@ class CustomerProject extends CI_Model{
     * @param type $itemDesc
     * @param type $itemPrice
     */
-   public function edit($itemId, $itemName, $itemCustomer, $itemSOCCompany, $itemSOCName, $itemGPU, $itemDSP, $itemRAM, $itemCamera0, $itemCamera1, $itemDesc) {
-       $data = ['Name'=>$itemName, 'CustomerID'=>$itemCustomer, 'SOCCompany'=>$itemSOCCompany, 'SOCName'=>$itemSOCName, 'GPU'=>$itemGPU, 'DSP'=>$itemDSP, 'RAM'=>$itemRAM, 'FrontCameraType'=>$itemCamera0, 'RearCameraType'=>$itemCamera1, 'Notes'=>$itemDesc];
+   public function edit($itemId, $itemName, $itemCustomer, $itemSOCCompany, $itemSOCName, $itemGPU, $itemDSP, $itemRAM, $itemCamera0, $itemCamera1,
+                        $itemCamera0Res, $itemCamera1Res, $itemStartDate, $itemMPDate, $itemShipDate, $itemDesc) {
+       $data = ['Name'=>$itemName, 'CustomerID'=>$itemCustomer, 'SOCCompany'=>$itemSOCCompany, 'SOCName'=>$itemSOCName, 'GPU'=>$itemGPU, 'DSP'=>$itemDSP,
+                'RAM'=>$itemRAM, 'FrontCameraType'=>$itemCamera0, 'RearCameraType'=>$itemCamera1, 'Notes'=>$itemDesc, 'FrontCameraRes'=>$itemCamera0Res,
+                'RearCameraRes'=>$itemCamera1Res];
+
+       if ($itemStartDate !== "") {
+           $this->db->set('Start', "{$itemStartDate}");
+       }
+       if ($itemMPDate !== "") {
+           $this->db->set('MP', "{$itemMPDate}");
+       }
+       if ($itemShipDate !== "") {
+           $this->db->set('Ship', "{$itemShipDate}");
+       }
 
        $this->db->where('id', $itemId);
        $this->db->update('customer_project', $data);
@@ -145,7 +172,9 @@ class CustomerProject extends CI_Model{
 
 	public function getActiveItems($orderBy, $orderFormat){
         $this->db->order_by($orderBy, $orderFormat);
-
+        $this->db->select($orderBy);
+        $this->db->group_by($orderBy);
+        $this->db->where($orderBy.'!=', '');
         $run_q = $this->db->get('customer_project');
 
         if($run_q->num_rows() > 0){
@@ -156,49 +185,4 @@ class CustomerProject extends CI_Model{
             return FALSE;
         }
     }
-
-    /*
-     ********************************************************************************************************************************
-     ********************************************************************************************************************************
-     ********************************************************************************************************************************
-     ********************************************************************************************************************************
-     ********************************************************************************************************************************
-     */
-
-     public function getSOCCompanies($orderBy, $orderFormat){
-         $this->db->order_by($orderBy, $orderFormat);
-         $this->db->select("SOCCompany");
-         $this->db->group_by('SOCCompany');
-         $run_q = $this->db->get('customer_project');
-
-         if($run_q->num_rows() > 0){
-             return $run_q->result();
-         }
-
-         else{
-             return FALSE;
-         }
-     }
-     /*
-      ********************************************************************************************************************************
-      ********************************************************************************************************************************
-      ********************************************************************************************************************************
-      ********************************************************************************************************************************
-      ********************************************************************************************************************************
-      */
-
-      public function getSOCNames($orderBy, $orderFormat){
-          $this->db->order_by($orderBy, $orderFormat);
-          $this->db->select("SOCName");
-          $this->db->group_by('SOCName');
-          $run_q = $this->db->get('customer_project');
-
-          if($run_q->num_rows() > 0){
-              return $run_q->result();
-          }
-
-          else{
-              return FALSE;
-          }
-      }
 }
