@@ -22,15 +22,15 @@ class CustomerProjects extends CI_Controller{
      */
     public function index(){
         $transData['customers'] = $this->customer->getActiveItems('Name', 'ASC');//get items with at least one qty left, to be used when doing a new transaction
-        $transData['soc_companies'] = $this->customerProject->getActiveItems('SOCCompany', 'ASC');//get items with at least one qty left, to be used when doing a new transaction
-        $transData['soc_names'] = $this->customerProject->getActiveItems('SOCName', 'ASC');//get items with at least one qty left, to be used when doing a new transaction
-        $transData['hardware_DSP'] = $this->customerProject->getActiveItems('DSP', 'ASC');//get items with at least one qty left, to be used when doing a new transaction
-        $transData['hardware_GPU'] = $this->customerProject->getActiveItems('GPU', 'ASC');//get items with at least one qty left, to be used when doing a new transaction
-        $transData['hardware_RAM'] = $this->customerProject->getActiveItems('RAM', 'ASC');//get items with at least one qty left, to be used when doing a new transaction
-        $transData['camera_type0'] = $this->customerProject->getActiveItems('FrontCameraType', 'ASC');//get items with at least one qty left, to be used when doing a new transaction
-        $transData['camera_res0'] = $this->customerProject->getActiveItems('FrontCameraRes', 'ASC');//get items with at least one qty left, to be used when doing a new transaction
-        $transData['camera_type1'] = $this->customerProject->getActiveItems('RearCameraType', 'ASC');//get items with at least one qty left, to be used when doing a new transaction
-        $transData['camera_res1'] = $this->customerProject->getActiveItems('RearCameraRes','ASC');//get items with at least one qty left, to be used when doing a new transaction
+        $transData['soc_companies'] = $this->customerProject->getTagItems('SOCCompany', 'ASC');//get items with at least one qty left, to be used when doing a new transaction
+        $transData['soc_names'] = $this->customerProject->getTagItems('SOCName', 'ASC');//get items with at least one qty left, to be used when doing a new transaction
+        $transData['hardware_DSP'] = $this->customerProject->getTagItems('DSP', 'ASC');//get items with at least one qty left, to be used when doing a new transaction
+        $transData['hardware_GPU'] = $this->customerProject->getTagItems('GPU', 'ASC');//get items with at least one qty left, to be used when doing a new transaction
+        $transData['hardware_RAM'] = $this->customerProject->getTagItems('RAM', 'ASC');//get items with at least one qty left, to be used when doing a new transaction
+        $transData['camera_type0'] = $this->customerProject->getTagItems('FrontCameraType', 'ASC');//get items with at least one qty left, to be used when doing a new transaction
+        $transData['camera_res0'] = $this->customerProject->getTagItems('FrontCameraRes', 'ASC');//get items with at least one qty left, to be used when doing a new transaction
+        $transData['camera_type1'] = $this->customerProject->getTagItems('RearCameraType', 'ASC');//get items with at least one qty left, to be used when doing a new transaction
+        $transData['camera_res1'] = $this->customerProject->getTagItems('RearCameraRes','ASC');//get items with at least one qty left, to be used when doing a new transaction
 
         $data['pageContent'] = $this->load->view('customerProjects/customerProjects', $transData, TRUE);
         $data['pageTitle'] = "Customer Projects";
