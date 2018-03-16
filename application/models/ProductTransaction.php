@@ -67,7 +67,9 @@ class ProductTransaction extends CI_Model{
         'StatusID'=>$status, 'VenderID'=>$competitor, 'ProjectID'=>$projectName, 'Notes'=>$description];
 
         if ($itemMilestone !== "") {
-            $this->db->set('MilestoneDate', "{$itemMilestone}");
+            $this->db->set('MilestoneDate', $itemMilestone);
+        } else {
+            $this->db->set('MilestoneDate', NULL);
         }
         //set the datetime based on the db driver in use
         $this->db->platform() == "sqlite3"
@@ -146,7 +148,9 @@ class ProductTransaction extends CI_Model{
        $data = ['ProductID'=>$itemProductID, 'CustomerID'=>$itemCustomerID, 'PriorityID'=>$itemPriorityID, 'PlatformID'=>$itemPlatformID,
        'StatusID'=>$itemStatusID, 'VenderID'=>$itemCompetitorID, 'ProjectID'=>$itemProjectName, 'Notes'=>$itemDesc];
        if ($itemMilestone !== "") {
-           $this->db->set('MilestoneDate', "{$itemMilestone}");
+           $this->db->set('MilestoneDate', $itemMilestone);
+       } else {
+           $this->db->set('MilestoneDate', NULL);
        }
        $this->db->where('id', $itemId);
        $this->db->update('xscp', $data);

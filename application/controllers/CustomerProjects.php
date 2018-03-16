@@ -195,14 +195,14 @@ class CustomerProjects extends CI_Controller{
         $this->form_validation->set_rules('itemCustomer', 'Customer ID', ['required', 'trim', 'numeric']);
         $this->form_validation->set_rules('itemSOCCompany', 'SOCCompany', ['trim']);
         $this->form_validation->set_rules('itemSOCName', 'SOCName', ['trim']);
-        $this->form_validation->set_rules('itemGPU', 'GPU', ['trim']);
-        $this->form_validation->set_rules('itemDSP', 'DSP', ['trim']);
-        $this->form_validation->set_rules('itemRAM', 'RAM', ['trim']);
-        $this->form_validation->set_rules('itemCamera0', 'Camera0', ['trim']);
-        $this->form_validation->set_rules('itemCamera1', 'Camera1', ['trim']);
-        $this->form_validation->set_rules('itemCamera0Res', 'Camera0Res', ['trim']);
-        $this->form_validation->set_rules('itemCamera1Res', 'Camera1Res', ['trim']);
-        $this->form_validation->set_rules('itemDesc', 'Item Description', ['trim']);
+        //$this->form_validation->set_rules('itemGPU', 'GPU', ['trim']);
+        //$this->form_validation->set_rules('itemDSP', 'DSP', ['trim']);
+        //$this->form_validation->set_rules('itemRAM', 'RAM', ['trim']);
+        //$this->form_validation->set_rules('itemCamera0', 'Camera0', ['trim']);
+        //$this->form_validation->set_rules('itemCamera1', 'Camera1', ['trim']);
+        //$this->form_validation->set_rules('itemCamera0Res', 'Camera0Res', ['trim']);
+        //$this->form_validation->set_rules('itemCamera1Res', 'Camera1Res', ['trim']);
+        //$this->form_validation->set_rules('itemDesc', 'Item Description', ['trim']);
 
         if($this->form_validation->run() !== FALSE){
             $itemId = set_value('_iId');

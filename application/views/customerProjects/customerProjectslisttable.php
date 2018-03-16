@@ -40,8 +40,8 @@
                     <th>Rear</th>
                     <th>RearRes</th>
                     <th>Start</th>
-                    <th>MassProduction</th>
-                    <th>Shipments</th>
+                    <th>MP</th>
+                    <th>Ship</th>
                 </tr>
             </thead>
             <tbody>

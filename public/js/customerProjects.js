@@ -204,13 +204,21 @@ $(document).ready(function(){
 
         var itemSOCCompany = $("#itemSOCCompany").find("option:selected").text();
         var itemSOCName = $("#itemSOCName").find("option:selected").text();
-        var itemGPU = $("#itemGPU").find("option:selected").text();
-        var itemDSP = $("#itemDSP").find("option:selected").text();
-        var itemRAM = $("#itemRAM").find("option:selected").text();
-        var itemCamera0 = $("#itemCamera0").find("option:selected").text();
-        var itemCamera1 = $("#itemCamera1").find("option:selected").text();
-        var itemCamera0Res = $("#itemCamera0Res").find("option:selected").text();
-        var itemCamera1Res = $("#itemCamera1Res").find("option:selected").text();
+        //var itemGPU = $("#itemGPU").find("option:selected").text();
+        //var itemDSP = $("#itemDSP").find("option:selected").text();
+        //var itemRAM = $("#itemRAM").find("option:selected").text();
+        //var itemCamera0 = $("#itemCamera0").find("option:selected").text();
+        //var itemCamera1 = $("#itemCamera1").find("option:selected").text();
+        //var itemCamera0Res = $("#itemCamera0Res").find("option:selected").text();
+        //var itemCamera1Res = $("#itemCamera1Res").find("option:selected").text();
+
+        var itemGPU = itemGPUVal != '' ? $("#itemGPU").find("option:selected").text() : '';
+        var itemDSP = itemDSPVal != '' ? $("#itemDSP").find("option:selected").text() : '';
+        var itemRAM = itemRAMVal != '' ? $("#itemRAM").find("option:selected").text() : '';
+        var itemCamera0 = itemCamera0Val != '' ? $("#itemCamera0").find("option:selected").text() : '';
+        var itemCamera1 = itemCamera1Val != '' ? $("#itemCamera1").find("option:selected").text() : '';
+        var itemCamera0Res = itemCamera0ResVal != '' ? $("#itemCamera0Res").find("option:selected").text() : '';
+        var itemCamera1Res = itemCamera1ResVal != '' ? $("#itemCamera1Res").find("option:selected").text() : '';
 
 
         if(!itemName || !itemSOCCompanyVal || !itemSOCNameVal){
@@ -564,22 +572,6 @@ $(document).ready(function(){
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     $("#editItemSubmit").click(function(){
-        //var itemName = $("#itemNameEdit").val();
-        //var itemDesc = $("#itemDescEdit").val();
-        //
-        //var itemCustomer = $("#itemCustomerEdit").val();
-        //var itemSOCCompany = $("#itemSOCCompanyEdit").find("option:selected").text();
-        //var itemSOCCompanyVal = $("#itemSOCCompanyEdit").val();
-        //var itemSOCName = $("#itemSOCNameEdit").find("option:selected").text();
-        //var itemSOCNameVal = $("#itemSOCNameEdit").val();
-        //var itemGPU = $("#itemGPUEdit").val();
-        //var itemDSP = $("#itemDSPEdit").val();
-        //var itemRAM = $("#itemRAMEdit").val();
-        //var itemCamera0 = $("#itemCamera0Edit").val();
-        //var itemCamera1 = $("#itemCamera1Edit").val();
-        //var itemCamera0 = $("#itemCamera0Edit").val();
-        //var itemCamera1 = $("#itemCamera1Edit").val();
-
         var itemId = $("#itemIdEdit").val();
         var itemName = $("#itemNameEdit").val();
         var itemCustomer = $("#itemCustomerEdit").val();

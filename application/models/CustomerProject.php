@@ -65,13 +65,19 @@ class CustomerProject extends CI_Model{
         'Notes'=>$itemDesc, 'FrontCameraRes'=>$itemCamera0Res, 'RearCameraRes'=>$itemCamera1Res];
 
         if ($itemStartDate !== "") {
-            $this->db->set('Start', "{$itemStartDate}");
+            $this->db->set('Start', $itemStartDate);
+        } else {
+            $this->db->set('Start', NULL);
         }
         if ($itemMPDate !== "") {
-            $this->db->set('MP', "{$itemMPDate}");
+            $this->db->set('MP', $itemMPDate);
+        } else {
+            $this->db->set('MP', NULL);
         }
         if ($itemShipDate !== "") {
-            $this->db->set('Ship', "{$itemShipDate}");
+            $this->db->set('Ship', $itemShipDate);
+        } else {
+            $this->db->set('Ship', NULL);
         }
 
         //set the datetime based on the db driver in use
@@ -147,13 +153,19 @@ class CustomerProject extends CI_Model{
                 'RearCameraRes'=>$itemCamera1Res];
 
        if ($itemStartDate !== "") {
-           $this->db->set('Start', "{$itemStartDate}");
+           $this->db->set('Start', $itemStartDate);
+       } else {
+           $this->db->set('Start', NULL);
        }
        if ($itemMPDate !== "") {
-           $this->db->set('MP', "{$itemMPDate}");
+           $this->db->set('MP', $itemMPDate);
+       } else {
+           $this->db->set('MP', NULL);
        }
        if ($itemShipDate !== "") {
-           $this->db->set('Ship', "{$itemShipDate}");
+           $this->db->set('Ship', $itemShipDate);
+       } else {
+           $this->db->set('Ship', NULL);
        }
 
        $this->db->where('id', $itemId);
