@@ -277,6 +277,126 @@ $(document).ready(function(){
                     } else {
                         $("#itemSOCName").val(itemSOCNameVal);
                     }
+
+                    if(!inArray(itemDSP, currentDSPs)){
+                        if (itemDSPVal != '') {
+                            currentDSPs.push(itemDSP);
+                            $(".selectedDSPDefault").empty();
+                            for(let key in currentDSPs){
+                                if (currentDSPs[key] == itemDSP) {
+        			                $(".selectedDSPDefault").append("<option value='"+key+"' selected>"+currentDSPs[key]+"</option>");
+                                } else {
+                                    $(".selectedDSPDefault").append("<option value='"+key+"'>"+currentDSPs[key]+"</option>");
+                                }
+                			}
+                			$(".selectedDSPDefault").prepend("<option value=''>Select DSP</option>");
+                        }
+                    } else {
+                        $("#itemDSP").val(itemDSPVal);
+                    }
+
+                    if(!inArray(itemGPU, currentGPUs)){
+                        if (itemGPUVal != '') {
+                            currentGPUs.push(itemGPU);
+                            $(".selectedGPUDefault").empty();
+                            for(let key in currentGPUs){
+                                if (currentGPUs[key] == itemGPU) {
+        			                $(".selectedGPUDefault").append("<option value='"+key+"' selected>"+currentGPUs[key]+"</option>");
+                                } else {
+                                    $(".selectedGPUDefault").append("<option value='"+key+"'>"+currentGPUs[key]+"</option>");
+                                }
+                			}
+                			$(".selectedGPUDefault").prepend("<option value=''>Select GPU</option>");
+                        }
+                    } else {
+                        $("#itemGPU").val(itemGPUVal);
+                    }
+
+                    if(!inArray(itemRAM, currentRAMs)){
+                        if (itemRAMVal != '') {
+                            currentRAMs.push(itemRAM);
+                            $(".selectedRAMDefault").empty();
+                            for(let key in currentRAMs){
+                                if (currentRAMs[key] == itemRAM) {
+        			                $(".selectedRAMDefault").append("<option value='"+key+"' selected>"+currentRAMs[key]+"</option>");
+                                } else {
+                                    $(".selectedRAMDefault").append("<option value='"+key+"'>"+currentRAMs[key]+"</option>");
+                                }
+                			}
+                			$(".selectedRAMDefault").prepend("<option value=''>Select RAM</option>");
+                        }
+                    } else {
+                        $("#itemRAM").val(itemRAMVal);
+                    }
+
+                    if(!inArray(itemCamera0, currentCamera0Types)){
+                        if (itemCamera0Val != '') {
+                            currentCamera0Types.push(itemCamera0);
+                            $(".selectedCamera0Default").empty();
+                            for(let key in currentCamera0Types){
+                                if (currentCamera0Types[key] == itemCamera0) {
+        			                $(".selectedCamera0Default").append("<option value='"+key+"' selected>"+currentCamera0Types[key]+"</option>");
+                                } else {
+                                    $(".selectedCamera0Default").append("<option value='"+key+"'>"+currentCamera0Types[key]+"</option>");
+                                }
+                			}
+                			$(".selectedCamera0Default").prepend("<option value=''>Select CameraType</option>");
+                        }
+                    } else {
+                        $("#itemCamera0").val(itemCamera0Val);
+                    }
+
+                    if(!inArray(itemCamera1, currentCamera1Types)){
+                        if (itemCamera01Val != '') {
+                            currentCamera1Types.push(itemCamera1);
+                            $(".selectedCamera1Default").empty();
+                            for(let key in currentCamera1Types){
+                                if (currentCamera1Types[key] == itemCamera1) {
+        			                $(".selectedCamera1Default").append("<option value='"+key+"' selected>"+currentCamera1Types[key]+"</option>");
+                                } else {
+                                    $(".selectedCamera1Default").append("<option value='"+key+"'>"+currentCamera1Types[key]+"</option>");
+                                }
+                			}
+                			$(".selectedCamera1Default").prepend("<option value=''>Select CameraType</option>");
+                        }
+                    } else {
+                        $("#itemCamera1").val(itemCamera1Val);
+                    }
+
+                    if(!inArray(itemCamera0Res, currentCamera0Res)){
+                        if (itemCamera0ResVal != '') {
+                            currentCamera0Res.push(itemCamera0Res);
+                            $(".selectedCamera0ResDefault").empty();
+                            for(let key in currentCamera0Res){
+                                if (currentCamera0Res[key] == itemCamera0Res) {
+        			                $(".selectedCamera0ResDefault").append("<option value='"+key+"' selected>"+currentCamera0Res[key]+"</option>");
+                                } else {
+                                    $(".selectedCamera0ResDefault").append("<option value='"+key+"'>"+currentCamera0Res[key]+"</option>");
+                                }
+                			}
+                			$(".selectedCamera0ResDefault").prepend("<option value=''>Select CameraRes</option>");
+                        }
+                    } else {
+                        $("#itemCamera0Res").val(itemCamera0ResVal);
+                    }
+
+                    if(!inArray(itemCamera1Res, currentCamera1Res)){
+                        if (itemCamera1ResVal != '') {
+                            currentCamera1Res.push(itemCamera1Res);
+                            $(".selectedCamera1ResDefault").empty();
+                            for(let key in currentCamera1Res){
+                                if (currentCamera1Res[key] == itemCamera1Res) {
+        			                $(".selectedCamera1ResDefault").append("<option value='"+key+"' selected>"+currentCamera1Res[key]+"</option>");
+                                } else {
+                                    $(".selectedCamera1ResDefault").append("<option value='"+key+"'>"+currentCamera1Res[key]+"</option>");
+                                }
+                			}
+                			$(".selectedCamera1ResDefault").prepend("<option value=''>Select CameraRes</option>");
+                        }
+                    } else {
+                        $("#itemCamera1Res").val(itemCamera1ResVal);
+                    }
+
                     //refresh the items list table
                     lilt();
 
@@ -621,6 +741,56 @@ $(document).ready(function(){
                 itemShipDate:itemShipDate, _iId:itemId}
         }).done(function(returnedData){
             if(returnedData.status === 1){
+                if(!inArray(itemSOCCompany, currentSOCCompanies)){
+                    currentSOCCompanies.push(itemSOCCompany);
+                }
+
+                if(!inArray(itemSOCName, currentSOCNames)){
+                    currentSOCNames.push(itemSOCName);
+                }
+
+                if(!inArray(itemDSP, currentDSPs)){
+                    if (itemDSPVal != '') {
+                        currentDSPs.push(itemDSP);
+                    }
+                }
+
+                if(!inArray(itemGPU, currentGPUs)){
+                    if (itemGPUVal != '') {
+                        currentGPUs.push(itemGPU);
+                    }
+                }
+
+                if(!inArray(itemRAM, currentRAMs)){
+                    if (itemRAMVal != '') {
+                        currentRAMs.push(itemRAM);
+                    }
+                }
+
+                if(!inArray(itemCamera0, currentCamera0Types)){
+                    if (itemCamera0Val != '') {
+                        currentCamera0Types.push(itemCamera0);
+                    }
+                }
+
+                if(!inArray(itemCamera1, currentCamera1Types)){
+                    if (itemCamera01Val != '') {
+                        currentCamera1Types.push(itemCamera1);
+                    }
+                }
+
+                if(!inArray(itemCamera0Res, currentCamera0Res)){
+                    if (itemCamera0ResVal != '') {
+                        currentCamera0Res.push(itemCamera0Res);
+                    }
+                }
+
+                if(!inArray(itemCamera1Res, currentCamera1Res)){
+                    if (itemCamera1ResVal != '') {
+                        currentCamera1Res.push(itemCamera1Res);
+                    }
+                }
+
                 $("#editItemFMsg").css('color', 'green').html("successfully updated");
 
                 setTimeout(function(){

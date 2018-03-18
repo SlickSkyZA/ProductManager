@@ -26,7 +26,7 @@ defined('BASEPATH') OR exit('');
                         <label for="adminListPerPage">per page</label>
                     </div>
                     <div class="col-sm-4 form-inline form-group-sm">
-                        <label for="adminListSortBy" class="control-label">Sort by</label> 
+                        <label for="adminListSortBy" class="control-label">Sort by</label>
                         <select id="adminListSortBy" class="form-control">
                             <option value="first_name-ASC" selected>Name (A to Z)</option>
                             <option value="first_name-DESC">Name (Z to A)</option>
@@ -42,10 +42,10 @@ defined('BASEPATH') OR exit('');
                     </div>
                 </div>
             </div>
-            
+
             <hr>
             <!-- Header (sort order etc.) ends -->
-            
+
             <!-- Admin list -->
             <div class="row">
                 <div class="col-sm-12" id="allAdmin"></div>
@@ -81,8 +81,8 @@ defined('BASEPATH') OR exit('');
                             <span class="help-block errMsg" id="lastNameErr"></span>
                         </div>
                     </div>
-                    
-                    
+
+
                     <div class="row">
                         <div class="form-group-sm col-sm-6">
                             <label for='email' class="control-label">Email</label>
@@ -94,12 +94,13 @@ defined('BASEPATH') OR exit('');
                             <select class="form-control checkField" id='role'>
                                 <option value=''>Role</option>
                                 <option value='Super'>Super</option>
+                                <option value='Admin'>Admin</option>
                                 <option value='Basic'>Basic</option>
                             </select>
                             <span class="help-block errMsg" id="roleErr"></span>
                         </div>
                     </div>
-                    
+
                     <div class="row">
                         <div class="form-group-sm col-sm-6">
                             <label for='mobile1' class="control-label">Phone Number</label>
@@ -112,7 +113,7 @@ defined('BASEPATH') OR exit('');
                             <span class="help-block errMsg" id="mobile2Err"></span>
                         </div>
                     </div>
-                    
+
                     <div class="row">
                         <div class="form-group-sm col-sm-6">
                             <label for="passwordOrig" class="control-label">Password:</label>
@@ -164,7 +165,7 @@ defined('BASEPATH') OR exit('');
                             <span class="help-block errMsg" id="lastNameEditErr"></span>
                         </div>
                     </div>
-                    
+
                     <div class="row">
                         <div class="form-group-sm col-sm-6">
                             <label for='emailEdit' class="control-label">Email</label>
@@ -181,7 +182,7 @@ defined('BASEPATH') OR exit('');
                             <span class="help-block errMsg" id="roleEditErr"></span>
                         </div>
                     </div>
-                    
+
                     <div class="row">
                         <div class="form-group-sm col-sm-6">
                             <label for='mobile1Edit' class="control-label">Phone Number</label>
@@ -194,7 +195,7 @@ defined('BASEPATH') OR exit('');
                             <span class="help-block errMsg" id="mobile2EditErr"></span>
                         </div>
                     </div>
-                    
+
                     <input type="hidden" id="adminId">
                 </form>
             </div>

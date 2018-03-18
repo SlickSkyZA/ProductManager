@@ -128,7 +128,9 @@ if(isset($camera_res1) && !empty($camera_res1)){
                         <label for="itemsListSortBy">Sort by</label>
                         <select id="itemsListSortBy" class="form-control">
                             <option value="Name-ASC">Project Name (A-Z)</option>
+                            <option value="CustomerName-ASC">Customer Name (A-Z)</option>
                             <option value="Name-DESC">Project Name (Z-A)</option>
+                            <option value="CustomerName-DESC">Customer Name (Z-A)</option>
                         </select>
                     </div>
 

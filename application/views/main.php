@@ -108,25 +108,26 @@ defined('BASEPATH') OR exit('');
                                 Dashboard
                             </a>
                         </li>
+                        <?php if($this->session->admin_role === "Super"):?>
                         <li class="<?= $pageTitle == 'Transactions' ? 'active' : '' ?>">
                             <a href="<?= site_url('transactions') ?>">
                                 <i class="fa fa-exchange"></i>
                                 Transactions
                             </a>
                         </li>
-
-                        <?php if($this->session->admin_role === "Super"):?>
                         <li class="<?= $pageTitle == 'Items' ? 'active' : '' ?>">
                             <a href="<?= site_url('items') ?>">
                                 <i class="fa fa-shopping-cart"></i>
                                 Inventory Items
                             </a>
                         </li>
+                        <?php endif; ?>
 
+                        <?php if($this->session->admin_role === "Admin" || $this->session->admin_role === "Super"):?>
                         <li class="<?= $pageTitle == 'Product Transactions' ? 'active' : '' ?>">
                             <a href="<?= site_url('ProductTransactions') ?>">
                                 <i class="fa fa-exchange"></i>
-                                Product-Records
+                                Product Transactions
                             </a>
                         </li>
 
@@ -219,14 +220,14 @@ defined('BASEPATH') OR exit('');
                                 Event Log
                             </a>
                         </li>--->
-
+                        <?php endif; ?>
+                        <?php if($this->session->admin_role === "Super"):?>
                         <li class="<?= $pageTitle == 'Database' ? 'active' : '' ?>">
                             <a href="<?= site_url('dbmanagement') ?>">
                                 <i class="fa fa-database"></i>
                                 Database Management
                             </a>
                         </li>
-
                         <li class="<?= $pageTitle == 'Administrators' ? 'active' : '' ?>">
                             <a href="<?= site_url('administrators') ?>">
                                 <i class="fa fa-user"></i>
