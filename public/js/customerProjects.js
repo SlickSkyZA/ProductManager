@@ -774,7 +774,7 @@ $(document).ready(function(){
                 }
 
                 if(!inArray(itemCamera1, currentCamera1Types)){
-                    if (itemCamera01Val != '') {
+                    if (itemCamera1Val != '') {
                         currentCamera1Types.push(itemCamera1);
                     }
                 }

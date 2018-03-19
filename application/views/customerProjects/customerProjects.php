@@ -221,7 +221,7 @@ if(isset($camera_res1) && !empty($camera_res1)){
 
                     <div class="row">
                         <div class="col-sm-4 form-group-sm">
-                            <label for="itemStartDate">Start</label>
+                            <label for="itemStartDate">Code Freeze</label>
                             <div class="input-group date">
                                 <div class="input-group-addon">
                                     <span><i class="fa fa-calendar"></i></span>
@@ -370,7 +370,7 @@ if(isset($camera_res1) && !empty($camera_res1)){
 
                     <div class="row">
                         <div class="col-sm-4 form-group-sm">
-                            <label for="itemStartDateEdit">Start</label>
+                            <label for="itemStartDateEdit">Code Freeze</label>
                             <div class="input-group date">
                                 <div class="input-group-addon">
                                     <span><i class="fa fa-calendar"></i></span>

@@ -25,7 +25,7 @@ class CustomerProject extends CI_Model{
         $this->db->select('customer_project.id, customer_project.Name, customer.Name CustomerName, customer_project.SOCCompany,
         customer_project.SOCName, customer_project.GPU, customer_project.DSP, customer_project.RAM, customer_project.FrontCameraType,
         customer_project.RearCameraType, customer_project.AddedDate, customer_project.UpdatedDate, customer_project.Notes,
-        customer_project.RearCameraRes, customer_project.FrontCameraRes, customer_project.Start, customer_project.MP, customer_project.Ship');
+        customer_project.RearCameraRes, customer_project.FrontCameraRes, customer_project.CodeFreeze, customer_project.MP, customer_project.Ship');
 
         $this->db->join('customer', 'customer_project.CustomerID = customer.id');
 
@@ -65,9 +65,9 @@ class CustomerProject extends CI_Model{
         'Notes'=>$itemDesc, 'FrontCameraRes'=>$itemCamera0Res, 'RearCameraRes'=>$itemCamera1Res];
 
         if ($itemStartDate !== "") {
-            $this->db->set('Start', $itemStartDate);
+            $this->db->set('CodeFreeze', $itemStartDate);
         } else {
-            $this->db->set('Start', NULL);
+            $this->db->set('CodeFreeze', NULL);
         }
         if ($itemMPDate !== "") {
             $this->db->set('MP', $itemMPDate);
@@ -153,9 +153,9 @@ class CustomerProject extends CI_Model{
                 'RearCameraRes'=>$itemCamera1Res];
 
        if ($itemStartDate !== "") {
-           $this->db->set('Start', $itemStartDate);
+           $this->db->set('CodeFreeze', $itemStartDate);
        } else {
-           $this->db->set('Start', NULL);
+           $this->db->set('CodeFreeze', NULL);
        }
        if ($itemMPDate !== "") {
            $this->db->set('MP', $itemMPDate);

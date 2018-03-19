@@ -39,7 +39,7 @@
                     <th>FrontRes</th>
                     <th>Rear</th>
                     <th>RearRes</th>
-                    <th>Start</th>
+                    <th>CF</th>
                     <th>MP</th>
                     <th>Ship</th>
                 </tr>
@@ -61,7 +61,7 @@
                     <td><span id="itemCamera0Res-<?=$get->id?>"><?=$get->FrontCameraRes?></td>
                     <td><span id="itemCamera1-<?=$get->id?>"><?=$get->RearCameraType?></td>
                     <td><span id="itemCamera1Res-<?=$get->id?>"><?=$get->RearCameraRes?></td>
-                    <td><span id="itemStartDate-<?=$get->id?>"><?=$get->Start?></td>
+                    <td><span id="itemStartDate-<?=$get->id?>"><?=$get->CodeFreeze?></td>
                     <td><span id="itemMPDate-<?=$get->id?>"><?=$get->MP?></td>
                     <td><span id="itemShipDate-<?=$get->id?>"><?=$get->Ship?></td>
                     <td>
