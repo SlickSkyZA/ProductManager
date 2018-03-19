@@ -7,21 +7,12 @@ $(document).ready(function(){
     //load all items once the page is ready
     lilt();
 
-
-
     //WHEN USE BARCODE SCANNER IS CLICKED
     $("#useBarcodeScanner").click(function(e){
         e.preventDefault();
 
         $("#itemCode").focus();
     });
-
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Toggle the form to add a new item
@@ -34,86 +25,16 @@ $(document).ready(function(){
         return new Promise((resolve, reject)=>{
 			//if an item has been selected (i.e. added to the current transaction), do not add it to the list. This way, an item will appear just once.
 			//We start by forming an array of all selected items, then skip that item in the loop appending items to select dropdown
-
-            $(".selectedCustomerDefault").empty();
-            for(let key in currentCustomers){
-				//if the current key in the loop is in our 'selectedItemsArr' array
-				$(".selectedCustomerDefault").append("<option value='"+key+"'>"+currentCustomers[key]+"</option>");
-			}
-			//prepend 'select item' to the select option
-			$(".selectedCustomerDefault").prepend("<option value='' selected>Select Customer</option>");
-
-            $(".selectedSOCCompanyDefault").empty();
-            for(let key in currentSOCCompanies){
-				//if the current key in the loop is in our 'selectedItemsArr' array
-				$(".selectedSOCCompanyDefault").append("<option value='"+key+"'>"+currentSOCCompanies[key]+"</option>");
-			}
-			//prepend 'select item' to the select option
-			$(".selectedSOCCompanyDefault").prepend("<option value='' selected>Select SOC Company</option>");
-
-            $(".selectedSOCNameDefault").empty();
-            for(let key in currentSOCNames){
-				//if the current key in the loop is in our 'selectedItemsArr' array
-				$(".selectedSOCNameDefault").append("<option value='"+key+"'>"+currentSOCNames[key]+"</option>");
-			}
-			//prepend 'select item' to the select option
-			$(".selectedSOCNameDefault").prepend("<option value='' selected>Select SOC</option>");
-
-            $(".selectedDSPDefault").empty();
-            for(let key in currentDSPs){
-				//if the current key in the loop is in our 'selectedItemsArr' array
-				$(".selectedDSPDefault").append("<option value='"+key+"'>"+currentDSPs[key]+"</option>");
-			}
-			//prepend 'select item' to the select option
-			$(".selectedDSPDefault").prepend("<option value='' selected>Select DSP</option>");
-
-            $(".selectedGPUDefault").empty();
-            for(let key in currentGPUs){
-				//if the current key in the loop is in our 'selectedItemsArr' array
-				$(".selectedGPUDefault").append("<option value='"+key+"'>"+currentGPUs[key]+"</option>");
-			}
-			//prepend 'select item' to the select option
-			$(".selectedGPUDefault").prepend("<option value='' selected>Select GPU</option>");
-
-            $(".selectedRAMDefault").empty();
-            for(let key in currentRAMs){
-				//if the current key in the loop is in our 'selectedItemsArr' array
-				$(".selectedRAMDefault").append("<option value='"+key+"'>"+currentRAMs[key]+"</option>");
-			}
-			//prepend 'select item' to the select option
-			$(".selectedRAMDefault").prepend("<option value='' selected>Select RAM</option>");
-
-            $(".selectedCamera0Default").empty();
-            for(let key in currentCamera0Types){
-				//if the current key in the loop is in our 'selectedItemsArr' array
-				$(".selectedCamera0Default").append("<option value='"+key+"'>"+currentCamera0Types[key]+"</option>");
-			}
-			//prepend 'select item' to the select option
-			$(".selectedCamera0Default").prepend("<option value='' selected>Select CameraType</option>");
-
-            $(".selectedCamera1Default").empty();
-            for(let key in currentCamera1Types){
-				//if the current key in the loop is in our 'selectedItemsArr' array
-				$(".selectedCamera1Default").append("<option value='"+key+"'>"+currentCamera1Types[key]+"</option>");
-			}
-			//prepend 'select item' to the select option
-			$(".selectedCamera1Default").prepend("<option value='' selected>Select CameraType</option>");
-
-            $(".selectedCamera0ResDefault").empty();
-            for(let key in currentCamera0Res){
-				//if the current key in the loop is in our 'selectedItemsArr' array
-				$(".selectedCamera0ResDefault").append("<option value='"+key+"'>"+currentCamera0Res[key]+"</option>");
-			}
-			//prepend 'select item' to the select option
-			$(".selectedCamera0ResDefault").prepend("<option value='' selected>Select Resolution</option>");
-
-            $(".selectedCamera1ResDefault").empty();
-            for(let key in currentCamera1Res){
-				//if the current key in the loop is in our 'selectedItemsArr' array
-				$(".selectedCamera1ResDefault").append("<option value='"+key+"'>"+currentCamera1Res[key]+"</option>");
-			}
-			//prepend 'select item' to the select option
-			$(".selectedCamera1ResDefault").prepend("<option value='' selected>Select Resolution</option>");
+            selected2_tag_addnew_initial(".selectedCustomerDefault", currentCustomers, "Select Customer");
+            selected2_tag_addnew_initial(".selectedSOCCompanyDefault", currentSOCCompanies, "Select SOC Company");
+            selected2_tag_addnew_initial(".selectedSOCNameDefault", currentSOCNames, "Select SOC");
+            selected2_tag_addnew_initial(".selectedDSPDefault", currentDSPs, "Select DSP");
+            selected2_tag_addnew_initial(".selectedGPUDefault", currentGPUs, "Select GPU");
+            selected2_tag_addnew_initial(".selectedRAMDefault", currentRAMs, "Select RAM");
+            selected2_tag_addnew_initial(".selectedCamera0Default", currentCamera0Types, "Select Camera Type");
+            selected2_tag_addnew_initial(".selectedCamera1Default", currentCamera1Types, "Select Camera Type");
+            selected2_tag_addnew_initial(".selectedCamera0ResDefault", currentCamera0Res, "Select Resolution");
+            selected2_tag_addnew_initial(".selectedCamera1ResDefault", currentCamera1Res, "Select Resolution");
 
 			resolve(); //selectedGroupsArr, selectedPrioritysArr
 		}).then(()=>{ //selectedGroupsArray, selectedPrioritysArray
@@ -158,26 +79,12 @@ $(document).ready(function(){
         autoSize: true
     });
 
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
     $(".cancelAddItem").click(function(){
         //reset and hide the form
         document.getElementById("addNewItemForm").reset();//reset the form
         $("#createNewItemDiv").addClass('hidden');//hide the form
         $("#itemsListDiv").attr('class', "col-sm-12");//make the table span the whole div
     });
-
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     //handles the submission of adding new item
     $("#addNewItem").click(function(e){
@@ -204,14 +111,6 @@ $(document).ready(function(){
 
         var itemSOCCompany = $("#itemSOCCompany").find("option:selected").text();
         var itemSOCName = $("#itemSOCName").find("option:selected").text();
-        //var itemGPU = $("#itemGPU").find("option:selected").text();
-        //var itemDSP = $("#itemDSP").find("option:selected").text();
-        //var itemRAM = $("#itemRAM").find("option:selected").text();
-        //var itemCamera0 = $("#itemCamera0").find("option:selected").text();
-        //var itemCamera1 = $("#itemCamera1").find("option:selected").text();
-        //var itemCamera0Res = $("#itemCamera0Res").find("option:selected").text();
-        //var itemCamera1Res = $("#itemCamera1Res").find("option:selected").text();
-
         var itemGPU = itemGPUVal != '' ? $("#itemGPU").find("option:selected").text() : '';
         var itemDSP = itemDSPVal != '' ? $("#itemDSP").find("option:selected").text() : '';
         var itemRAM = itemRAMVal != '' ? $("#itemRAM").find("option:selected").text() : '';
@@ -219,7 +118,6 @@ $(document).ready(function(){
         var itemCamera1 = itemCamera1Val != '' ? $("#itemCamera1").find("option:selected").text() : '';
         var itemCamera0Res = itemCamera0ResVal != '' ? $("#itemCamera0Res").find("option:selected").text() : '';
         var itemCamera1Res = itemCamera1ResVal != '' ? $("#itemCamera1Res").find("option:selected").text() : '';
-
 
         if(!itemName || !itemSOCCompanyVal || !itemSOCNameVal){
             !itemName ? $("#itemNameErr").text("required") : "";
@@ -248,154 +146,15 @@ $(document).ready(function(){
                     document.getElementById("addNewItemForm").reset();
                     $("#itemCustomer").val(itemCustomer);
 
-                    if(!inArray(itemSOCCompany, currentSOCCompanies)){
-                        currentSOCCompanies.push(itemSOCCompany);
-                        $(".selectedSOCCompanyDefault").empty();
-                        for(let key in currentSOCCompanies){
-                            if (currentSOCCompanies[key] == itemSOCCompany) {
-                            	$(".selectedSOCCompanyDefault").append("<option value='"+key+"' selected>"+currentSOCCompanies[key]+"</option>");
-                            } else {
-                            	$(".selectedSOCCompanyDefault").append("<option value='"+key+"'>"+currentSOCCompanies[key]+"</option>");
-                            }
-            			}
-            			$(".selectedSOCCompanyDefault").prepend("<option value=''>Select SOC Company</option>");
-                    } else {
-                        $("#itemSOCCompany").val(itemSOCCompanyVal);
-                    }
-
-                    if(!inArray(itemSOCName, currentSOCNames)){
-                        currentSOCNames.push(itemSOCName);
-                        $(".selectedSOCNameDefault").empty();
-                        for(let key in currentSOCNames){
-                            if (currentSOCNames[key] == itemSOCName) {
-    			                $(".selectedSOCNameDefault").append("<option value='"+key+"' selected>"+currentSOCNames[key]+"</option>");
-                            } else {
-                                $(".selectedSOCNameDefault").append("<option value='"+key+"'>"+currentSOCNames[key]+"</option>");
-                            }
-            			}
-            			$(".selectedSOCNameDefault").prepend("<option value=''>Select SOC</option>");
-                    } else {
-                        $("#itemSOCName").val(itemSOCNameVal);
-                    }
-
-                    if(!inArray(itemDSP, currentDSPs)){
-                        if (itemDSPVal != '') {
-                            currentDSPs.push(itemDSP);
-                            $(".selectedDSPDefault").empty();
-                            for(let key in currentDSPs){
-                                if (currentDSPs[key] == itemDSP) {
-        			                $(".selectedDSPDefault").append("<option value='"+key+"' selected>"+currentDSPs[key]+"</option>");
-                                } else {
-                                    $(".selectedDSPDefault").append("<option value='"+key+"'>"+currentDSPs[key]+"</option>");
-                                }
-                			}
-                			$(".selectedDSPDefault").prepend("<option value=''>Select DSP</option>");
-                        }
-                    } else {
-                        $("#itemDSP").val(itemDSPVal);
-                    }
-
-                    if(!inArray(itemGPU, currentGPUs)){
-                        if (itemGPUVal != '') {
-                            currentGPUs.push(itemGPU);
-                            $(".selectedGPUDefault").empty();
-                            for(let key in currentGPUs){
-                                if (currentGPUs[key] == itemGPU) {
-        			                $(".selectedGPUDefault").append("<option value='"+key+"' selected>"+currentGPUs[key]+"</option>");
-                                } else {
-                                    $(".selectedGPUDefault").append("<option value='"+key+"'>"+currentGPUs[key]+"</option>");
-                                }
-                			}
-                			$(".selectedGPUDefault").prepend("<option value=''>Select GPU</option>");
-                        }
-                    } else {
-                        $("#itemGPU").val(itemGPUVal);
-                    }
-
-                    if(!inArray(itemRAM, currentRAMs)){
-                        if (itemRAMVal != '') {
-                            currentRAMs.push(itemRAM);
-                            $(".selectedRAMDefault").empty();
-                            for(let key in currentRAMs){
-                                if (currentRAMs[key] == itemRAM) {
-        			                $(".selectedRAMDefault").append("<option value='"+key+"' selected>"+currentRAMs[key]+"</option>");
-                                } else {
-                                    $(".selectedRAMDefault").append("<option value='"+key+"'>"+currentRAMs[key]+"</option>");
-                                }
-                			}
-                			$(".selectedRAMDefault").prepend("<option value=''>Select RAM</option>");
-                        }
-                    } else {
-                        $("#itemRAM").val(itemRAMVal);
-                    }
-
-                    if(!inArray(itemCamera0, currentCamera0Types)){
-                        if (itemCamera0Val != '') {
-                            currentCamera0Types.push(itemCamera0);
-                            $(".selectedCamera0Default").empty();
-                            for(let key in currentCamera0Types){
-                                if (currentCamera0Types[key] == itemCamera0) {
-        			                $(".selectedCamera0Default").append("<option value='"+key+"' selected>"+currentCamera0Types[key]+"</option>");
-                                } else {
-                                    $(".selectedCamera0Default").append("<option value='"+key+"'>"+currentCamera0Types[key]+"</option>");
-                                }
-                			}
-                			$(".selectedCamera0Default").prepend("<option value=''>Select CameraType</option>");
-                        }
-                    } else {
-                        $("#itemCamera0").val(itemCamera0Val);
-                    }
-
-                    if(!inArray(itemCamera1, currentCamera1Types)){
-                        if (itemCamera01Val != '') {
-                            currentCamera1Types.push(itemCamera1);
-                            $(".selectedCamera1Default").empty();
-                            for(let key in currentCamera1Types){
-                                if (currentCamera1Types[key] == itemCamera1) {
-        			                $(".selectedCamera1Default").append("<option value='"+key+"' selected>"+currentCamera1Types[key]+"</option>");
-                                } else {
-                                    $(".selectedCamera1Default").append("<option value='"+key+"'>"+currentCamera1Types[key]+"</option>");
-                                }
-                			}
-                			$(".selectedCamera1Default").prepend("<option value=''>Select CameraType</option>");
-                        }
-                    } else {
-                        $("#itemCamera1").val(itemCamera1Val);
-                    }
-
-                    if(!inArray(itemCamera0Res, currentCamera0Res)){
-                        if (itemCamera0ResVal != '') {
-                            currentCamera0Res.push(itemCamera0Res);
-                            $(".selectedCamera0ResDefault").empty();
-                            for(let key in currentCamera0Res){
-                                if (currentCamera0Res[key] == itemCamera0Res) {
-        			                $(".selectedCamera0ResDefault").append("<option value='"+key+"' selected>"+currentCamera0Res[key]+"</option>");
-                                } else {
-                                    $(".selectedCamera0ResDefault").append("<option value='"+key+"'>"+currentCamera0Res[key]+"</option>");
-                                }
-                			}
-                			$(".selectedCamera0ResDefault").prepend("<option value=''>Select CameraRes</option>");
-                        }
-                    } else {
-                        $("#itemCamera0Res").val(itemCamera0ResVal);
-                    }
-
-                    if(!inArray(itemCamera1Res, currentCamera1Res)){
-                        if (itemCamera1ResVal != '') {
-                            currentCamera1Res.push(itemCamera1Res);
-                            $(".selectedCamera1ResDefault").empty();
-                            for(let key in currentCamera1Res){
-                                if (currentCamera1Res[key] == itemCamera1Res) {
-        			                $(".selectedCamera1ResDefault").append("<option value='"+key+"' selected>"+currentCamera1Res[key]+"</option>");
-                                } else {
-                                    $(".selectedCamera1ResDefault").append("<option value='"+key+"'>"+currentCamera1Res[key]+"</option>");
-                                }
-                			}
-                			$(".selectedCamera1ResDefault").prepend("<option value=''>Select CameraRes</option>");
-                        }
-                    } else {
-                        $("#itemCamera1Res").val(itemCamera1ResVal);
-                    }
+                    selected2_tag_addnew_optional(".selectedSOCCompanyDefault", "#itemSOCCompany", currentSOCCompanies, itemSOCCompany, "Select SOC Company");
+                    selected2_tag_addnew_optional(".selectedSOCNameDefault", "#itemSOCName", currentSOCNames, itemSOCName, "Select SOC");
+                    selected2_tag_addnew_optional(".selectedDSPDefault", "#itemDSP", currentDSPs, itemDSP, "Select DSP");
+                    selected2_tag_addnew_optional(".selectedGPUDefault", "#itemGPU", currentGPUs, itemGPU, "Select GPU");
+                    selected2_tag_addnew_optional(".selectedRAMDefault", "#itemRAM", currentRAMs, itemRAM, "Select RAM");
+                    selected2_tag_addnew_optional(".selectedCamera0Default", "#itemCamera0", currentCamera0Types, itemCamera0, "Select Camera Type");
+                    selected2_tag_addnew_optional(".selectedCamera1Default", "#itemCamera1", currentCamera1Types, itemCamera1, "Select Camera Type");
+                    selected2_tag_addnew_optional(".selectedCamera0ResDefault", "#itemCamera0Res", currentCamera0Res, itemCamera0Res, "Select Resolution");
+                    selected2_tag_addnew_optional(".selectedCamera1ResDefault", "#itemCamera1Res", currentCamera1Res, itemCamera1Res, "Select Resolution");
 
                     //refresh the items list table
                     lilt();
@@ -514,134 +273,16 @@ $(document).ready(function(){
         return new Promise((resolve, reject)=>{
 			//if an item has been selected (i.e. added to the current transaction), do not add it to the list. This way, an item will appear just once.
 			//We start by forming an array of all selected items, then skip that item in the loop appending items to select dropdown
-            $(".selectedCustomerDefault").empty();
-            for(let key in currentCustomers){
-				if (currentCustomers[key] == itemCustomer) {
-                    $(".selectedCustomerDefault").append("<option value='"+key+"' selected>"+currentCustomers[key]+"</option>");
-                } else {
-                    $(".selectedCustomerDefault").append("<option value='"+key+"'>"+currentCustomers[key]+"</option>");
-                }
-
-			}
-			$(".selectedCustomerDefault").prepend("<option value=''>Select Customer" +  itemDSP + "</option>");
-
-            $(".selectedSOCCompanyDefault").empty();
-            for(let key in currentSOCCompanies){
-				if (currentSOCCompanies[key] == itemSOCCompany) {
-	                $(".selectedSOCCompanyDefault").append("<option value='"+key+"' selected>"+currentSOCCompanies[key]+"</option>");
-                } else {
-                    $(".selectedSOCCompanyDefault").append("<option value='"+key+"'>"+currentSOCCompanies[key]+"</option>");
-                }
-			}
-			$(".selectedSOCCompanyDefault").prepend("<option value='' >Select SOC Company</option>");
-
-            $(".selectedSOCNameDefault").empty();
-            for(let key in currentSOCNames){
-    			if (currentSOCNames[key] == itemSOCName) {
-    				$(".selectedSOCNameDefault").append("<option value='"+key+"' selected>"+currentSOCNames[key]+"</option>");
-                } else {
-                    $(".selectedSOCNameDefault").append("<option value='"+key+"'>"+currentSOCNames[key]+"</option>");
-                }
-			}
-			$(".selectedSOCNameDefault").prepend("<option value='' >Select SOC</option>");
-
-            $(".selectedDSPDefault").empty();
-            for(let key in currentDSPs){
-				if (currentDSPs[key] == itemDSP) {
-    				$(".selectedDSPDefault").append("<option value='"+key+"' selected>"+currentDSPs[key]+"</option>");
-                } else {
-                    $(".selectedDSPDefault").append("<option value='"+key+"'>"+currentDSPs[key]+"</option>");
-                }
-			}
-			if (itemDSP == '') {
-                $(".selectedDSPDefault").prepend("<option value='' selected>Select DSP</option>");
-            } else {
-                $(".selectedDSPDefault").prepend("<option value=''>Select DSP</option>");
-            }
-
-            $(".selectedGPUDefault").empty();
-            for(let key in currentGPUs){
-				if (currentGPUs[key] == itemGPU) {
-				    $(".selectedGPUDefault").append("<option value='"+key+"' selected>"+currentGPUs[key]+"</option>");
-                } else {
-                    $(".selectedGPUDefault").append("<option value='"+key+"'>"+currentGPUs[key]+"</option>");
-                }
-			}
-			if (itemGPU == '') {
-                $(".selectedGPUDefault").prepend("<option value='' selected>Select GPU</option>");
-            } else {
-                $(".selectedGPUDefault").prepend("<option value=''>Select GPU</option>");
-            }
-
-            $(".selectedRAMDefault").empty();
-            for(let key in currentRAMs){
-				if (currentRAMs[key] == itemRAM) {
-				    $(".selectedRAMDefault").append("<option value='"+key+"' selected>"+currentRAMs[key]+"</option>");
-                } else {
-                    $(".selectedRAMDefault").append("<option value='"+key+"'>"+currentRAMs[key]+"</option>");
-                }
-			}
-			if (itemRAM == '') {
-                $(".selectedRAMDefault").prepend("<option value='' selected>Select RAM</option>");
-            } else {
-                $(".selectedRAMDefault").prepend("<option value=''>Select RAM</option>");
-            }
-
-            $(".selectedCamera0Default").empty();
-            for(let key in currentCamera0Types){
-			    if (currentCamera0Types[key] == itemCamera0) {
-    				$(".selectedCamera0Default").append("<option value='"+key+"' selected>"+currentCamera0Types[key]+"</option>");
-                } else {
-                	$(".selectedCamera0Default").append("<option value='"+key+"'>"+currentCamera0Types[key]+"</option>");
-                }
-			}
-			if (itemCamera0 == '') {
-                $(".selectedCamera0Default").prepend("<option value='' selected>Select CameraType</option>");
-            } else {
-                $(".selectedCamera0Default").prepend("<option value=''>Select CameraType</option>");
-            }
-
-            $(".selectedCamera1Default").empty();
-            for(let key in currentCamera1Types){
-				if (currentCamera1Types[key] == itemCamera1) {
-                    $(".selectedCamera1Default").append("<option value='"+key+"' selected>"+currentCamera1Types[key]+"</option>");
-                } else {
-                    $(".selectedCamera1Default").append("<option value='"+key+"'>"+currentCamera1Types[key]+"</option>");
-                }
-			}
-			if (itemCamera1 == '') {
-                $(".selectedCamera1Default").prepend("<option value='' selected>Select CameraType</option>");
-            } else {
-                $(".selectedCamera1Default").prepend("<option value=''>Select CameraType</option>");
-            }
-
-            $(".selectedCamera0ResDefault").empty();
-            for(let key in currentCamera0Res){
-				if (currentCamera0Res[key] == itemCamera0Res) {
-    				$(".selectedCamera0ResDefault").append("<option value='"+key+"' selected>"+currentCamera0Res[key]+"</option>");
-                } else {
-                    $(".selectedCamera0ResDefault").append("<option value='"+key+"'>"+currentCamera0Res[key]+"</option>");
-                }
-			}
-			if (itemCamera0Res == '') {
-                $(".selectedCamera0ResDefault").prepend("<option value='' selected>Select Resolution</option>");
-            } else {
-                $(".selectedCamera0ResDefault").prepend("<option value=''>Select Resolution</option>");
-            }
-
-            $(".selectedCamera1ResDefault").empty();
-            for(let key in currentCamera1Res){
-				if (currentCamera1Res[key] == itemCamera1Res) {
-    				$(".selectedCamera1ResDefault").append("<option value='"+key+"' selected>"+currentCamera1Res[key]+"</option>");
-                } else {
-                	$(".selectedCamera1ResDefault").append("<option value='"+key+"'>"+currentCamera1Res[key]+"</option>");
-                }
-			}
-			if (itemCamera1Res == '') {
-                $(".selectedCamera1ResDefault").prepend("<option value='' selected>Select Resolution</option>");
-            } else {
-                $(".selectedCamera1ResDefault").prepend("<option value=''>Select Resolution</option>");
-            }
+            selected2_tag_update_optional(".selectedSOCNameDefault", currentSOCNames, itemSOCName, "Select SOC");
+            selected2_tag_update_optional(".selectedSOCCompanyDefault", currentSOCCompanies, itemSOCCompany, "Select SOC Company");
+            selected2_tag_update_optional(".selectedCustomerDefault", currentCustomers, itemCustomer, "Select Customer");
+            selected2_tag_update_optional(".selectedCamera1ResDefault", currentCamera1Res, itemCamera1Res, "Select Resolution");
+            selected2_tag_update_optional(".selectedCamera0ResDefault", currentCamera0Res, itemCamera0Res, "Select Resolution");
+            selected2_tag_update_optional(".selectedCamera1Default", currentCamera1, itemCamera1, "Select CameraType");
+            selected2_tag_update_optional(".selectedCamera0Default", currentCamera0, itemCamera0, "Select CameraType");
+            selected2_tag_update_optional(".selectedRAMDefault", currentRAMs, itemRAM, "Select RAM");
+            selected2_tag_update_optional(".selectedGPUDefault", currentGPUs, itemGPU, "Select GPU");
+            selected2_tag_update_optional(".selectedDSPDefault", currentDSPs, itemDSP, "Select DSP");
 
 			resolve(); //selectedGroupsArr, selectedPrioritysArr
 		}).then(()=>{ //selectedGroupsArray, selectedPrioritysArray
@@ -741,55 +382,15 @@ $(document).ready(function(){
                 itemShipDate:itemShipDate, _iId:itemId}
         }).done(function(returnedData){
             if(returnedData.status === 1){
-                if(!inArray(itemSOCCompany, currentSOCCompanies)){
-                    currentSOCCompanies.push(itemSOCCompany);
-                }
-
-                if(!inArray(itemSOCName, currentSOCNames)){
-                    currentSOCNames.push(itemSOCName);
-                }
-
-                if(!inArray(itemDSP, currentDSPs)){
-                    if (itemDSPVal != '') {
-                        currentDSPs.push(itemDSP);
-                    }
-                }
-
-                if(!inArray(itemGPU, currentGPUs)){
-                    if (itemGPUVal != '') {
-                        currentGPUs.push(itemGPU);
-                    }
-                }
-
-                if(!inArray(itemRAM, currentRAMs)){
-                    if (itemRAMVal != '') {
-                        currentRAMs.push(itemRAM);
-                    }
-                }
-
-                if(!inArray(itemCamera0, currentCamera0Types)){
-                    if (itemCamera0Val != '') {
-                        currentCamera0Types.push(itemCamera0);
-                    }
-                }
-
-                if(!inArray(itemCamera1, currentCamera1Types)){
-                    if (itemCamera1Val != '') {
-                        currentCamera1Types.push(itemCamera1);
-                    }
-                }
-
-                if(!inArray(itemCamera0Res, currentCamera0Res)){
-                    if (itemCamera0ResVal != '') {
-                        currentCamera0Res.push(itemCamera0Res);
-                    }
-                }
-
-                if(!inArray(itemCamera1Res, currentCamera1Res)){
-                    if (itemCamera1ResVal != '') {
-                        currentCamera1Res.push(itemCamera1Res);
-                    }
-                }
+                selected2_tag_update_array(currentSOCCompanies, itemSOCCompany, itemSOCCompanyVal);
+                selected2_tag_update_array(currentSOCNames, itemSOCName, itemSOCNameVal);
+                selected2_tag_update_array(currentDSPs, itemDSP, itemDSPVal);
+                selected2_tag_update_array(currentGPUs, itemGPU, itemGPUVal);
+                selected2_tag_update_array(currentRAMs, itemRAM, itemRAMVal);
+                selected2_tag_update_array(currentCamera0Types, itemCamera0, itemCamera0Val);
+                selected2_tag_update_array(currentCamera1Types, itemCamera1, itemCamera1Val);
+                selected2_tag_update_array(currentCamera0Res, itemCamera0Res, itemCamera0ResVal);
+                selected2_tag_update_array(currentCamera1Res, itemCamera1Res, itemCamera1ResVal);
 
                 $("#editItemFMsg").css('color', 'green').html("successfully updated");
 
@@ -809,47 +410,6 @@ $(document).ready(function(){
             $("#editItemFMsg").css('color', 'red').html("Unable to process your request at this time. Please check your internet connection and try again");
         });
     });
-
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    //trigers the modal to update stock
-    $("#itemsListTable").on('click', '.updateStock', function(){
-        //get item info and fill the form with them
-        var itemId = $(this).attr('id').split("-")[1];
-        var itemName = $("#itemName-"+itemId).html();
-        var itemCurQuantity = $("#itemQuantity-"+itemId).html();
-        var itemCode = $("#itemCode-"+itemId).html();
-
-        $("#stockUpdateItemId").val(itemId);
-        $("#stockUpdateItemName").val(itemName);
-        $("#stockUpdateItemCode").val(itemCode);
-        $("#stockUpdateItemQInStock").val(itemCurQuantity);
-
-        $("#updateStockModal").modal('show');
-    });
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    //PREVENT AUTO-SUBMISSION BY THE BARCODE SCANNER
-    $("#itemCode").keypress(function(e){
-        if(e.which === 13){
-            e.preventDefault();
-
-            //change to next input by triggering the tab keyboard
-            $("#itemName").focus();
-        }
-    });
-
-
 
     //TO DELETE AN ITEM (The item will be marked as "deleted" instead of removing it totally from the db)
     $("#itemsListTable").on('click', '.delItem', function(e){
@@ -923,24 +483,75 @@ function lilt(url){
     return false;
 }
 
-
-/**
- * "vittrhist" = "View item's transaction history"
- * @param {type} itemId
- * @returns {Boolean}
- */
-function vittrhist(itemId){
-    if(itemId){
-
-    }
-
-    return false;
-}
-
-
-
 function resetItemSN(){
     $(".itemSN").each(function(i){
         $(this).html(parseInt(i)+1);
     });
+}
+
+/**
+* 编辑页面指定对应选中项
+*
+*/
+function selected2_tag_update_optional(str, list, item, str2) {
+    $(str).empty();
+    for(let key in list){
+    	if (list[key] == item) {
+    		$(str).append("<option value='"+key+"' selected>"+list[key]+"</option>");
+        } else {
+        	$(str).append("<option value='"+key+"'>"+list[key]+"</option>");
+        }
+    }
+    if (item == '') {
+        $(str).prepend("<option value='' selected>"+ str2 +"</option>");
+    } else {
+        $(str).prepend("<option value=''>"+ str2 +"</option>");
+    }
+}
+
+/**
+* 新增页面所有中项
+*
+*/
+function selected2_tag_addnew_initial(str, list, str2) {
+    $(str).empty();
+    for(let key in list){
+        $(str).append("<option value='"+key+"'>"+list[key]+"</option>");
+    }
+    $(str).prepend("<option value='' selected>"+str2+"</option>");
+}
+
+/**
+* 新增页面新加项目添加至列表
+*
+*/
+function selected2_tag_addnew_optional(str, strVal, list, item, itemVal, str2) {
+    if(!inArray(item, list)){
+        if (itemVal != '') {
+            currentDSPs.push(item);
+            $(str).empty();
+            for(let key in list){
+                if (list[key] == item) {
+                    $(str).append("<option value='"+key+"' selected>"+list[key]+"</option>");
+                } else {
+                    $(str).append("<option value='"+key+"'>"+list[key]+"</option>");
+                }
+            }
+            $(str).prepend("<option value=''>"+str2+"</option>");
+        }
+    } else {
+        $(strVal).val(itemVal);
+    }
+}
+
+/**
+* 更新tag数据到list
+*
+*/
+function selected2_tag_update_array(list, item, itemVal) {
+    if(!inArray(item, list)){
+        if (itemVal != '') {
+            currentCamera0Types.push(item);
+        }
+    }
 }
