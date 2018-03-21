@@ -138,6 +138,20 @@ defined('BASEPATH') OR exit('');
                             </a>
                         </li>
 
+                        <li class="<?= $pageTitle == 'Product Issues' ? 'active' : '' ?>">
+                            <a href="<?= site_url('productIssues') ?>">
+                                <i class="fa fa-tag"></i>
+                                Product Issues
+                            </a>
+                        </li>
+
+                        <li class="<?= $pageTitle == 'Product Performance' ? 'active' : '' ?>">
+                            <a href="<?= site_url('productGroups') ?>">
+                                <i class="fa fa-tag"></i>
+                                Product Performance
+                            </a>
+                        </li>
+
                         <li class="<?= $pageTitle == 'Product Groups' ? 'active' : '' ?>">
                             <a href="<?= site_url('productGroups') ?>">
                                 <i class="fa fa-tag"></i>
@@ -161,7 +175,7 @@ defined('BASEPATH') OR exit('');
 
                         <li class="<?= $pageTitle == 'Customers' ? 'active' : '' ?>">
                             <a href="<?= site_url('customers') ?>">
-                                <i class="fa fa-tag"></i>
+                                <i class="fa fa-archive"></i>
                                 Customers
                             </a>
                         </li>
