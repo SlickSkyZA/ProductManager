@@ -146,7 +146,7 @@ defined('BASEPATH') OR exit('');
                         </li>
 
                         <li class="<?= $pageTitle == 'Product Performance' ? 'active' : '' ?>">
-                            <a href="<?= site_url('productGroups') ?>">
+                            <a href="<?= site_url('productPerformances') ?>">
                                 <i class="fa fa-tag"></i>
                                 Product Performance
                             </a>

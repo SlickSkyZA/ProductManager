@@ -20,7 +20,7 @@ class Search extends CI_Controller{
 
         $this->load->model(['transaction', 'item', 'productGroup', 'priority', 'product', 'region',
         'platform', 'customer', 'productStatus', 'customerVender', 'productTransaction', 'customerType',
-        'customerProject']);
+        'customerProject', 'productIssue']);
 
         $this->load->helper('text');
 
@@ -230,6 +230,20 @@ class Search extends CI_Controller{
         $data['sn'] = 1;
 
         $json['itemsListTable'] = $data['allItems'] ? $this->load->view('productTransactions/productTranstable', $data, TRUE) : "No match found {$this->value}";
+
+        //set final output
+        $this->output->set_content_type('application/json')->set_output(json_encode($json));
+    }
+
+    /**
+     * [productIssueSearch description]
+     * @return [type] [description]
+     */
+    public function productIssueSearch() {
+        $data['allItems'] = $this->productIssue->itemsearch($this->value);
+        $data['sn'] = 1;
+
+        $json['itemsListTable'] = $data['allItems'] ? $this->load->view('productIssues/productIssueslisttable', $data, TRUE) : "No match found {$this->value}";
 
         //set final output
         $this->output->set_content_type('application/json')->set_output(json_encode($json));

@@ -7,7 +7,7 @@ require_once 'functions.php';
  * @author Amir <amirsanni@gmail.com>
  * @date 31st Dec, 2015
  */
-class ProductIssues extends CI_Controller{
+class ProductPerformances extends CI_Controller{
     private $total_before_discount = 0, $discount_amount = 0, $vat_amount = 0, $eventual_total = 0;
 
     public function __construct(){
@@ -15,7 +15,7 @@ class ProductIssues extends CI_Controller{
 
         $this->genlib->checkLogin();
 
-        $this->load->model(['customer', 'customerProject', 'priority', 'product', 'productIssue']);
+        $this->load->model(['platform', 'product', 'productPerformance']);
     }
 
     /*
@@ -27,14 +27,13 @@ class ProductIssues extends CI_Controller{
     */
 
     public function index(){
-        $transData['priorities'] = $this->priority->getActiveItems('Name', 'ASC');//get items with at least one qty left, to be used when doing a new transaction
-        $transData['customers'] = $this->customer->getActiveItems('Name', 'ASC');
-        $transData['customerProjects'] = $this->customerProject->getActiveItems('Name', 'ASC');
+        $transData['platforms'] = $this->platform->getActiveItems('Name', 'ASC');
         $transData['products'] = $this->product->getActiveItems('Name', 'ASC');
-        $transData['productIssues'] = $this->productIssue->getTagItems('IssueType', 'ASC');
+        $transData['devices'] = $this->productPerformance->getTagItems('Device', 'ASC');
+        $transData['resolutions'] = $this->productPerformance->getTagItems('Resolution', 'ASC');
 
-        $data['pageContent'] = $this->load->view('productIssues/productIssues', $transData, TRUE);
-        $data['pageTitle'] = "Product Issues";
+        $data['pageContent'] = $this->load->view('productPerformances/productPerformances', $transData, TRUE);
+        $data['pageTitle'] = "Product Performance";
 
         $this->load->view('main', $data);
     }
@@ -51,33 +50,34 @@ class ProductIssues extends CI_Controller{
         $this->form_validation->set_error_delimiters('', '');
 
         $this->form_validation->set_rules('itemProduct', 'ProductID', ['required', 'trim', 'numeric'], ['required'=>"required"]);
-        $this->form_validation->set_rules('itemCustomer', 'CustomerID', ['required', 'trim', 'numeric'], ['required'=>"required"]);
-        $this->form_validation->set_rules('itemPriority', 'Priority', ['required', 'trim', 'numeric'], ['required'=>"required"]);
+        $this->form_validation->set_rules('itemPlatform', 'PlatformID', ['required', 'trim', 'numeric'], ['required'=>"required"]);
+        $this->form_validation->set_rules('itemDevice', 'Device', ['required', 'trim', 'max_length[80]'], ['required'=>"required"]);
         $this->form_validation->set_rules('itemVersion', 'Version', ['required', 'trim', 'max_length[80]'], ['required'=>"required"]);
-        $this->form_validation->set_rules('itemIssueType', 'IssueType', ['required', 'trim', 'max_length[255]'], ['required'=>"required"]);
+        $this->form_validation->set_rules('itemResolution', 'Resolution', ['required', 'trim', 'max_length[255]'], ['required'=>"required"]);
         $this->form_validation->set_rules('itemReportDate', 'ReportDate', ['required', 'trim', 'max_length[80]'], ['required'=>"required"]);
 
         if($this->form_validation->run() !== FALSE){
             $this->db->trans_start();//start transaction
 
             $itemProduct = set_value('itemProduct');
-            $itemCustomer = set_value('itemCustomer');
-            $itemPriority = set_value('itemPriority');
-            $itemProject = set_value('itemProject');
+            $itemPlatform = set_value('itemPlatform');
+            $itemDevice = set_value('itemDevice');
+            $itemPerformance = set_value('itemPerformance');
             $itemVersion = set_value('itemVersion');
-            $itemIssueType = set_value('itemIssueType');
+            $itemResolution = set_value('itemResolution');
+            $itemPower = set_value('itemPower');
             $itemReportDate = set_value('itemReportDate');
             $itemDesc = set_value('itemDesc');
 
-            $insertedId = $this->productIssue->add($itemProduct, $itemCustomer, $itemPriority, $itemProject, $itemVersion, $itemIssueType, $itemReportDate, $itemDesc);
+            $insertedId = $this->productPerformance->add($itemProduct, $itemPlatform, $itemDevice, $itemPerformance, $itemVersion, $itemResolution, $itemPower, $itemReportDate, $itemDesc);
 
             $itemName = set_value('itemProduct');
 
             //insert into eventlog
             //function header: addevent($event, $eventRowId, $eventDesc, $eventTable, $staffId)
-            $desc = "New addition issue of product:{$itemName}";
+            $desc = "New addition performance of product:{$itemName}";
 
-            $insertedId ? $this->genmod->addevent("Creation of new issue", $insertedId, $desc, "issue", $this->session->admin_id) : "";
+            $insertedId ? $this->genmod->addevent("Creation of new performance", $insertedId, $desc, "issue", $this->session->admin_id) : "";
 
             $this->db->trans_complete();
 
@@ -119,7 +119,7 @@ class ProductIssues extends CI_Controller{
         $orderFormat = $this->input->get('orderFormat', TRUE) ? $this->input->get('orderFormat', TRUE) : "ASC";
 
         //count the total number of items in db
-        $totalItems = $this->db->count_all('product_issue');
+        $totalItems = $this->db->count_all('product_performance');
 
         $this->load->library('pagination');
 
@@ -129,17 +129,17 @@ class ProductIssues extends CI_Controller{
         $start = $pageNumber == 0 ? 0 : ($pageNumber - 1) * $limit;//start from 0 if pageNumber is 0, else start from the next iteration
 
         //call setPaginationConfig($totalRows, $urlToCall, $limit, $attributes) in genlib to configure pagination
-        $config = $this->genlib->setPaginationConfig($totalItems, "productIssues/lilt", $limit, ['onclick'=>'return lilt(this.href);']);
+        $config = $this->genlib->setPaginationConfig($totalItems, "productPerformances/lilt", $limit, ['onclick'=>'return lilt(this.href);']);
 
         $this->pagination->initialize($config);//initialize the library class
 
         //get all items from db
-        $data['allItems'] = $this->productIssue->getAll($orderBy, $orderFormat, $start, $limit);
+        $data['allItems'] = $this->productPerformance->getAll($orderBy, $orderFormat, $start, $limit);
         $data['range'] = $totalItems > 0 ? "Showing " . ($start+1) . "-" . ($start + count($data['allItems'])) . " of " . $totalItems : "";
         $data['links'] = $this->pagination->create_links();//page links
         $data['sn'] = $start+1;
 
-        $json['itemsListTable'] = $this->load->view('productIssues/productIssueslisttable', $data, TRUE);//get view with populated items table
+        $json['itemsListTable'] = $this->load->view('productPerformances/productPerformanceslisttable', $data, TRUE);//get view with populated items table
 
         $this->output->set_content_type('application/json')->set_output(json_encode($json));
     }
@@ -158,29 +158,23 @@ class ProductIssues extends CI_Controller{
          $this->load->library('form_validation');
 
          $this->form_validation->set_error_delimiters('', '');
-        //itemProduct:itemProduct, itemCustomer:itemCustomer, itemPriority:itemPriority, itemProject:itemProject,
-        //    itemVersion:itemVersion, itemIssueType:itemIssueType, itemReportDate:itemReportDate, itemDesc:itemDesc, _iId:itemId
-        $this->form_validation->set_rules('itemProduct', 'ProductID', ['required', 'trim', 'numeric'], ['required'=>"required"]);
-        $this->form_validation->set_rules('itemCustomer', 'CustomerID', ['required', 'trim', 'numeric'], ['required'=>"required"]);
-        $this->form_validation->set_rules('itemPriority', 'Priority', ['required', 'trim', 'numeric'], ['required'=>"required"]);
-        $this->form_validation->set_rules('itemVersion', 'Version', ['required', 'trim', 'max_length[80]'], ['required'=>"required"]);
-        $this->form_validation->set_rules('itemIssueType', 'IssueType', ['required', 'trim', 'max_length[255]'], ['required'=>"required"]);
-        $this->form_validation->set_rules('itemReportDate', 'ReportDate', ['required', 'trim', 'max_length[80]'], ['required'=>"required"]);
+        //itemName:itemName, itemGroupID:itemGroupID, itemPriorityID:itemPriorityID, itemVersion:itemVersion, itemDesc:itemDesc, _iId:itemId
+         $this->form_validation->set_rules('_iId', 'Item ID', ['required', 'trim', 'numeric']);
+         $this->form_validation->set_rules('itemName', 'Product Name', ['required', 'trim',
+             'callback_crosscheckName['.$this->input->post('_iId', TRUE).']'], ['required'=>'required']);
+         $this->form_validation->set_rules('itemDesc', 'Product Description', ['trim']);
+         $this->form_validation->set_rules('itemVersion', 'Product Version', ['trim']);
 
          if($this->form_validation->run() !== FALSE){
              $itemId = set_value('_iId');
-             $itemProduct = set_value('itemProduct');
-             $itemCustomer = set_value('itemCustomer');
-             $itemPriority = set_value('itemPriority');
-             $itemProject = set_value('itemProject');
-             $itemVersion = set_value('itemVersion');
-             $itemIssueType = set_value('itemIssueType');
-             $itemReportDate = set_value('itemReportDate');
              $itemDesc = set_value('itemDesc');
-
+             $itemName = set_value('itemName');
+             $itemGroupID = set_value('itemGroupID');
+             $itemPriorityID = set_value('itemPriorityID');
+             $itemVersion = set_value('itemVersion');
 
              //update item in db
-             $updated = $this->productIssue->edit($itemId, $itemProduct, $itemCustomer, $itemPriority, $itemProject, $itemVersion, $itemIssueType, $itemReportDate, $itemDesc);
+             $updated = $this->product->edit($itemId, $itemName, $itemGroupID, $itemPriorityID, $itemVersion, $itemDesc);
 
              $json['status'] = $updated ? 1 : 0;
 
@@ -239,7 +233,7 @@ class ProductIssues extends CI_Controller{
          $item_id = $this->input->post('i', TRUE);
 
          if($item_id){
-             $this->db->where('id', $item_id)->delete('product_issue');
+             $this->db->where('id', $item_id)->delete('product_performance');
 
              $json['status'] = 1;
          }

@@ -46,11 +46,11 @@ defined('BASEPATH') OR exit('');
 <div class="row margin-top-5">
     <div class="col-sm-9">
         <div class="box">
-            <div class="box-header" style="background-color:/*#33c9dd*/#333;">
+            <div class="box-header" style="background-color:/*#33c9dd*/#EEE;">
               <h3 class="box-title" id="earningsTitle"></h3>
             </div>
 
-            <div class="box-body" style="background-color:/*#33c9dd*/#333;">
+            <div class="box-body" style="background-color:/*#33c9dd*/#EEE;">
               <canvas style="padding-right:25px" id="earningsGraph" width="200" height="80"/></canvas>
             </div>
         </div>
