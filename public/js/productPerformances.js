@@ -49,6 +49,14 @@ $(document).ready(function(){
         autoSize: true
     });
 
+    //INITIALISE datepicker on the "From date" and "To date" fields
+    $('#itemReportDateEdit').datepicker({
+        dateFormat: 'yy-mm-dd',
+        changeMonth: true,
+        changeYear: true,
+        autoSize: true
+    });
+
     /**
      * [triger cancel button]
      * @return
@@ -201,18 +209,24 @@ $(document).ready(function(){
 
         //get item info
         var itemId = $(this).attr('id').split("-")[1];
-        var itemDesc = $("#itemDesc-"+itemId).attr('title');
         var itemProduct = $("#itemProduct-"+itemId).html();
-        var itemCustomer = $("#itemCustomer-"+itemId).html();
-        var itemPriority = $("#itemPriority-"+itemId).html();
+        var itemPlatform = $("#itemPlatform-"+itemId).html();
+        var itemPerformance = $("#itemPerformance-"+itemId).html();
+        var itemPower = $("#itemPower-"+itemId).html();
         var itemVersion = $("#itemVersion-"+itemId).html();
         var itemReportDate = $("#itemReportDate-"+itemId).html();
-        var itemProject = $("#itemProject-"+itemId).html();
+        var itemDesc = $("#itemDesc-"+itemId).html();
+        var itemDevice = $("#itemDevice-"+itemId).html();
+        var itemResolution = $("#itemResolution-"+itemId).html();
 
         //prefill form with info
         $("#itemIdEdit").val(itemId);
         $("#itemProductEdit").val(itemProduct);
-        $("#itemVersionEdit").val(itemVersion);
+        $("#itemPlatformEdit").val(itemPlatform);
+        $("#itemPerformanceEdit").val(itemPerformance);
+        $("#itemPowerEdit").val(itemPower);
+        $("#itemDeviceEdit").val(itemDevice);
+        $("#itemResolutionEdit").val(itemResolution);
         $("#itemDescEdit").val(itemDesc);
         $("#itemVersionEdit").val(itemVersion);
         $("#itemReportDateEdit").val(itemReportDate);
@@ -234,17 +248,16 @@ $(document).ready(function(){
         //loop through the currentItems variable to add the items to the select input
 		return new Promise((resolve, reject)=>{
             selected2_tag_update_optional(".selectedProductDefault", currentProducts, itemProduct, "Select Product");
-            selected2_tag_update_optional(".selectedPriorityDefault", currentPriorities, itemPriority, "Select Priority");
-            selected2_tag_update_optional(".selectedCustomerDefault", currentCustomers, itemCustomer, "Select Customer");
-            selected2_tag_update_optional(".selectedProjectDefault", currentCustomerProjects, itemProject, "Select Project");
-            selected2_tag_update_optional(".selectedIssueTypeDefault", currentIssueTypes, itemIssueType, "Select Issue Type");
+            selected2_tag_update_optional(".selectedPlatformDefault", currentPlatforms, itemPlatform, "Select Platform");
+            selected2_tag_update_optional(".selectedDeviceDefault", currentDevices, itemDevice, "Select Device");
+            selected2_tag_update_optional(".selectedResolutionDefault", currentResolutions, itemResolution, "Select Resolution");
+            resolve();
 		}).then(()=>{
 			//add select2 to the 'select input'
             $('.selectedProductDefault').select2({dropdownAutoWidth : true, width : "100%"});
-            $('.selectedPriorityDefault').select2({dropdownAutoWidth : true, width : "100%"});
-            $('.selectedCustomerDefault').select2({dropdownAutoWidth : true, width : "100%"});
-            $('.selectedProjectDefault').select2({dropdownAutoWidth : true, width : "100%"});
-            $('.selectedIssueTypeDefault').select2({dropdownAutoWidth : true, width : "100%", tags : true});
+            $('.selectedPlatformDefault').select2({dropdownAutoWidth : true, width : "100%"});
+            $('.selectedDeviceDefault').select2({dropdownAutoWidth : true, width : "100%", tags : true});
+            $('.selectedResolutionDefault').select2({dropdownAutoWidth : true, width : "100%", tags : true});
 		}).catch(()=>{
 			console.log('outer promise err');
 		});
@@ -252,37 +265,45 @@ $(document).ready(function(){
         return false;
     });
 
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+    /**
+     * [description]
+     * @return {[type]} [description]
+     */
     $("#editItemSubmit").click(function(){
-        var itemName = $("#itemNameEdit").val();
-        var itemGroup = $("#itemGroupEdit").val();
-        var itemPriority = $("#itemPriorityEdit").val();
-        var itemVersion = $("#itemVersionEdit").val();
-        var itemDesc = $("#itemDescriptionEdit").val();
         var itemId = $("#itemIdEdit").val();
+        var itemProduct = $("#itemProductEdit").val();
+        var itemPlatform = $("#itemPlatformEdit").val();
+        var itemPerformance = $("#itemPerformanceEdit").val();
+        var itemPower = $("#itemPowerEdit").val();
+        var itemVersion = $("#itemVersionEdit").val();
+        var itemReportDate = $("#itemReportDateEdit").val();
+        var itemDesc = $("#itemDescEdit").val();
+        var itemDeviceValue = $("#itemDeviceEdit").val();
+        var itemResolutionValue = $("#itemResolutionEdit").val();
 
-        if(!itemName || !itemId || !itemGroup || !itemPriority){
-            !itemName ? $("#itemNameEditErr").html("Product name cannot be empty") : "";
-            !itemGroup ? $("#itemGroupEditErr").html("Product group cannot be empty") : "";
-            !itemPriority ? $("#itemPriorityEditErr").html("Product priority cannot be empty") : "";
-            !itemId ? $("#editItemFMsg").html("Unknown Priority") : "";
+        var itemResolution = itemResolutionValue != '' ? $("#itemResolutionEdit").find("option:selected").text() : '';
+        var itemDevice = itemDeviceValue != '' ? $("#itemDeviceEdit").find("option:selected").text() : '';
+
+        if(!itemProduct || !itemPlatform || !itemDeviceValue || !itemPerformance || !itemResolutionValue || !itemVersion || !itemReportDate){
+            !itemProduct ? $("#itemProductEditErr").text("required") : "";
+            !itemPlatform ? $("#itemPlatformEditErr").text("required") : "";
+            !itemDeviceValue ? $("#itemDeviceEditErr").text("required") : "";
+            !itemPerformance ? $("#itemPerformanceEditErr").text("required") : "";
+            !itemResolutionValue ? $("#itemResolutionEditErr").text("required") : "";
+            !itemVersion ? $("#itemVersionEditErr").text("required") : "";
+            !itemReportDate ? $("#itemReportDateEditErr").text("required") : "";
+
             return;
         }
-
-        var itemGroupID = itemGroup;
-        var itemPriorityID = itemPriority;
 
         $("#editItemFMsg").css('color', 'black').html("<i class='"+spinnerClass+"'></i> Processing your request....");
 
         $.ajax({
             method: "POST",
-            url: appRoot+"products/edit",
-            data: {itemName:itemName, itemGroupID:itemGroupID, itemPriorityID:itemPriorityID, itemVersion:itemVersion, itemDesc:itemDesc, _iId:itemId}
+            url: appRoot+"productPerformances/edit",
+            data: {itemProduct:itemProduct, itemPlatform:itemPlatform, itemDevice:itemDevice, itemPerformance:itemPerformance,
+                itemPower:itemPower, itemResolution:itemResolution, itemVersion:itemVersion,
+                itemReportDate:itemReportDate, itemDesc:itemDesc, _iId:itemId}
         }).done(function(returnedData){
             if(returnedData.status === 1){
                 $("#editItemFMsg").css('color', 'green').html("Product successfully updated");

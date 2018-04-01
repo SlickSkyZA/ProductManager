@@ -13,8 +13,8 @@
                     <th>ID</th>
                     <th>Product</th>
                     <th>Platform</th>
-                    <th>Performance</th>
-                    <th>Power</th>
+                    <th>Performance(ms)</th>
+                    <th>Power(ma)</th>
                     <th>Version</th>
                     <th>Device</th>
                     <th>Resolution</th>

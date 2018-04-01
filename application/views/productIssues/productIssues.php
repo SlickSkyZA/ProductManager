@@ -222,7 +222,7 @@ if(isset($customerProjects) && !empty($customerProjects)){
                             <span class="help-block errMsg" id="itemProductEditErr"></span>
                         </div>
                         <div class="col-sm-4 form-group-sm">
-                            <label for="itemCustomer">Customer Name</label>
+                            <label for="itemCustomerEdit">Customer Name</label>
                             <select class="form-control selectedCustomerDefault" id="itemCustomerEdit" name="itemCustomerEdit"
                                 onchange="checkField(this.value, 'itemCustomerEditErr')"></select>
                             <span class="help-block errMsg" id="itemCustomerEditErr"></span>

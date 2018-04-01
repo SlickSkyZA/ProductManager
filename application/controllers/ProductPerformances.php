@@ -158,23 +158,32 @@ class ProductPerformances extends CI_Controller{
          $this->load->library('form_validation');
 
          $this->form_validation->set_error_delimiters('', '');
-        //itemName:itemName, itemGroupID:itemGroupID, itemPriorityID:itemPriorityID, itemVersion:itemVersion, itemDesc:itemDesc, _iId:itemId
+        //itemProduct:itemProduct, itemPlatform:itemPlatform, itemDevice:itemDevice, itemPerformance:itemPerformance,
+        //    itemPower:itemPower, itemResolution:itemResolution, itemVersion:itemVersion,
+        //    itemReportDate:itemReportDate, itemDesc:itemDesc
          $this->form_validation->set_rules('_iId', 'Item ID', ['required', 'trim', 'numeric']);
-         $this->form_validation->set_rules('itemName', 'Product Name', ['required', 'trim',
-             'callback_crosscheckName['.$this->input->post('_iId', TRUE).']'], ['required'=>'required']);
-         $this->form_validation->set_rules('itemDesc', 'Product Description', ['trim']);
-         $this->form_validation->set_rules('itemVersion', 'Product Version', ['trim']);
+         $this->form_validation->set_rules('itemProduct', 'ProductID', ['required', 'trim', 'numeric'], ['required'=>"required"]);
+         $this->form_validation->set_rules('itemPlatform', 'PlatformID', ['required', 'trim', 'numeric'], ['required'=>"required"]);
+         $this->form_validation->set_rules('itemDevice', 'Device', ['required', 'trim', 'max_length[80]'], ['required'=>"required"]);
+         $this->form_validation->set_rules('itemVersion', 'Version', ['required', 'trim', 'max_length[80]'], ['required'=>"required"]);
+         $this->form_validation->set_rules('itemResolution', 'Resolution', ['required', 'trim', 'max_length[255]'], ['required'=>"required"]);
+         $this->form_validation->set_rules('itemReportDate', 'ReportDate', ['required', 'trim', 'max_length[80]'], ['required'=>"required"]);
 
          if($this->form_validation->run() !== FALSE){
              $itemId = set_value('_iId');
-             $itemDesc = set_value('itemDesc');
-             $itemName = set_value('itemName');
-             $itemGroupID = set_value('itemGroupID');
-             $itemPriorityID = set_value('itemPriorityID');
+
+             $itemProduct = set_value('itemProduct');
+             $itemPlatform = set_value('itemPlatform');
+             $itemDevice = set_value('itemDevice');
+             $itemPerformance = set_value('itemPerformance');
              $itemVersion = set_value('itemVersion');
+             $itemResolution = set_value('itemResolution');
+             $itemPower = set_value('itemPower');
+             $itemReportDate = set_value('itemReportDate');
+             $itemDesc = set_value('itemDesc');
 
              //update item in db
-             $updated = $this->product->edit($itemId, $itemName, $itemGroupID, $itemPriorityID, $itemVersion, $itemDesc);
+             $updated = $this->productPerformance->edit($itemId, $itemProduct, $itemPlatform, $itemDevice, $itemPerformance, $itemVersion, $itemResolution, $itemPower, $itemReportDate, $itemDesc);
 
              $json['status'] = $updated ? 1 : 0;
 

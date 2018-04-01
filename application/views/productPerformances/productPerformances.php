@@ -216,66 +216,66 @@ if(isset($resolutions) && !empty($resolutions)){
 
                     <div class="row">
                         <div class="col-sm-4 form-group-sm">
-                            <label for="itemProduct">Product Name</label>
-                            <select class="form-control selectedProductDefault" id="itemProduct" name="itemProduct"
-                                onchange="checkField(this.value, 'itemProductErr')"></select>
-                            <span class="help-block errMsg" id="itemProductErr"></span>
+                            <label for="itemProductEdit">Product Name</label>
+                            <select class="form-control selectedProductDefault" id="itemProductEdit" name="itemProductEdit"
+                                onchange="checkField(this.value, 'itemProductEditErr')"></select>
+                            <span class="help-block errMsg" id="itemProductEditErr"></span>
                         </div>
                         <div class="col-sm-4 form-group-sm">
-                            <label for="itemPlatform">Platform</label>
-                            <select class="form-control selectedPlatformDefault" id="itemPlatform" name="itemPlatform"
-                                onchange="checkField(this.value, 'itemPlatformErr')"></select>
-                            <span class="help-block errMsg" id="itemPlatformErr"></span>
+                            <label for="itemPlatformEdit">Platform</label>
+                            <select class="form-control selectedPlatformDefault" id="itemPlatformEdit" name="itemPlatformEdit"
+                                onchange="checkField(this.value, 'itemPlatformEditErr')"></select>
+                            <span class="help-block errMsg" id="itemPlatformEditErr"></span>
                         </div>
                         <div class="col-sm-4 form-group-sm">
-                            <label for="itemDevice">Device</label>
-                            <select class="form-control selectedDeviceDefault" id="itemDevice" name="itemDevice"></select>
-                            <span class="help-block errMsg" id="itemDeviceErr"></span>
+                            <label for="itemDeviceEdit">Device</label>
+                            <select class="form-control selectedDeviceDefault" id="itemDeviceEdit" name="itemDeviceEdit"></select>
+                            <span class="help-block errMsg" id="itemDeviceEditErr"></span>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-4 form-group-sm">
-                            <label for="itemPerformance">Performance(ms)</label>
-                            <input type="text" id="itemPerformance" name="itemPerformance" placeholder="Performance(ms)" maxlength="80"
-                                class="form-control" onchange="checkField(this.value, 'itemPerformanceErr')">
-                            <span class="help-block errMsg" id="itemPerformanceErr"></span>
+                            <label for="itemPerformanceEdit">Performance(ms)</label>
+                            <input type="text" id="itemPerformanceEdit" name="itemPerformanceEdit" placeholder="Performance(ms)" maxlength="80"
+                                class="form-control" onchange="checkField(this.value, 'itemPerformanceEditErr')">
+                            <span class="help-block errMsg" id="itemPerformanceEditErr"></span>
                         </div>
                         <div class="col-sm-4 form-group-sm">
-                            <label for="itemPower">Power(ma)</label>
-                            <input type="text" id="itemPower" name="itemPower" placeholder="Power(ma)" maxlength="80"
-                                class="form-control" onchange="checkField(this.value, 'itemPowerErr')">
-                            <span class="help-block errMsg" id="itemPowerErr"></span>
+                            <label for="itemPowerEdit">Power(ma)</label>
+                            <input type="text" id="itemPowerEdit" name="itemPowerEdit" placeholder="Power(ma)" maxlength="80"
+                                class="form-control" onchange="checkField(this.value, 'itemPowerEditErr')">
+                            <span class="help-block errMsg" id="itemPowerEditErr"></span>
                         </div>
                         <div class="col-sm-4 form-group-sm">
-                            <label for="itemResolution">Image Resolution</label>
-                            <select class="form-control selectedResolutionDefault" id="itemResolution" name="itemResolution"
-                                onchange="checkField(this.value, 'itemResolutionErr')"></select>
-                            <span class="help-block errMsg" id="itemResolutionErr"></span>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-sm-4 form-group-sm">
-                            <label for="itemVersion">Version</label>
-                            <input type="text" id="itemVersion" name="itemVersion" placeholder="Version " maxlength="80"
-                                class="form-control" onchange="checkField(this.value, 'itemVersionErr')">
-                            <span class="help-block errMsg" id="itemVersionErr"></span>
+                            <label for="itemResolutionEdit">Image Resolution</label>
+                            <select class="form-control selectedResolutionDefault" id="itemResolutionEdit" name="itemResolutionEdit"
+                                onchange="checkField(this.value, 'itemResolutionEditErr')"></select>
+                            <span class="help-block errMsg" id="itemResolutionEditErr"></span>
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-sm-4 form-group-sm">
-                            <label for="itemReportDate">Report Date</label>
-                            <input type="text" id="itemReportDate" name="itemReportDate" placeholder="Report Date " maxlength="80"
-                                class="form-control" onchange="checkField(this.value, 'itemReportDateErr')">
-                            <span class="help-block errMsg" id="itemReportDateErr"></span>
+                            <label for="itemVersionEdit">Version</label>
+                            <input type="text" id="itemVersionEdit" name="itemVersionEdit" placeholder="Version " maxlength="80"
+                                class="form-control" onchange="checkField(this.value, 'itemVersionEditErr')">
+                            <span class="help-block errMsg" id="itemVersionEditErr"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-4 form-group-sm">
+                            <label for="itemReportDateEdit">Report Date</label>
+                            <input type="text" id="itemReportDateEdit" name="itemReportDateEdit" placeholder="Report Date " maxlength="80"
+                                class="form-control" onchange="checkField(this.value, 'itemReportDateEditErr')">
+                            <span class="help-block errMsg" id="itemReportDateEditErr"></span>
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-sm-12 form-group-sm">
-                            <label for="itemDesc" class="">Description (Optional)</label>
-                            <textarea class="form-control" id="itemDesc" name="itemDesc" rows='4'
+                            <label for="itemDescEdit" class="">Description (Optional)</label>
+                            <textarea class="form-control" id="itemDescEdit" name="itemDescEdit" rows='4'
                                 placeholder="Optional Product Description"></textarea>
                         </div>
                     </div>

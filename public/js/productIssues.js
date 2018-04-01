@@ -242,6 +242,7 @@ $(document).ready(function(){
             selected2_tag_update_optional(".selectedCustomerDefault", currentCustomers, itemCustomer, "Select Customer");
             selected2_tag_update_optional(".selectedProjectDefault", currentCustomerProjects, itemProject, "Select Project");
             selected2_tag_update_optional(".selectedIssueTypeDefault", currentIssueTypes, itemIssueType, "Select Issue Type");
+            resolve();
 		}).then(()=>{
 			//add select2 to the 'select input'
             $('.selectedProductDefault').select2({dropdownAutoWidth : true, width : "100%"});

@@ -127,11 +127,12 @@ class ProductPerformance extends CI_Model{
     * @param type $itemDesc
     * @param type $itemPrice
     */
-   public function edit($itemId, $itemName, $itemGroupID, $itemPriorityID, $itemVersion, $itemDesc){
-       $data = ['Name'=>$itemName, 'GroupID'=>$itemGroupID, 'PriorityID'=>$itemPriorityID, 'Version'=>$itemVersion, 'Notes'=>$itemDesc];
+   public function edit($itemId, $itemProduct, $itemPlatform, $itemDevice, $itemPerformance, $itemVersion, $itemResolution, $itemPower, $itemReportDate, $itemDesc) {
+       $data = ['ProductID'=>$itemProduct, 'PlatformID'=>$itemPlatform, 'Device'=>$itemDevice, 'Performance'=>$itemPerformance,
+       'Resolution'=>$itemResolution, 'Power'=>$itemPower, 'ReportDate'=>$itemReportDate, 'Version'=>$itemVersion, 'Notes'=>$itemDesc];
 
        $this->db->where('id', $itemId);
-       $this->db->update('product', $data);
+       $this->db->update('product_performance', $data);
 
        return TRUE;
    }

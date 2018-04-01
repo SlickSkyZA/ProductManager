@@ -259,8 +259,8 @@ $(document).ready(function(){
             selected2_tag_update_optional(".selectedCustomerDefault", currentCustomers, itemCustomer, "Select Customer");
             selected2_tag_update_optional(".selectedCamera1ResDefault", currentCamera1Res, itemCamera1Res, "Select Resolution");
             selected2_tag_update_optional(".selectedCamera0ResDefault", currentCamera0Res, itemCamera0Res, "Select Resolution");
-            selected2_tag_update_optional(".selectedCamera1Default", currentCamera1, itemCamera1, "Select CameraType");
-            selected2_tag_update_optional(".selectedCamera0Default", currentCamera0, itemCamera0, "Select CameraType");
+            selected2_tag_update_optional(".selectedCamera1Default", currentCamera1Types, itemCamera1, "Select CameraType");
+            selected2_tag_update_optional(".selectedCamera0Default", currentCamera0Types, itemCamera0, "Select CameraType");
             selected2_tag_update_optional(".selectedRAMDefault", currentRAMs, itemRAM, "Select RAM");
             selected2_tag_update_optional(".selectedGPUDefault", currentGPUs, itemGPU, "Select GPU");
             selected2_tag_update_optional(".selectedDSPDefault", currentDSPs, itemDSP, "Select DSP");
