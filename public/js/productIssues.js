@@ -104,11 +104,16 @@ $(document).ready(function(){
 
             success: function(returnedData){
                 if(returnedData.status === 1){
-                    selected2_tag_update_array(currentIssueTypes, itemIssueType, itemIssueTypeValue);
-
                     changeFlashMsgContent(returnedData.msg, "text-success", '', 1500);
-
                     document.getElementById("addNewItemForm").reset();
+
+                    selected2_tag_addnew_optional(".selectedIssueTypeDefault", "#itemIssueType", currentIssueTypes, itemIssueType, itemIssueTypeValue, "Select Issue Type");
+                    $("#itemProduct").val(itemProduct);
+                    $("#itemPriority").val(itemPriority);
+                    $("#itemCustomer").val(itemCustomer);
+                    $("#itemProject").val(itemProject);
+                    $("#itemVersion").val(itemVersion);
+                    $("#itemReportDate").val(itemReportDate);
 
                     //refresh the items list table
                     lilt();
@@ -293,6 +298,7 @@ $(document).ready(function(){
                 itemVersion:itemVersion, itemIssueType:itemIssueType, itemReportDate:itemReportDate, itemDesc:itemDesc, _iId:itemId}
         }).done(function(returnedData){
             if(returnedData.status === 1){
+                selected2_tag_update_array(currentIssueTypes, itemIssueType, itemIssueTypeValue);
                 $("#editItemFMsg").css('color', 'green').html("Product issue successfully updated");
 
                 setTimeout(function(){
@@ -476,7 +482,7 @@ function selected2_tag_update_optional(str, list, item, str2) {
 function selected2_tag_addnew_optional(str, strVal, list, item, itemVal, str2) {
     if(!inArray(item, list)){
         if (itemVal != '') {
-            currentDSPs.push(item);
+            list.push(item);
             $(str).empty();
             for(let key in list){
                 if (list[key] == item) {
@@ -499,7 +505,7 @@ function selected2_tag_addnew_optional(str, strVal, list, item, itemVal, str2) {
 function selected2_tag_update_array(list, item, itemVal) {
     if(!inArray(item, list)){
         if (itemVal != '') {
-            currentCamera0Types.push(item);
+            list.push(item);
         }
     }
 }

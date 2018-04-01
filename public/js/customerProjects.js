@@ -146,15 +146,15 @@ $(document).ready(function(){
                     document.getElementById("addNewItemForm").reset();
                     $("#itemCustomer").val(itemCustomer);
 
-                    selected2_tag_addnew_optional(".selectedSOCCompanyDefault", "#itemSOCCompany", currentSOCCompanies, itemSOCCompany, "Select SOC Company");
-                    selected2_tag_addnew_optional(".selectedSOCNameDefault", "#itemSOCName", currentSOCNames, itemSOCName, "Select SOC");
-                    selected2_tag_addnew_optional(".selectedDSPDefault", "#itemDSP", currentDSPs, itemDSP, "Select DSP");
-                    selected2_tag_addnew_optional(".selectedGPUDefault", "#itemGPU", currentGPUs, itemGPU, "Select GPU");
-                    selected2_tag_addnew_optional(".selectedRAMDefault", "#itemRAM", currentRAMs, itemRAM, "Select RAM");
-                    selected2_tag_addnew_optional(".selectedCamera0Default", "#itemCamera0", currentCamera0Types, itemCamera0, "Select Camera Type");
-                    selected2_tag_addnew_optional(".selectedCamera1Default", "#itemCamera1", currentCamera1Types, itemCamera1, "Select Camera Type");
-                    selected2_tag_addnew_optional(".selectedCamera0ResDefault", "#itemCamera0Res", currentCamera0Res, itemCamera0Res, "Select Resolution");
-                    selected2_tag_addnew_optional(".selectedCamera1ResDefault", "#itemCamera1Res", currentCamera1Res, itemCamera1Res, "Select Resolution");
+                    selected2_tag_addnew_optional(".selectedSOCCompanyDefault", "#itemSOCCompany", currentSOCCompanies, itemSOCCompany, itemSOCCompanyVal, "Select SOC Company");
+                    selected2_tag_addnew_optional(".selectedSOCNameDefault", "#itemSOCName", currentSOCNames, itemSOCName, itemSOCNameVal, "Select SOC");
+                    selected2_tag_addnew_optional(".selectedDSPDefault", "#itemDSP", currentDSPs, itemDSP, itemDSPVal,"Select DSP");
+                    selected2_tag_addnew_optional(".selectedGPUDefault", "#itemGPU", currentGPUs, itemGPU, itemGPUVal,"Select GPU");
+                    selected2_tag_addnew_optional(".selectedRAMDefault", "#itemRAM", currentRAMs, itemRAM, itemRAMVal,"Select RAM");
+                    selected2_tag_addnew_optional(".selectedCamera0Default", "#itemCamera0", currentCamera0Types, itemCamera0, itemCamera0Val, "Select Camera Type");
+                    selected2_tag_addnew_optional(".selectedCamera1Default", "#itemCamera1", currentCamera1Types, itemCamera1, itemCamera1Val, "Select Camera Type");
+                    selected2_tag_addnew_optional(".selectedCamera0ResDefault", "#itemCamera0Res", currentCamera0Res, itemCamera0Res, itemCamera0ResVal, "Select Resolution");
+                    selected2_tag_addnew_optional(".selectedCamera1ResDefault", "#itemCamera1Res", currentCamera1Res, itemCamera1Res, itemCamera1ResVal, "Select Resolution");
 
                     //refresh the items list table
                     lilt();
@@ -504,7 +504,7 @@ function selected2_tag_addnew_initial(str, list, str2) {
 function selected2_tag_addnew_optional(str, strVal, list, item, itemVal, str2) {
     if(!inArray(item, list)){
         if (itemVal != '') {
-            currentDSPs.push(item);
+            list.push(item);
             $(str).empty();
             for(let key in list){
                 if (list[key] == item) {
@@ -527,7 +527,7 @@ function selected2_tag_addnew_optional(str, strVal, list, item, itemVal, str2) {
 function selected2_tag_update_array(list, item, itemVal) {
     if(!inArray(item, list)){
         if (itemVal != '') {
-            currentCamera0Types.push(item);
+            list.push(item);
         }
     }
 }

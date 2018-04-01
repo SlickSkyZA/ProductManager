@@ -77,8 +77,8 @@ $(document).ready(function(){
         var itemDeviceValue = $("#itemDevice").val();
         var itemResolutionValue = $("#itemResolution").val();
 
-        var itemResolution = itemDeviceValue != '' ? $("#itemResolution").find("option:selected").text() : '';
-        var itemDevice = itemResolutionValue != '' ? $("#itemDevice").find("option:selected").text() : '';
+        var itemResolution = itemResolutionValue != '' ? $("#itemResolution").find("option:selected").text() : '';
+        var itemDevice = itemDeviceValue != '' ? $("#itemDevice").find("option:selected").text() : '';
 
         if(!itemProduct || !itemPlatform || !itemDeviceValue || !itemPerformance || !itemResolutionValue || !itemVersion || !itemReportDate){
             !itemProduct ? $("#itemProductErr").text("required") : "";
@@ -107,6 +107,9 @@ $(document).ready(function(){
                 if(returnedData.status === 1){
                     changeFlashMsgContent(returnedData.msg, "text-success", '', 1500);
                     document.getElementById("addNewItemForm").reset();
+
+                    selected2_tag_addnew_optional(".selectedDeviceDefault", "#itemDevice", currentDevices, itemDevice, itemDeviceValue, "Select Device");
+                    selected2_tag_addnew_optional(".selectedResolutionDefault", "#itemResolution", currentResolutions, itemResolution, itemResolutionValue, "Select Resolution");
 
                     //refresh the items list table
                     lilt();
@@ -283,6 +286,9 @@ $(document).ready(function(){
         }).done(function(returnedData){
             if(returnedData.status === 1){
                 $("#editItemFMsg").css('color', 'green').html("Product successfully updated");
+
+                selected2_tag_update_array(currentDevices, itemDevice, itemDeviceValue);
+                selected2_tag_update_array(currentResolutions, itemResolution, itemResolutionValue);
 
                 setTimeout(function(){
                     $("#editItemModal").modal('hide');
@@ -463,7 +469,7 @@ function selected2_tag_update_optional(str, list, item, str2) {
 function selected2_tag_addnew_optional(str, strVal, list, item, itemVal, str2) {
     if(!inArray(item, list)){
         if (itemVal != '') {
-            currentDSPs.push(item);
+            list.push(item);
             $(str).empty();
             for(let key in list){
                 if (list[key] == item) {
@@ -486,7 +492,7 @@ function selected2_tag_addnew_optional(str, strVal, list, item, itemVal, str2) {
 function selected2_tag_update_array(list, item, itemVal) {
     if(!inArray(item, list)){
         if (itemVal != '') {
-            currentCamera0Types.push(item);
+            list.push(item);
         }
     }
 }
