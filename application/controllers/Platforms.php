@@ -13,6 +13,8 @@ class Platforms extends CI_Controller{
         parent::__construct();
 
         $this->genlib->checkLogin();
+        
+        $this->genlib->AdminOnly();
 
         $this->load->model(['platform']);
     }

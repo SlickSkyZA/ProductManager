@@ -80,38 +80,27 @@ class ProductIssue extends CI_Model{
         }
     }
 
-    /*
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    */
-
     /**
      *
      * @param type $value
      * @return boolean
      */
-    public function itemsearch($value){
-        $q = "SELECT product_issue.id, product.Name ProductName, customer.Name CustomerName, IFNULL(customer_project.Name,'') ProjectName,
-                    product_issue.Version, priority.Name PriorityName, priority.Value PriorityValue, product_issue.AddedDate, product_issue.UpdatedDate,
-                    product_issue.IssueType, product_issue.Active, product_issue.ReportDate, product_issue.Notes
-                FROM product_issue
-                JOIN product ON product_issue.ProductID = product.id
-                JOIN customer ON product_issue.CustomerID = customer.id
-           left JOIN customer_project ON product_issue.ProjectID = customer_project.id
-                JOIN priority ON product_issue.PriorityID = priority.id
-                WHERE
-                product.Name LIKE '%".$this->db->escape_like_str($value)."%'";
+    public function itemsearch($orderBy, $orderFormat, $value){
+        $this->db->select('product_issue.id, product.Name ProductName, customer.Name CustomerName, IFNULL(customer_project.Name,"") ProjectName,
+        product_issue.Version, priority.Name PriorityName, priority.Value PriorityValue, product_issue.AddedDate, product_issue.UpdatedDate,
+        product_issue.IssueType, product_issue.Active, product_issue.ReportDate, product_issue.Notes');
 
-        $run_q = $this->db->query($q, [$value, $value]);
+        $this->db->join('product', 'product_issue.ProductID = product.id');
+        $this->db->join('customer', 'product_issue.CustomerID = customer.id');
+        $this->db->join('customer_project', 'product_issue.ProjectID = customer_project.id', 'left');
+        $this->db->join('priority', 'product_issue.PriorityID = priority.id');
 
+        $this->db->order_by($orderBy, $orderFormat);
+        $this->db->like('product.Name', $this->db->escape_like_str($value));
+        $run_q = $this->db->get('product_issue');
         if($run_q->num_rows() > 0){
             return $run_q->result();
-        }
-
-        else{
+        } else {
             return FALSE;
         }
     }

@@ -72,6 +72,11 @@ defined('BASEPATH') OR exit('');
                             </a>
                         </li> -->
                         <li class="dropdown">
+                            <a>
+                                <?=$this->session->admin_email?>
+                            </a>
+                        </li>
+                        <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                 <i class="fa fa-user navbarIcons"></i>
                                 <span class="caret"></span>
@@ -137,7 +142,9 @@ defined('BASEPATH') OR exit('');
                                 Products
                             </a>
                         </li>
+                        <?php endif; ?>
 
+                        <?php if($this->session->admin_role === "Admin" || $this->session->admin_role === "Super" || $this->session->admin_role === "QAMgr"):?>
                         <li class="<?= $pageTitle == 'Product Issues' ? 'active' : '' ?>">
                             <a href="<?= site_url('productIssues') ?>">
                                 <i class="fa fa-tag"></i>
@@ -151,7 +158,9 @@ defined('BASEPATH') OR exit('');
                                 Product Performance
                             </a>
                         </li>
+                        <?php endif; ?>
 
+                        <?php if($this->session->admin_role === "Admin" || $this->session->admin_role === "Super"):?>
                         <li class="<?= $pageTitle == 'Product Groups' ? 'active' : '' ?>">
                             <a href="<?= site_url('productGroups') ?>">
                                 <i class="fa fa-tag"></i>

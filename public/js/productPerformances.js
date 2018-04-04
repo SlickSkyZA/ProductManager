@@ -185,13 +185,15 @@ $(document).ready(function(){
      * @return {[type]} [description]
      */
     $("#itemSearch").keyup(function(){
+        var orderBy = $("#itemsListSortBy").val().split("-")[0];
+        var orderFormat = $("#itemsListSortBy").val().split("-")[1];
         var value = $(this).val();
         //console.log("The Priority NAME value: %s", value);
         if(value){
             $.ajax({
-                url: appRoot+"search/productIssueSearch",
+                url: appRoot+"search/productPerformanceSearch",
                 type: "get",
-                data: {v:value},
+                data: {orderBy:orderBy, orderFormat:orderFormat, v:value},
                 success: function(returnedData){
                     $("#itemsListTable").html(returnedData.itemsListTable);
                 }

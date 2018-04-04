@@ -95,6 +95,7 @@ defined('BASEPATH') OR exit('');
                                 <option value=''>Role</option>
                                 <option value='Super'>Super</option>
                                 <option value='Admin'>Admin</option>
+                                <option value='QAMgr'>QAMgr</option>
                                 <option value='Basic'>Basic</option>
                             </select>
                             <span class="help-block errMsg" id="roleErr"></span>
@@ -177,6 +178,8 @@ defined('BASEPATH') OR exit('');
                             <select class="form-control checkField" id='roleEdit'>
                                 <option value=''>Role</option>
                                 <option value='Super'>Super</option>
+                                <option value='Admin'>Admin</option>
+                                <option value='QAMgr'>QAMgr</option>
                                 <option value='Basic'>Basic</option>
                             </select>
                             <span class="help-block errMsg" id="roleEditErr"></span>

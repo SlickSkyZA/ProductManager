@@ -72,11 +72,9 @@ if(isset($resolutions) && !empty($resolutions)){
                         <label for="itemsListSortBy">Sort by</label>
                         <select id="itemsListSortBy" class="form-control">
                             <option value="ProductName-ASC">Product Name (A-Z)</option>
-                            <option value="CustomerName-ASC">Customer (Ascending)</option>
-                            <option value="PriorityValue-ASC">Priority (Ascending)</option>
+                            <option value="PlatformName-ASC">Platform (Ascending)</option>
                             <option value="ProductName-DESC">Product Name (Z-A)</option>
-                            <option value="CustomerName-DESC">Customer (Descending)</option>
-                            <option value="PriorityValue-DESC">Priority (Descending)</option>
+                            <option value="PlatformName-DESC">Platform (Descending)</option>
                         </select>
                     </div>
 

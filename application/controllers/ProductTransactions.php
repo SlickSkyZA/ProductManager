@@ -14,6 +14,8 @@ class ProductTransactions extends CI_Controller{
         parent::__construct();
 
         $this->genlib->checkLogin();
+        
+        $this->genlib->AdminOnly();
 
         $this->load->model(['productTransaction', 'priority', 'product', 'customer', 'platform', 'customerVender','productStatus','customerProject']);
     }

@@ -20,7 +20,7 @@ class Search extends CI_Controller{
 
         $this->load->model(['transaction', 'item', 'productGroup', 'priority', 'product', 'region',
         'platform', 'customer', 'productStatus', 'customerVender', 'productTransaction', 'customerType',
-        'customerProject', 'productIssue']);
+        'customerProject', 'productIssue', 'productPerformance']);
 
         $this->load->helper('text');
 
@@ -240,10 +240,31 @@ class Search extends CI_Controller{
      * @return [type] [description]
      */
     public function productIssueSearch() {
-        $data['allItems'] = $this->productIssue->itemsearch($this->value);
+        $orderBy = $this->input->get('orderBy', TRUE) ? $this->input->get('orderBy', TRUE) : "Name";
+        $orderFormat = $this->input->get('orderFormat', TRUE) ? $this->input->get('orderFormat', TRUE) : "ASC";
+
+        $data['allItems'] = $this->productIssue->itemsearch($orderBy, $orderFormat, $this->value);
         $data['sn'] = 1;
 
         $json['itemsListTable'] = $data['allItems'] ? $this->load->view('productIssues/productIssueslisttable', $data, TRUE) : "No match found {$this->value}";
+
+        //set final output
+        $this->output->set_content_type('application/json')->set_output(json_encode($json));
+    }
+
+    /**
+     * [productIssueSearch description]
+     * @return [type] [description]
+     */
+    public function productPerformanceSearch() {
+        //set the sort order
+        $orderBy = $this->input->get('orderBy', TRUE) ? $this->input->get('orderBy', TRUE) : "Name";
+        $orderFormat = $this->input->get('orderFormat', TRUE) ? $this->input->get('orderFormat', TRUE) : "ASC";
+
+        $data['allItems'] = $this->productPerformance->itemsearch($orderBy, $orderFormat, $this->value);
+        $data['sn'] = 1;
+
+        $json['itemsListTable'] = $data['allItems'] ? $this->load->view('productPerformances/productPerformanceslisttable', $data, TRUE) : "No match found {$this->value}";
 
         //set final output
         $this->output->set_content_type('application/json')->set_output(json_encode($json));

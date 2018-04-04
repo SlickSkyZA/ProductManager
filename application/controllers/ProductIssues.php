@@ -15,6 +15,8 @@ class ProductIssues extends CI_Controller{
 
         $this->genlib->checkLogin();
 
+        $this->genlib->QAMgrOnly();
+
         $this->load->model(['customer', 'customerProject', 'priority', 'product', 'productIssue']);
     }
 

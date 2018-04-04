@@ -14,6 +14,8 @@ class CustomerProjects extends CI_Controller{
 
         $this->genlib->checkLogin();
 
+        $this->genlib->AdminOnly();
+
         $this->load->model(['customerProject', 'customer']);
     }
 
