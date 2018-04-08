@@ -30,7 +30,7 @@
                     <td><span id="itemUpdateDate-<?=$get->id?>"><?=$get->UpdatedDate?></td>
                     <td>
                         <span id="itemDesc-<?=$get->id?>" data-toggle="tooltip" title="<?=$get->Notes?>" data-placement="auto">
-                            <?=character_limiter($get->Notes, 15)?>
+                            <?=ellipsize_text($get->Notes, 10)?>
                         </span>
                     </td>
                     <td class="text-center text-primary">

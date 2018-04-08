@@ -217,7 +217,7 @@ $(document).ready(function(){
         var itemPower = $("#itemPower-"+itemId).html();
         var itemVersion = $("#itemVersion-"+itemId).html();
         var itemReportDate = $("#itemReportDate-"+itemId).html();
-        var itemDesc = $("#itemDesc-"+itemId).html();
+        var itemDesc = $("#itemDesc-"+itemId).attr('title');
         var itemDevice = $("#itemDevice-"+itemId).html();
         var itemResolution = $("#itemResolution-"+itemId).html();
 

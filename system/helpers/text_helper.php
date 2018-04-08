@@ -67,14 +67,14 @@ if ( ! function_exists('word_limiter'))
 		{
 			return $str;
 		}
-		
+
 		preg_match('/^\s*+(?:\S++\s*+){1,'.(int) $limit.'}/', $str, $matches);
 
 		if (strlen($str) === strlen($matches[0]))
 		{
 			$end_char = '';
 		}
-  
+
 		return rtrim($matches[0]).$end_char;
 	}
 }
@@ -563,5 +563,32 @@ if ( ! function_exists('ellipsize'))
 		}
 
 		return $beg.$ellipsis.$end;
+	}
+
+	/**
+	 * Ellipsize String
+	 *
+	 * This function will strip tags from a string, split it at its max_length and ellipsize
+	 *
+	 * @param	string	string to ellipsize
+	 * @param	int	max length of string
+	 * @param	mixed	int (1|0) or float, .5, .2, etc for position to split
+	 * @param	string	ellipsis ; Default '...'
+	 * @return	string	ellipsized string
+	 */
+	function ellipsize_text($str, $max_length, $ellipsis = '&hellip;')
+	{
+		// Strip tags
+		$str = trim(strip_tags($str));
+
+		// Is the string long enough to ellipsize?
+		if (mb_strlen($str) <= $max_length)
+		{
+			return $str;
+		}
+
+		$beg = mb_substr($str, 0, floor($max_length));
+
+		return $beg.$ellipsis;
 	}
 }
