@@ -16,14 +16,14 @@ class CustomerProjects extends CI_Controller{
 
         $this->genlib->AdminOnly();
 
-        $this->load->model(['customerProject', 'customer']);
+        $this->load->model(['customerProject', 'company']);
     }
 
     /**
      *
      */
     public function index(){
-        $transData['customers'] = $this->customer->getActiveItems('Name', 'ASC');//get items with at least one qty left, to be used when doing a new transaction
+        $transData['customers'] = $this->company->getActiveItems('Name', 'Customer', 'ASC');//get items with at least one qty left, to be used when doing a new transaction
         $transData['soc_companies'] = $this->customerProject->getTagItems('SOCCompany', 'ASC');//get items with at least one qty left, to be used when doing a new transaction
         $transData['soc_names'] = $this->customerProject->getTagItems('SOCName', 'ASC');//get items with at least one qty left, to be used when doing a new transaction
         $transData['hardware_DSP'] = $this->customerProject->getTagItems('DSP', 'ASC');//get items with at least one qty left, to be used when doing a new transaction

@@ -19,7 +19,7 @@ class Search extends CI_Controller{
         $this->genlib->ajaxOnly();
 
         $this->load->model(['transaction', 'item', 'productGroup', 'priority', 'product', 'region',
-        'platform', 'customer', 'productStatus', 'customerVender', 'productTransaction', 'customerType',
+        'platform', 'company', 'productStatus', 'customerVender', 'productTransaction', 'customerType',
         'customerProject', 'productIssue', 'productPerformance']);
 
         $this->load->helper('text');
@@ -133,18 +133,19 @@ class Search extends CI_Controller{
         $this->output->set_content_type('application/json')->set_output(json_encode($json));
     }
 
-    /*
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    */
-    public function customerSearch(){
-        $data['allItems'] = $this->customer->itemsearch($this->value);
+    /**
+     *
+     * @return [type] [description]
+     */
+    public function companySearch(){
+        //set the sort order
+        $orderBy = $this->input->get('orderBy', TRUE) ? $this->input->get('orderBy', TRUE) : "Name";
+        $orderFormat = $this->input->get('orderFormat', TRUE) ? $this->input->get('orderFormat', TRUE) : "ASC";
+
+        $data['allItems'] = $this->company->itemsearch($orderBy, $orderFormat, $this->value);
         $data['sn'] = 1;
 
-        $json['itemsListTable'] = $data['allItems'] ? $this->load->view('customers/customerslisttable', $data, TRUE) : "No match found {$this->value}";
+        $json['itemsListTable'] = $data['allItems'] ? $this->load->view('companies/companieslisttable', $data, TRUE) : "No match found {$this->value}";
 
         //set final output
         $this->output->set_content_type('application/json')->set_output(json_encode($json));

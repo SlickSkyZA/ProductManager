@@ -12,22 +12,24 @@ class CustomerProject extends CI_Model{
         parent::__construct();
     }
 
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+    /**
+     * [getAll description]
+     * @param  [type]  $orderBy     [description]
+     * @param  [type]  $orderFormat [description]
+     * @param  integer $start       [description]
+     * @param  string  $limit       [description]
+     * @return [type]               [description]
+     */
     public function getAll($orderBy, $orderFormat, $start=0, $limit=''){
         $this->db->limit($limit, $start);
         $this->db->order_by($orderBy, $orderFormat);
 
-        $this->db->select('customer_project.id, customer_project.Name, customer.Name CustomerName, customer_project.SOCCompany,
+        $this->db->select('customer_project.id, customer_project.Name, company.Name CustomerName, customer_project.SOCCompany,
         customer_project.SOCName, customer_project.GPU, customer_project.DSP, customer_project.RAM, customer_project.FrontCameraType,
         customer_project.RearCameraType, customer_project.AddedDate, customer_project.UpdatedDate, customer_project.Notes,
         customer_project.RearCameraRes, customer_project.FrontCameraRes, customer_project.CodeFreeze, customer_project.MP, customer_project.Ship');
 
-        $this->db->join('customer', 'customer_project.CustomerID = customer.id');
+        $this->db->join('company', 'customer_project.CustomerID = company.id');
 
         $run_q = $this->db->get('customer_project');
 
@@ -39,15 +41,6 @@ class CustomerProject extends CI_Model{
             return FALSE;
         }
     }
-
-    /*
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    */
-
 
     /**
      *
@@ -98,26 +91,18 @@ class CustomerProject extends CI_Model{
         }
     }
 
-    /*
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    */
-
     /**
      *
      * @param type $value
      * @return boolean
      */
     public function itemsearch($value){
-        $q = "SELECT customer_project.id, customer_project.Name, customer.Name CustomerName, customer_project.SOCCompany,
+        $q = "SELECT customer_project.id, customer_project.Name, company.Name CustomerName, customer_project.SOCCompany,
         customer_project.SOCName, customer_project.GPU, customer_project.DSP, customer_project.RAM, customer_project.FrontCameraType,
         customer_project.FrontCameraRes, customer_project.RearCameraRes,
         customer_project.RearCameraType, customer_project.CodeFreeze, customer_project.MP, customer_project.Ship, customer_project.AddedDate, customer_project.UpdatedDate, customer_project.Notes
             FROM customer_project
-            JOIN customer ON customer_project.CustomerID = customer.id
+            JOIN company ON customer_project.CustomerID = company.id
             WHERE
             customer_project.Name LIKE '%".$this->db->escape_like_str($value)."%'";
 
@@ -131,14 +116,6 @@ class CustomerProject extends CI_Model{
             return FALSE;
         }
     }
-
-   /*
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    */
 
    /**
     *
@@ -175,14 +152,12 @@ class CustomerProject extends CI_Model{
        return TRUE;
    }
 
-   /*
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    */
-
+    /**
+     * [getTagItems description]
+     * @param  [type] $orderBy     [description]
+     * @param  [type] $orderFormat [description]
+     * @return [type]              [description]
+     */
 	public function getTagItems($orderBy, $orderFormat){
         $this->db->order_by($orderBy, $orderFormat);
         $this->db->select($orderBy);
@@ -192,32 +167,26 @@ class CustomerProject extends CI_Model{
 
         if($run_q->num_rows() > 0){
             return $run_q->result();
-        }
-
-        else{
+        } else {
             return FALSE;
         }
     }
 
-    /*
-     ********************************************************************************************************************************
-     ********************************************************************************************************************************
-     ********************************************************************************************************************************
-     ********************************************************************************************************************************
-     ********************************************************************************************************************************
-     */
+    /**
+    * [getActiveItems description]
+    * @param  [type] $orderBy     [description]
+    * @param  [type] $orderFormat [description]
+    * @return [type]              [description]
+    */
+    public function getActiveItems($orderBy, $orderFormat){
+        $this->db->order_by($orderBy, $orderFormat);
 
-   public function getActiveItems($orderBy, $orderFormat){
-         $this->db->order_by($orderBy, $orderFormat);
+        $run_q = $this->db->get('customer_project');
 
-         $run_q = $this->db->get('customer_project');
-
-         if($run_q->num_rows() > 0){
-             return $run_q->result();
-         }
-
-         else{
-             return FALSE;
-         }
-     }
+        if($run_q->num_rows() > 0){
+            return $run_q->result();
+        } else {
+            return FALSE;
+        }
+    }
 }

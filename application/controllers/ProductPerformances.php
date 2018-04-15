@@ -17,23 +17,19 @@ class ProductPerformances extends CI_Controller{
 
         $this->genlib->QAMgrOnly();
 
-        $this->load->model(['customer', 'customerProject', 'platform', 'product', 'productPerformance']);
+        $this->load->model(['company', 'customerProject', 'platform', 'product', 'productPerformance']);
     }
 
-    /*
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    */
-
+    /**
+     * [index description]
+     * @return [type] [description]
+     */
     public function index(){
         $transData['platforms'] = $this->platform->getActiveItems('Name', 'ASC');
         $transData['products'] = $this->product->getActiveItems('Name', 'ASC');
         $transData['devices'] = $this->productPerformance->getTagItems('Device', 'ASC');
         $transData['resolutions'] = $this->productPerformance->getTagItems('Resolution', 'ASC');
-        $transData['customers'] = $this->customer->getActiveItems('Name', 'ASC');
+        $transData['customers'] = $this->company->getActiveItems('Name', 'Customer', 'ASC');
         $transData['customerProjects'] = $this->customerProject->getActiveItems('Name', 'ASC');
 
         $data['pageContent'] = $this->load->view('productPerformances/productPerformances', $transData, TRUE);

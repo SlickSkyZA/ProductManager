@@ -14,10 +14,10 @@ class ProductTransactions extends CI_Controller{
         parent::__construct();
 
         $this->genlib->checkLogin();
-        
+
         $this->genlib->AdminOnly();
 
-        $this->load->model(['productTransaction', 'priority', 'product', 'customer', 'platform', 'customerVender','productStatus','customerProject']);
+        $this->load->model(['productTransaction', 'priority', 'product', 'company', 'platform', 'productStatus','customerProject']);
     }
 
     /*
@@ -31,9 +31,9 @@ class ProductTransactions extends CI_Controller{
     public function index(){
         $transData['priorities'] = $this->priority->getActiveItems('Name', 'ASC');//get items with at least one qty left, to be used when doing a new transaction
         $transData['products'] = $this->product->getActiveItems('Name', 'ASC');
-        $transData['customers'] = $this->customer->getActiveItems('Name', 'ASC');
+        $transData['customers'] = $this->company->getActiveItems('Name', 'Customer', 'ASC');
         $transData['product_platforms'] = $this->platform->getActiveItems('Name', 'ASC');
-        $transData['customer_venders'] = $this->customerVender->getActiveItems('Name', 'ASC');
+        $transData['customer_venders'] = $this->company->getActiveItems('Name', 'Competitor', 'ASC');
         $transData['customer_projects'] = $this->customerProject->getActiveItems('Name', 'ASC');
         $transData['product_statuses'] = $this->productStatus->getActiveItems('Name', 'ASC');
 

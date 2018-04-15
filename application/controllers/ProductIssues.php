@@ -17,20 +17,16 @@ class ProductIssues extends CI_Controller{
 
         $this->genlib->QAMgrOnly();
 
-        $this->load->model(['customer', 'customerProject', 'priority', 'product', 'productIssue']);
+        $this->load->model(['company', 'customerProject', 'priority', 'product', 'productIssue']);
     }
 
-    /*
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    */
-
+    /**
+     * [index description]
+     * @return [type] [description]
+     */
     public function index(){
         $transData['priorities'] = $this->priority->getActiveItems('Name', 'ASC');//get items with at least one qty left, to be used when doing a new transaction
-        $transData['customers'] = $this->customer->getActiveItems('Name', 'ASC');
+        $transData['customers'] = $this->company->getActiveItems('Name', 'Customer', 'ASC');
         $transData['customerProjects'] = $this->customerProject->getActiveItems('Name', 'ASC');
         $transData['products'] = $this->product->getActiveItems('Name', 'ASC');
         $transData['productIssues'] = $this->productIssue->getTagItems('IssueType', 'ASC');

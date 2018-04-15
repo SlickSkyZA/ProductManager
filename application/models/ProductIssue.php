@@ -12,21 +12,23 @@ class ProductIssue extends CI_Model{
         parent::__construct();
     }
 
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+    /**
+     * [getAll description]
+     * @param  [type]  $orderBy     [description]
+     * @param  [type]  $orderFormat [description]
+     * @param  integer $start       [description]
+     * @param  string  $limit       [description]
+     * @return [type]               [description]
+     */
     public function getAll($orderBy, $orderFormat, $start=0, $limit=''){
         $this->db->limit($limit, $start);
         $this->db->order_by($orderBy, $orderFormat);
-        $this->db->select('product_issue.id, product.Name ProductName, customer.Name CustomerName, IFNULL(customer_project.Name,"") ProjectName,
+        $this->db->select('product_issue.id, product.Name ProductName, company.Name CustomerName, IFNULL(customer_project.Name,"") ProjectName,
         product_issue.Version, priority.Name PriorityName, priority.Value PriorityValue, product_issue.AddedDate, product_issue.UpdatedDate,
         product_issue.IssueType, product_issue.Active, product_issue.ReportDate, product_issue.Notes');
 
         $this->db->join('product', 'product_issue.ProductID = product.id');
-        $this->db->join('customer', 'product_issue.CustomerID = customer.id');
+        $this->db->join('company', 'product_issue.CustomerID = company.id');
         $this->db->join('customer_project', 'product_issue.ProjectID = customer_project.id', 'left');
         $this->db->join('priority', 'product_issue.PriorityID = priority.id');
 
@@ -38,15 +40,6 @@ class ProductIssue extends CI_Model{
             return FALSE;
         }
     }
-
-    /*
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    */
-
 
     /**
      *
@@ -86,12 +79,12 @@ class ProductIssue extends CI_Model{
      * @return boolean
      */
     public function itemsearch($orderBy, $orderFormat, $value){
-        $this->db->select('product_issue.id, product.Name ProductName, customer.Name CustomerName, IFNULL(customer_project.Name,"") ProjectName,
+        $this->db->select('product_issue.id, product.Name ProductName, company.Name CustomerName, IFNULL(customer_project.Name,"") ProjectName,
         product_issue.Version, priority.Name PriorityName, priority.Value PriorityValue, product_issue.AddedDate, product_issue.UpdatedDate,
         product_issue.IssueType, product_issue.Active, product_issue.ReportDate, product_issue.Notes');
 
         $this->db->join('product', 'product_issue.ProductID = product.id');
-        $this->db->join('customer', 'product_issue.CustomerID = customer.id');
+        $this->db->join('company', 'product_issue.CustomerID = company.id');
         $this->db->join('customer_project', 'product_issue.ProjectID = customer_project.id', 'left');
         $this->db->join('priority', 'product_issue.PriorityID = priority.id');
 
@@ -122,7 +115,12 @@ class ProductIssue extends CI_Model{
        return TRUE;
    }
 
-
+   /**
+    * [getTagItems description]
+    * @param  [type] $orderBy     [description]
+    * @param  [type] $orderFormat [description]
+    * @return [type]              [description]
+    */
    public function getTagItems($orderBy, $orderFormat){
        $this->db->order_by($orderBy, $orderFormat);
        $this->db->select($orderBy);
@@ -137,7 +135,13 @@ class ProductIssue extends CI_Model{
        }
    }
 
-	public function getActiveItems($orderBy, $orderFormat){
+   /**
+    * [getActiveItems description]
+    * @param  [type] $orderBy     [description]
+    * @param  [type] $orderFormat [description]
+    * @return [type]              [description]
+    */
+    public function getActiveItems($orderBy, $orderFormat){
         $this->db->order_by($orderBy, $orderFormat);
         $run_q = $this->db->get('product_issue');
         if($run_q->num_rows() > 0){
@@ -145,30 +149,5 @@ class ProductIssue extends CI_Model{
         } else {
             return FALSE;
         }
-    }
-
-
-    /*
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    */
-
-    /**
-     * array $where_clause
-     * array $fields_to_fetch
-     *
-     * return array | FALSE
-     */
-    public function getItemInfo($where_clause, $fields_to_fetch){
-        $this->db->select($fields_to_fetch);
-
-        $this->db->where($where_clause);
-
-        $run_q = $this->db->get('product group');
-
-        return $run_q->num_rows() ? $run_q->row() : FALSE;
     }
 }

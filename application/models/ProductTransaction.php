@@ -12,21 +12,23 @@ class ProductTransaction extends CI_Model{
         parent::__construct();
     }
 
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+    /**
+     * [getAll description]
+     * @param  [type]  $orderBy     [description]
+     * @param  [type]  $orderFormat [description]
+     * @param  integer $start       [description]
+     * @param  string  $limit       [description]
+     * @return [type]               [description]
+     */
     public function getAll($orderBy, $orderFormat, $start=0, $limit=''){
         $this->db->limit($limit, $start);
         $this->db->order_by($orderBy, $orderFormat);
-        $this->db->select('xscp.id, product.Name ProductName, customer.Name CustomerName, IFNULL(customer_vender.Name,"") CompetitorName,
+        $this->db->select('xscp.id, product.Name ProductName, company.Name CustomerName, IFNULL(customer_vender.Name,"") CompetitorName,
         priority.Name PriorityName, product_status.Name StatusName, priority.Value PriorityValue, product_platform.Name PlatformName,
         IFNULL(customer_project.Name,"") ProjectName, xscp.MilestoneDate, xscp.AddedDate, xscp.UpdatedDate, xscp.Notes');
 
         $this->db->join('product', 'xscp.ProductID = product.id');
-        $this->db->join('customer', 'xscp.CustomerID = customer.id');
+        $this->db->join('company', 'xscp.CustomerID = company.id');
         $this->db->join('customer_vender', 'xscp.VenderID = customer_vender.id', 'left');
         $this->db->join('customer_project', 'xscp.ProjectID = customer_project.id', 'left');
         $this->db->join('product_status', 'xscp.StatusID = product_status.id');

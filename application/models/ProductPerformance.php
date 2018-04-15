@@ -12,24 +12,26 @@ class ProductPerformance extends CI_Model{
         parent::__construct();
     }
 
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+    /**
+     * [getAll description]
+     * @param  [type]  $orderBy     [description]
+     * @param  [type]  $orderFormat [description]
+     * @param  integer $start       [description]
+     * @param  string  $limit       [description]
+     * @return [type]               [description]
+     */
     public function getAll($orderBy, $orderFormat, $start=0, $limit=''){
         $this->db->limit($limit, $start);
         $this->db->order_by($orderBy, $orderFormat);
         $this->db->select('product_performance.id, product.Name ProductName, product_platform.Name PlatformName,
-        customer.Name CustomerName, IFNULL(customer_project.Name,"") ProjectName,
+        company.Name CustomerName, IFNULL(customer_project.Name,"") ProjectName,
         product_performance.Version, product_performance.Device, product_performance.Performance,
         product_performance.AddedDate, product_performance.UpdatedDate,
         product_performance.Power, product_performance.Resolution, product_performance.ReportDate, product_performance.Notes');
 
         $this->db->join('product', 'product_performance.ProductID = product.id');
         $this->db->join('product_platform', 'product_performance.PlatformID = product_platform.id');
-        $this->db->join('customer', 'product_performance.CustomerID = customer.id');
+        $this->db->join('company', 'product_performance.CustomerID = company.id');
         $this->db->join('customer_project', 'product_performance.ProjectID = customer_project.id', 'left');
 
         $run_q = $this->db->get('product_performance');
@@ -40,15 +42,6 @@ class ProductPerformance extends CI_Model{
             return FALSE;
         }
     }
-
-    /*
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    */
-
 
     /**
      *
@@ -86,12 +79,15 @@ class ProductPerformance extends CI_Model{
      */
     public function itemsearch($orderBy, $orderFormat, $value){
         $this->db->select('product_performance.id, product.Name ProductName, product_platform.Name PlatformName,
+        company.Name CustomerName, IFNULL(customer_project.Name,"") ProjectName,
         product_performance.Version, product_performance.Device, product_performance.Performance,
         product_performance.AddedDate, product_performance.UpdatedDate,
         product_performance.Power, product_performance.Resolution, product_performance.ReportDate, product_performance.Notes');
 
         $this->db->join('product', 'product_performance.ProductID = product.id');
         $this->db->join('product_platform', 'product_performance.PlatformID = product_platform.id');
+        $this->db->join('company', 'product_performance.CustomerID = company.id');
+        $this->db->join('customer_project', 'product_performance.ProjectID = customer_project.id', 'left');
         $this->db->order_by($orderBy, $orderFormat);
         $this->db->like('product.Name', $this->db->escape_like_str($value));
         $run_q = $this->db->get('product_performance');

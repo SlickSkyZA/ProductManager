@@ -18,11 +18,11 @@ defined('BASEPATH') OR exit('');
         <link rel="stylesheet" href="<?=base_url()?>public/bootstrap/css/bootstrap-theme.min.css" media="screen">
         <link rel="stylesheet" href="<?=base_url()?>public/font-awesome/css/font-awesome.min.css">
         <link rel="stylesheet" href="<?=base_url()?>public/font-awesome/css/font-awesome-animation.min.css">
-        <link rel="stylesheet" href="<?=base_url()?>public/ext/select2/select2.min.css">
+        <link rel="stylesheet" href="<?=base_url()?>public/select2/select2.min.css">
 
         <script src="<?=base_url()?>public/jquery/jquery.min.js"></script>
         <script src="<?=base_url()?>public/bootstrap/js/bootstrap.min.js"></script>
-        <script src="<?=base_url()?>public/ext/select2/select2.min.js"></script>
+        <script src="<?=base_url()?>public/select2/select2.min.js"></script>
         <script src="<?=base_url()?>public/jquery-ui-1.12.1/jquery-ui.min.js"></script>
 
         <?php else: ?>
@@ -44,6 +44,7 @@ defined('BASEPATH') OR exit('');
 
         <!-- custom JS -->
         <script src="<?= base_url() ?>public/js/main.js"></script>
+        <script src="<?= base_url() ?>public/js/utils_select.js"></script>
     </head>
 
     <body>
@@ -182,10 +183,10 @@ defined('BASEPATH') OR exit('');
                             </a>
                         </li>
 
-                        <li class="<?= $pageTitle == 'Customers' ? 'active' : '' ?>">
-                            <a href="<?= site_url('customers') ?>">
+                        <li class="<?= $pageTitle == 'Companies' ? 'active' : '' ?>">
+                            <a href="<?= site_url('companies') ?>">
                                 <i class="fa fa-archive"></i>
-                                Customers
+                                Companies
                             </a>
                         </li>
 

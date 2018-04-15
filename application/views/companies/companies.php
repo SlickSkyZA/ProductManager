@@ -40,7 +40,7 @@ if(isset($customer_types) && !empty($customer_types)){
             <div class="row">
                 <div class="col-sm-12">
                     <div class="col-sm-2 form-inline form-group-sm">
-                        <button class="btn btn-primary btn-sm" id='createItem'>Add New Customers</button>
+                        <button class="btn btn-primary btn-sm" id='createItem'>Add New Company</button>
                     </div>
 
                     <div class="col-sm-3 form-inline form-group-sm">
@@ -61,8 +61,8 @@ if(isset($customer_types) && !empty($customer_types)){
                     <div class="col-sm-4 form-group-sm form-inline">
                         <label for="itemsListSortBy">Sort by</label>
                         <select id="itemsListSortBy" class="form-control">
-                            <option value="Name-ASC">Customer Name (A-Z)</option>
-                            <option value="Name-DESC">Customer Name (Z-A)</option>
+                            <option value="Name-ASC">Company Name (A-Z)</option>
+                            <option value="Name-DESC">Company Name (Z-A)</option>
                             <option value="RegionID-ASC">Region (Ascending)</option>
                             <option value="RegionID-DESC">Region (Descending)</option>
                             <option value="TypeID-ASC">Type (Ascending)</option>
@@ -99,49 +99,58 @@ if(isset($customer_types) && !empty($customer_types)){
 
                         <div class="row">
                             <div class="col-sm-12 form-group-sm">
-                                <label for="customerName">Customer Name</label>
-                                <input type="text" id="customerName" name="customerName" placeholder="Customer Name" maxlength="80"
-                                    class="form-control" onchange="checkField(this.value, 'customerNameErr')">
-                                <span class="help-block errMsg" id="customerNameErr"></span>
+                                <label for="itemName">Company Name</label>
+                                <input type="text" id="itemName" name="itemName" placeholder="Customer Name" maxlength="80"
+                                    class="form-control" onchange="checkField(this.value, 'itemNameErr')">
+                                <span class="help-block errMsg" id="itemNameErr"></span>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-sm-12 form-group-sm">
-                                <label for="customerRegion">Customer Region</label>
-                                <select class="form-control selectedGroupDefault" id="customerRegion" name="customerRegion" maxlength="80"
-                                    onchange="checkField(this.value, 'customerRegionErr')"></select>
-                                <span class="help-block errMsg" id="customerRegionErr"></span>
+                                <label for="itemRegion">Company Region(Optional)</label>
+                                <select class="form-control selectedGroupDefault" id="itemRegion" name="itemRegion" maxlength="80"></select>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-sm-12 form-group-sm">
-                                <label for="customerType">Customer Type</label>
-                                <select class="form-control selectedTypeDefault" id="customerType" name="customerType" maxlength="80"
-                                    onchange="checkField(this.value, 'customerTypeErr')"></select>
-                                <span class="help-block errMsg" id="customerTypeErr"></span>
+                                <label for="itemType">Company Type</label>
+                                <select class="form-control selectedTypeDefault" id="itemType" name="itemType"
+                                    onchange="checkField(this.value, 'itemTypeErr')"></select>
+                                <span class="help-block errMsg" id="itemTypeErr"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 form-group-sm">
+                                <label for="itemRSType">Company Relationship</label>
+                                <select class="form-control selectedRSTypeDefault" id="itemRSType" name="itemRSType"
+                                    onchange="checkField(this.value, 'itemRSTypeErr')">
+                                    <option value="Customer">Customer</option>
+                                    <option value="Competitor">Competitor</option>
+                                </select>
+                                <span class="help-block errMsg" id="itemRSTypeErr"></span>
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-sm-12 form-group-sm">
-                                <label for="priority">Priority</label>
-                                <select class="form-control selectedPriorityDefault" id="priority" name="priority" maxlength="80"
-                                    onchange="checkField(this.value, 'priorityErr')"></select>
-                                <span class="help-block errMsg" id="priorityErr"></span>
+                                <label for="itemPriority">Priority</label>
+                                <select class="form-control selectedPriorityDefault" id="itemPriority" name="itemPriority" maxlength="80"
+                                    onchange="checkField(this.value, 'itemPriorityErr')"></select>
+                                <span class="help-block errMsg" id="itemPriorityErr"></span>
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-sm-12 form-group-sm">
-                                <label for="description" class="">Description (Optional)</label>
-                                <textarea class="form-control" id="description" name="description" rows='4'
+                                <label for="itemDesc" class="">Description (Optional)</label>
+                                <textarea class="form-control" id="itemDesc" name="itemDesc" rows='4'
                                     placeholder="Optional Product Description"></textarea>
                             </div>
                         </div>
                         <br>
                         <div class="row text-center">
                             <div class="col-sm-6 form-group-sm">
-                                <button class="btn btn-primary btn-sm" id="addNewItem">Add Customer</button>
+                                <button class="btn btn-primary btn-sm" id="addNewItem">Add Company</button>
                             </div>
 
                             <div class="col-sm-6 form-group-sm">
@@ -177,33 +186,51 @@ if(isset($customer_types) && !empty($customer_types)){
                 <div id="editItemFMsg" class="text-center"></div>
             </div>
             <div class="modal-body">
-                <form name="addNewItemForm" id="addNewItemForm" role="form">
+                <form name="editItemForm" id="editItemForm" role="form">
                     <div class="row">
                         <div class="col-sm-4 form-group-sm">
-                            <label for="itemNameEdit">Customer Name</label>
+                            <label for="itemNameEdit">Company Name</label>
                             <input type="text" id="itemNameEdit" placeholder="Priority Name" autofocus class="form-control  checkField">
                             <span class="help-block errMsg" id="itemNameEditErr"></span>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-4 form-group-sm">
-                            <label for="itemRegionEdit">Customer Region</label>
-                            <select class="form-control selectedGroupDefault checkField" id="itemRegionEdit" name="itemRegionEdit"></select>
+                            <label for="itemRegionEdit">Company Region(Optional)</label>
+                            <select class="form-control selectedGroupDefault" id="itemRegionEdit" name="itemRegionEdit"></select>
                             <span class="help-block errMsg" id="itemRegionEditErr"></span>
                         </div>
                     </div>
-
                     <div class="row">
                         <div class="col-sm-4 form-group-sm">
-                            <label for="itemPriorityEdit">Product Priority</label>
+                            <label for="itemTypeEdit">Company Type</label>
+                            <select class="form-control selectedTypeDefault" id="itemTypeEdit" name="itemTypeEdit"
+                                onchange="checkField(this.value, 'itemTypeEditErr')"></select>
+                            <span class="help-block errMsg" id="itemTypeEditErr"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4 form-group-sm">
+                            <label for="itemRSTypeEdit">Company Relationship</label>
+                            <select class="form-control selectedRSTypeDefault" id="itemRSTypeEdit" name="itemRSTypeEdit"
+                                onchange="checkField(this.value, 'itemRSTypeEditErr')">
+                                <option value="Customer">Customer</option>
+                                <option value="Competitor">Competitor</option>
+                            </select>
+                            <span class="help-block errMsg" id="itemRSTypeEditErr"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4 form-group-sm">
+                            <label for="itemPriorityEdit">Company Priority</label>
                             <select class="form-control selectedPriorityDefault checkField" id="itemPriorityEdit" name="itemPriorityEdit"></select>
                             <span class="help-block errMsg" id="itemPriorityEditErr"></span>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-12 form-group-sm">
-                            <label for="itemDescriptionEdit" class="">Description (Optional)</label>
-                            <textarea class="form-control" id="itemDescriptionEdit" placeholder="Optional Item Description"></textarea>
+                            <label for="itemDescEdit" class="">Description (Optional)</label>
+                            <textarea class="form-control" id="itemDescEdit" name="itemDescEdit" placeholder="Optional Item Description"></textarea>
                         </div>
                     </div>
                     <input type="hidden" id="itemIdEdit">
@@ -218,8 +245,4 @@ if(isset($customer_types) && !empty($customer_types)){
 </div>
 
 <!---End of copy of div to clone when adding more items to sales transaction---->
-<script src="<?=base_url()?>public/js/customers.js"></script>
-<script src="<?=base_url('public/ext/datetimepicker/bootstrap-datepicker.min.js')?>"></script>
-<script src="<?=base_url('public/ext/datetimepicker/jquery.timepicker.min.js')?>"></script>
-<script src="<?=base_url()?>public/ext/datetimepicker/datepair.min.js"></script>
-<script src="<?=base_url()?>public/ext/datetimepicker/jquery.datepair.min.js"></script>
+<script src="<?=base_url()?>public/js/companies.js"></script>
