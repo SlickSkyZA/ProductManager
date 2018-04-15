@@ -22,12 +22,15 @@ class ProductPerformance extends CI_Model{
         $this->db->limit($limit, $start);
         $this->db->order_by($orderBy, $orderFormat);
         $this->db->select('product_performance.id, product.Name ProductName, product_platform.Name PlatformName,
+        customer.Name CustomerName, IFNULL(customer_project.Name,"") ProjectName,
         product_performance.Version, product_performance.Device, product_performance.Performance,
         product_performance.AddedDate, product_performance.UpdatedDate,
         product_performance.Power, product_performance.Resolution, product_performance.ReportDate, product_performance.Notes');
 
         $this->db->join('product', 'product_performance.ProductID = product.id');
         $this->db->join('product_platform', 'product_performance.PlatformID = product_platform.id');
+        $this->db->join('customer', 'product_performance.CustomerID = customer.id');
+        $this->db->join('customer_project', 'product_performance.ProjectID = customer_project.id', 'left');
 
         $run_q = $this->db->get('product_performance');
 
@@ -56,8 +59,8 @@ class ProductPerformance extends CI_Model{
      * @param type $itemCode
      * @return boolean
      */
-    public function add($itemProduct, $itemPlatform, $itemDevice, $itemPerformance, $itemVersion, $itemResolution, $itemPower, $itemReportDate, $itemDesc) {
-        $data = ['ProductID'=>$itemProduct, 'PlatformID'=>$itemPlatform, 'Device'=>$itemDevice, 'Performance'=>$itemPerformance,
+    public function add($itemProduct, $itemPlatform, $itemDevice, $itemPerformance, $itemVersion, $itemResolution, $itemPower, $itemReportDate, $itemCustomer, $itemProject, $itemDesc) {
+        $data = ['ProductID'=>$itemProduct, 'CustomerID'=>$itemCustomer, 'ProjectID'=>$itemProject, 'PlatformID'=>$itemPlatform, 'Device'=>$itemDevice, 'Performance'=>$itemPerformance,
         'Resolution'=>$itemResolution, 'Power'=>$itemPower, 'ReportDate'=>$itemReportDate, 'Version'=>$itemVersion, 'Notes'=>$itemDesc];
 
         //set the datetime based on the db driver in use
@@ -108,8 +111,8 @@ class ProductPerformance extends CI_Model{
     * @param type $itemDesc
     * @param type $itemPrice
     */
-   public function edit($itemId, $itemProduct, $itemPlatform, $itemDevice, $itemPerformance, $itemVersion, $itemResolution, $itemPower, $itemReportDate, $itemDesc) {
-       $data = ['ProductID'=>$itemProduct, 'PlatformID'=>$itemPlatform, 'Device'=>$itemDevice, 'Performance'=>$itemPerformance,
+   public function edit($itemId, $itemProduct, $itemPlatform, $itemDevice, $itemPerformance, $itemVersion, $itemResolution, $itemPower, $itemReportDate, $itemCustomer, $itemProject, $itemDesc) {
+       $data = ['ProductID'=>$itemProduct, 'CustomerID'=>$itemCustomer, 'ProjectID'=>$itemProject, 'PlatformID'=>$itemPlatform, 'Device'=>$itemDevice, 'Performance'=>$itemPerformance,
        'Resolution'=>$itemResolution, 'Power'=>$itemPower, 'ReportDate'=>$itemReportDate, 'Version'=>$itemVersion, 'Notes'=>$itemDesc];
 
        $this->db->where('id', $itemId);

@@ -114,7 +114,8 @@ class CustomerProject extends CI_Model{
     public function itemsearch($value){
         $q = "SELECT customer_project.id, customer_project.Name, customer.Name CustomerName, customer_project.SOCCompany,
         customer_project.SOCName, customer_project.GPU, customer_project.DSP, customer_project.RAM, customer_project.FrontCameraType,
-        customer_project.RearCameraType, customer_project.AddedDate, customer_project.UpdatedDate, customer_project.Notes
+        customer_project.FrontCameraRes, customer_project.RearCameraRes,
+        customer_project.RearCameraType, customer_project.CodeFreeze, customer_project.MP, customer_project.Ship, customer_project.AddedDate, customer_project.UpdatedDate, customer_project.Notes
             FROM customer_project
             JOIN customer ON customer_project.CustomerID = customer.id
             WHERE

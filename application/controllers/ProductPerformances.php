@@ -17,7 +17,7 @@ class ProductPerformances extends CI_Controller{
 
         $this->genlib->QAMgrOnly();
 
-        $this->load->model(['platform', 'product', 'productPerformance']);
+        $this->load->model(['customer', 'customerProject', 'platform', 'product', 'productPerformance']);
     }
 
     /*
@@ -33,6 +33,8 @@ class ProductPerformances extends CI_Controller{
         $transData['products'] = $this->product->getActiveItems('Name', 'ASC');
         $transData['devices'] = $this->productPerformance->getTagItems('Device', 'ASC');
         $transData['resolutions'] = $this->productPerformance->getTagItems('Resolution', 'ASC');
+        $transData['customers'] = $this->customer->getActiveItems('Name', 'ASC');
+        $transData['customerProjects'] = $this->customerProject->getActiveItems('Name', 'ASC');
 
         $data['pageContent'] = $this->load->view('productPerformances/productPerformances', $transData, TRUE);
         $data['pageTitle'] = "Product Performance";
@@ -70,8 +72,11 @@ class ProductPerformances extends CI_Controller{
             $itemPower = set_value('itemPower');
             $itemReportDate = set_value('itemReportDate');
             $itemDesc = set_value('itemDesc');
+            $itemCustomer = set_value('itemCustomer');
+            $itemProject = set_value('itemProject');
 
-            $insertedId = $this->productPerformance->add($itemProduct, $itemPlatform, $itemDevice, $itemPerformance, $itemVersion, $itemResolution, $itemPower, $itemReportDate, $itemDesc);
+            $insertedId = $this->productPerformance->add($itemProduct, $itemPlatform, $itemDevice, $itemPerformance,
+            $itemVersion, $itemResolution, $itemPower, $itemReportDate, $itemCustomer, $itemProject, $itemDesc);
 
             $itemName = set_value('itemProduct');
 
@@ -183,9 +188,12 @@ class ProductPerformances extends CI_Controller{
              $itemPower = set_value('itemPower');
              $itemReportDate = set_value('itemReportDate');
              $itemDesc = set_value('itemDesc');
+             $itemCustomer = set_value('itemCustomer');
+             $itemProject = set_value('itemProject');
 
              //update item in db
-             $updated = $this->productPerformance->edit($itemId, $itemProduct, $itemPlatform, $itemDevice, $itemPerformance, $itemVersion, $itemResolution, $itemPower, $itemReportDate, $itemDesc);
+             $updated = $this->productPerformance->edit($itemId, $itemProduct, $itemPlatform, $itemDevice, $itemPerformance, $itemVersion,
+             $itemResolution, $itemPower, $itemReportDate, $itemCustomer, $itemProject, $itemDesc);
 
              $json['status'] = $updated ? 1 : 0;
 

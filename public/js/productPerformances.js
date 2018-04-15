@@ -26,12 +26,16 @@ $(document).ready(function(){
 		return new Promise((resolve, reject)=>{
             selected2_tag_addnew_initial(".selectedProductDefault", currentProducts, "Select Product");
             selected2_tag_addnew_initial(".selectedPlatformDefault", currentPlatforms, "Select Platform");
+            selected2_tag_addnew_initial(".selectedCustomerDefault", currentCustomers, "Select Customer");
+            selected2_tag_addnew_initial(".selectedProjectDefault", currentCustomerProjects, "Select Project");
             selected2_tag_addnew_initial(".selectedDeviceDefault", currentDevices, "Select Device");
             selected2_tag_addnew_initial(".selectedResolutionDefault", currentResolutions, "Select Resolution");
 			resolve();
 		}).then(()=>{
 		    $('.selectedProductDefault').select2({dropdownAutoWidth : true, width : "100%"});
             $('.selectedPlatformDefault').select2({dropdownAutoWidth : true, width : "100%"});
+            $('.selectedCustomerDefault').select2({dropdownAutoWidth : true, width : "100%"});
+            $('.selectedProjectDefault').select2({dropdownAutoWidth : true, width : "100%"});
             $('.selectedDeviceDefault').select2({dropdownAutoWidth : true, width : "100%", tags : true});
             $('.selectedResolutionDefault').select2({dropdownAutoWidth : true, width : "100%", tags : true});
 		}).catch(()=>{
@@ -84,11 +88,13 @@ $(document).ready(function(){
         var itemDesc = $("#itemDesc").val();
         var itemDeviceValue = $("#itemDevice").val();
         var itemResolutionValue = $("#itemResolution").val();
+        var itemCustomer = $("#itemCustomer").val();
+        var itemProject = $("#itemProject").val();
 
         var itemResolution = itemResolutionValue != '' ? $("#itemResolution").find("option:selected").text() : '';
         var itemDevice = itemDeviceValue != '' ? $("#itemDevice").find("option:selected").text() : '';
 
-        if(!itemProduct || !itemPlatform || !itemDeviceValue || !itemPerformance || !itemResolutionValue || !itemVersion || !itemReportDate){
+        if(!itemProduct || !itemPlatform || !itemDeviceValue || !itemPerformance || !itemResolutionValue || !itemVersion || !itemReportDate || !itemCustomer){
             !itemProduct ? $("#itemProductErr").text("required") : "";
             !itemPlatform ? $("#itemPlatformErr").text("required") : "";
             !itemDeviceValue ? $("#itemDeviceErr").text("required") : "";
@@ -96,6 +102,7 @@ $(document).ready(function(){
             !itemResolutionValue ? $("#itemResolutionErr").text("required") : "";
             !itemVersion ? $("#itemVersionErr").text("required") : "";
             !itemReportDate ? $("#itemReportDateErr").text("required") : "";
+            !itemCustomer ? $("#itemCustomerErr").text("required") : "";
 
             $("#addCustErrMsg").text("One or more required fields are empty");
 
@@ -108,7 +115,7 @@ $(document).ready(function(){
             type: "post",
             url: appRoot+"productPerformances/add",
             data:{itemProduct:itemProduct, itemPlatform:itemPlatform, itemDevice:itemDevice, itemPerformance:itemPerformance,
-                itemPower:itemPower, itemResolution:itemResolution, itemVersion:itemVersion,
+                itemPower:itemPower, itemResolution:itemResolution, itemVersion:itemVersion, itemCustomer:itemCustomer, itemProject:itemProject, 
                 itemReportDate:itemReportDate, itemDesc:itemDesc},
 
             success: function(returnedData){
@@ -220,6 +227,8 @@ $(document).ready(function(){
         var itemDesc = $("#itemDesc-"+itemId).attr('title');
         var itemDevice = $("#itemDevice-"+itemId).html();
         var itemResolution = $("#itemResolution-"+itemId).html();
+        var itemCustomer = $("#itemCustomer-"+itemId).html();
+        var itemProject = $("#itemProject-"+itemId).html();
 
         //prefill form with info
         $("#itemIdEdit").val(itemId);
@@ -253,11 +262,15 @@ $(document).ready(function(){
             selected2_tag_update_optional(".selectedPlatformDefault", currentPlatforms, itemPlatform, "Select Platform");
             selected2_tag_update_optional(".selectedDeviceDefault", currentDevices, itemDevice, "Select Device");
             selected2_tag_update_optional(".selectedResolutionDefault", currentResolutions, itemResolution, "Select Resolution");
+            selected2_tag_update_optional(".selectedCustomerDefault", currentCustomers, itemCustomer, "Select Customer");
+            selected2_tag_update_optional(".selectedProjectDefault", currentCustomerProjects, itemProject, "Select Project");
             resolve();
 		}).then(()=>{
 			//add select2 to the 'select input'
             $('.selectedProductDefault').select2({dropdownAutoWidth : true, width : "100%"});
             $('.selectedPlatformDefault').select2({dropdownAutoWidth : true, width : "100%"});
+            $('.selectedCustomerDefault').select2({dropdownAutoWidth : true, width : "100%"});
+            $('.selectedProjectDefault').select2({dropdownAutoWidth : true, width : "100%"});
             $('.selectedDeviceDefault').select2({dropdownAutoWidth : true, width : "100%", tags : true});
             $('.selectedResolutionDefault').select2({dropdownAutoWidth : true, width : "100%", tags : true});
 		}).catch(()=>{
@@ -282,11 +295,13 @@ $(document).ready(function(){
         var itemDesc = $("#itemDescEdit").val();
         var itemDeviceValue = $("#itemDeviceEdit").val();
         var itemResolutionValue = $("#itemResolutionEdit").val();
+        var itemCustomer = $("#itemCustomerEdit").val();
+        var itemProject = $("#itemProjectEdit").val();
 
         var itemResolution = itemResolutionValue != '' ? $("#itemResolutionEdit").find("option:selected").text() : '';
         var itemDevice = itemDeviceValue != '' ? $("#itemDeviceEdit").find("option:selected").text() : '';
 
-        if(!itemProduct || !itemPlatform || !itemDeviceValue || !itemPerformance || !itemResolutionValue || !itemVersion || !itemReportDate){
+        if(!itemProduct || !itemPlatform || !itemDeviceValue || !itemPerformance || !itemResolutionValue || !itemVersion || !itemReportDate || !itemCustomer) {
             !itemProduct ? $("#itemProductEditErr").text("required") : "";
             !itemPlatform ? $("#itemPlatformEditErr").text("required") : "";
             !itemDeviceValue ? $("#itemDeviceEditErr").text("required") : "";
@@ -294,6 +309,7 @@ $(document).ready(function(){
             !itemResolutionValue ? $("#itemResolutionEditErr").text("required") : "";
             !itemVersion ? $("#itemVersionEditErr").text("required") : "";
             !itemReportDate ? $("#itemReportDateEditErr").text("required") : "";
+            !itemCustomer ? $("#itemCustomerEditErr").text("required") : "";
 
             return;
         }
@@ -305,7 +321,7 @@ $(document).ready(function(){
             url: appRoot+"productPerformances/edit",
             data: {itemProduct:itemProduct, itemPlatform:itemPlatform, itemDevice:itemDevice, itemPerformance:itemPerformance,
                 itemPower:itemPower, itemResolution:itemResolution, itemVersion:itemVersion,
-                itemReportDate:itemReportDate, itemDesc:itemDesc, _iId:itemId}
+                itemReportDate:itemReportDate, itemDesc:itemDesc, itemCustomer:itemCustomer, itemProject:itemProject, _iId:itemId}
         }).done(function(returnedData){
             if(returnedData.status === 1){
                 $("#editItemFMsg").css('color', 'green').html("Product successfully updated");

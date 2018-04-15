@@ -5,6 +5,8 @@ $current_products = [];
 $current_devices = [];
 $current_resolutions = [];
 $current_platforms = [];
+$current_customerProjects = [];
+$current_customers = [];
 
 if(isset($products) && !empty($products)){
     foreach($products as $get){
@@ -33,7 +35,16 @@ if(isset($resolutions) && !empty($resolutions)){
         $id = $id + 1;
     }
 }
-
+if(isset($customerProjects) && !empty($customerProjects)){
+    foreach($customerProjects as $get){
+        $current_customerProjects[$get->id] = $get->Name;
+    }
+}
+if(isset($customers) && !empty($customers)){
+    foreach($customers as $get){
+        $current_customers[$get->id] = $get->Name;
+    }
+}
 ?>
 
 <script>
@@ -41,6 +52,8 @@ if(isset($resolutions) && !empty($resolutions)){
     var currentPlatforms = <?=json_encode($current_platforms)?>;
     var currentDevices = <?=json_encode($current_devices)?>;
     var currentResolutions = <?=json_encode($current_resolutions)?>;
+    var currentCustomers = <?=json_encode($current_customers)?>;
+    var currentCustomerProjects = <?=json_encode($current_customerProjects)?>;
 </script>
 
 <div class="pwell hidden-print">
@@ -150,6 +163,17 @@ if(isset($resolutions) && !empty($resolutions)){
                                     class="form-control" onchange="checkField(this.value, 'itemVersionErr')">
                                 <span class="help-block errMsg" id="itemVersionErr"></span>
                             </div>
+                            <div class="col-sm-4 form-group-sm">
+                                <label for="itemCustomer">Customer Name</label>
+                                <select class="form-control selectedCustomerDefault" id="itemCustomer" name="itemCustomer"
+                                    onchange="checkField(this.value, 'itemCustomerErr')"></select>
+                                <span class="help-block errMsg" id="itemCustomerErr"></span>
+                            </div>
+                            <div class="col-sm-4 form-group-sm">
+                                <label for="itemProject">Customer Project</label>
+                                <select class="form-control selectedProjectDefault" id="itemProject" name="itemProject"></select>
+                                <span class="help-block errMsg" id="itemProjectErr"></span>
+                            </div>
                         </div>
 
                         <div class="row">
@@ -258,6 +282,17 @@ if(isset($resolutions) && !empty($resolutions)){
                             <input type="text" id="itemVersionEdit" name="itemVersionEdit" placeholder="Version " maxlength="80"
                                 class="form-control" onchange="checkField(this.value, 'itemVersionEditErr')">
                             <span class="help-block errMsg" id="itemVersionEditErr"></span>
+                        </div>
+                        <div class="col-sm-4 form-group-sm">
+                            <label for="itemCustomerEdit">Customer Name</label>
+                            <select class="form-control selectedCustomerDefault" id="itemCustomerEdit" name="itemCustomerEdit"
+                                onchange="checkField(this.value, 'itemCustomerErr')"></select>
+                            <span class="help-block errMsg" id="itemCustomerEditErr"></span>
+                        </div>
+                        <div class="col-sm-4 form-group-sm">
+                            <label for="itemProjectEdit">Customer Project</label>
+                            <select class="form-control selectedProjectDefault" id="itemProjectEdit" name="itemProjectEdit"></select>
+                            <span class="help-block errMsg" id="itemProjectEditErr"></span>
                         </div>
                     </div>
 

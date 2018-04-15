@@ -16,6 +16,8 @@
                     <th>Performance(ms)</th>
                     <th>Power(ma)</th>
                     <th>Version</th>
+                    <th>Customer</th>
+                    <th>Project</th>
                     <th>Device</th>
                     <th>Resolution</th>
                     <th>Report Date</th>
@@ -35,6 +37,8 @@
                     <td><span id="itemPerformance-<?=$get->id?>"><?=$get->Performance?></td>
                     <td><span id="itemPower-<?=$get->id?>"><?=$get->Power?></td>
                     <td><span id="itemVersion-<?=$get->id?>"><?=$get->Version?></td>
+                    <td><span id="itemCustomer-<?=$get->id?>"><?=$get->CustomerName?></td>
+                    <td><span id="itemProject-<?=$get->id?>"><?=$get->ProjectName?></td>
                     <td><span id="itemDevice-<?=$get->id?>"><?=$get->Device?></td>
                     <td><span id="itemResolution-<?=$get->id?>"><?=$get->Resolution?></td>
                     <td><span id="itemReportDate-<?=$get->id?>"><?=$get->ReportDate?></td>
