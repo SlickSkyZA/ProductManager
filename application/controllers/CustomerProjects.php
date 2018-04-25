@@ -16,37 +16,32 @@ class CustomerProjects extends CI_Controller{
 
         $this->genlib->AdminOnly();
 
-        $this->load->model(['customerProject', 'company']);
+        $this->load->model(['customerProject', 'company', 'RelCustomerAssembly', 'RelCustomerModule']);
     }
 
     /**
-     *
+     * initial info
+     * @return [type] [description]
      */
     public function index(){
-        $transData['customers'] = $this->company->getActiveItems('Name', 'Customer', 'ASC');//get items with at least one qty left, to be used when doing a new transaction
-        $transData['soc_companies'] = $this->customerProject->getTagItems('SOCCompany', 'ASC');//get items with at least one qty left, to be used when doing a new transaction
-        $transData['soc_names'] = $this->customerProject->getTagItems('SOCName', 'ASC');//get items with at least one qty left, to be used when doing a new transaction
-        $transData['hardware_DSP'] = $this->customerProject->getTagItems('DSP', 'ASC');//get items with at least one qty left, to be used when doing a new transaction
-        $transData['hardware_GPU'] = $this->customerProject->getTagItems('GPU', 'ASC');//get items with at least one qty left, to be used when doing a new transaction
-        $transData['hardware_RAM'] = $this->customerProject->getTagItems('RAM', 'ASC');//get items with at least one qty left, to be used when doing a new transaction
-        $transData['camera_type0'] = $this->customerProject->getTagItems('FrontCameraType', 'ASC');//get items with at least one qty left, to be used when doing a new transaction
-        $transData['camera_res0'] = $this->customerProject->getTagItems('FrontCameraRes', 'ASC');//get items with at least one qty left, to be used when doing a new transaction
-        $transData['camera_type1'] = $this->customerProject->getTagItems('RearCameraType', 'ASC');//get items with at least one qty left, to be used when doing a new transaction
-        $transData['camera_res1'] = $this->customerProject->getTagItems('RearCameraRes','ASC');//get items with at least one qty left, to be used when doing a new transaction
+        $transData['camera_vender'] = $this->company->getCompanyByType('Name', 'Camera Module Factory', 'ASC');
+        $transData['camera_assembly'] = $this->company->getCompanyByType('Name', 'Assembly Factory', 'ASC');
+        $transData['customers'] = $this->company->getActiveItems('Name', 'Customer', 'ASC');
+        $transData['soc_companies'] = $this->customerProject->getTagItems('SOCCompany', 'ASC');
+        $transData['soc_names'] = $this->customerProject->getTagItems('SOCName', 'ASC');
+        $transData['hardware_DSP'] = $this->customerProject->getTagItems('DSP', 'ASC');
+        $transData['hardware_GPU'] = $this->customerProject->getTagItems('GPU', 'ASC');
+        $transData['hardware_RAM'] = $this->customerProject->getTagItems('RAM', 'ASC');
+        $transData['camera_type0'] = $this->customerProject->getTagItems('FrontCameraType', 'ASC');
+        $transData['camera_res0'] = $this->customerProject->getTagItems('FrontCameraRes', 'ASC');
+        $transData['camera_type1'] = $this->customerProject->getTagItems('RearCameraType', 'ASC');
+        $transData['camera_res1'] = $this->customerProject->getTagItems('RearCameraRes','ASC');
 
         $data['pageContent'] = $this->load->view('customerProjects/customerProjects', $transData, TRUE);
         $data['pageTitle'] = "Customer Projects";
 
         $this->load->view('main', $data);
     }
-
-    /*
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    */
 
     /**
      * "lilt" = "load Items List Table"
@@ -86,16 +81,9 @@ class CustomerProjects extends CI_Controller{
         $this->output->set_content_type('application/json')->set_output(json_encode($json));
     }
 
-    /*
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    */
-
-
-
+    /**
+     * [add description]
+     */
     public function add(){
         $this->genlib->ajaxOnly();
 
@@ -133,6 +121,8 @@ class CustomerProjects extends CI_Controller{
             $itemMPDate = set_value('itemMPDate');
             $itemShipDate = set_value('itemShipDate');
             $itemDesc = set_value('itemDesc');
+            $itemCamAssemblies = set_value('itemCamAssemblies');
+            $itemCamModules = set_value('itemCamModules');
 
             /**
              * insert info into db
@@ -140,6 +130,9 @@ class CustomerProjects extends CI_Controller{
              */
             $insertedId = $this->customerProject->add($itemName, $itemCustomer, $itemSOCCompany, $itemSOCName, $itemGPU,
             $itemCamera0Res, $itemCamera1Res, $itemStartDate, $itemMPDate, $itemShipDate, $itemDSP, $itemRAM, $itemCamera0, $itemCamera1, $itemDesc);
+
+            $this->RelCustomerAssembly->add($insertedId, $itemCamAssemblies);
+            $this->RelCustomerModule->add($insertedId, $itemCamModules);
 
             $itemName = set_value('itemName');
 
@@ -168,23 +161,10 @@ class CustomerProjects extends CI_Controller{
         $this->output->set_content_type('application/json')->set_output(json_encode($json));
     }
 
-
-    /*
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    */
-
-   /*
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    */
-
+    /**
+     * [edit description]
+     * @return [type] [description]
+     */
     public function edit(){
         $this->genlib->ajaxOnly();
 
@@ -224,10 +204,16 @@ class CustomerProjects extends CI_Controller{
             $itemShipDate = set_value('itemShipDate');
             $itemName = set_value('itemName');
 
+            $itemCamModules = set_value('itemCamModules');
+            $itemCamAssemblies = set_value('itemCamAssemblies');
+
             //update item in db
             $updated = $this->customerProject->edit($itemId, $itemName, $itemCustomer, $itemSOCCompany, $itemSOCName,
             $itemGPU, $itemDSP, $itemRAM, $itemCamera0, $itemCamera1, $itemCamera0Res, $itemCamera1Res, $itemStartDate,
             $itemMPDate, $itemShipDate, $itemDesc);
+
+            $this->RelCustomerAssembly->edit($itemId, $itemCamAssemblies);
+            $this->RelCustomerModule->edit($itemId, $itemCamModules);
 
             $json['status'] = $updated ? 1 : 0;
 
@@ -247,15 +233,10 @@ class CustomerProjects extends CI_Controller{
     }
 
 
-    /*
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    */
-
-
+    /**
+     * remove customer's project
+     * @return [type] [description]
+     */
     public function delete(){
         $this->genlib->ajaxOnly();
 
@@ -264,7 +245,8 @@ class CustomerProjects extends CI_Controller{
 
         if($item_id){
             $this->db->where('id', $item_id)->delete('customer_project');
-
+            $this->db->where('CustomerProjectID', $item_id)->delete('rel_customer_project_module');
+            $this->db->where('CustomerProjectID', $item_id)->delete('rel_customer_project_assembly');
             $json['status'] = 1;
         }
 

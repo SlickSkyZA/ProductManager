@@ -23,7 +23,7 @@
                     <th rowspan="2">Customer</th>
                     <th colspan="2">SOC</th>
                     <th colspan="3">Hardware</th>
-                    <th colspan="4">Camera</th>
+                    <th colspan="6">Camera</th>
                     <th colspan="3">Date</th>
                     <th rowspan="2">DESCRIPTION</th>
                     <th rowspan="2">EDIT</th>
@@ -39,6 +39,8 @@
                     <th>FrontRes</th>
                     <th>Rear</th>
                     <th>RearRes</th>
+                    <th>ModuleVender</th>
+                    <th>Assembly</th>
                     <th>CF</th>
                     <th>MP</th>
                     <th>Ship</th>
@@ -61,6 +63,8 @@
                     <td><span id="itemCamera0Res-<?=$get->id?>"><?=$get->FrontCameraRes?></td>
                     <td><span id="itemCamera1-<?=$get->id?>"><?=$get->RearCameraType?></td>
                     <td><span id="itemCamera1Res-<?=$get->id?>"><?=$get->RearCameraRes?></td>
+                    <td><span id="itemCamModule-<?=$get->id?>"><?=$get->ModuleName?></td>
+                    <td><span id="itemCamAssembly-<?=$get->id?>"><?=$get->AssemblyName?></td>
                     <td><span id="itemStartDate-<?=$get->id?>"><?=$get->CodeFreeze?></td>
                     <td><span id="itemMPDate-<?=$get->id?>"><?=$get->MP?></td>
                     <td><span id="itemShipDate-<?=$get->id?>"><?=$get->Ship?></td>

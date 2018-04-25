@@ -208,7 +208,7 @@ $(document).ready(function(){
         var itemType = $("#itemTypeEdit").val();
         var itemRSType = $("#itemRSTypeEdit").val();
         var itemPriority = $("#itemPriorityEdit").val();
-        var itemDesc = $("#itemDescriptionEdit").val();
+        var itemDesc = $("#itemDescEdit").val();
         var itemId = $("#itemIdEdit").val();
 
         if(!itemName || !itemId || !itemType || !itemPriority){

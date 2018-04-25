@@ -21,23 +21,29 @@ class CustomerProject extends CI_Model{
      * @return [type]               [description]
      */
     public function getAll($orderBy, $orderFormat, $start=0, $limit=''){
-        $this->db->limit($limit, $start);
-        $this->db->order_by($orderBy, $orderFormat);
+        $q = "SELECT customer_project.id, customer_project.Name, company.Name CustomerName, customer_project.SOCCompany,
+            rel_customer_project_module.ModuleName, rel_customer_project_assembly.AssemblyName,
+            customer_project.SOCName, customer_project.GPU, customer_project.DSP, customer_project.RAM, customer_project.FrontCameraType,
+            customer_project.RearCameraType, customer_project.AddedDate, customer_project.UpdatedDate, customer_project.Notes,
+            customer_project.RearCameraRes, customer_project.FrontCameraRes, customer_project.CodeFreeze, customer_project.MP, customer_project.Ship
+            FROM customer_project
+            LEFT JOIN (
+                 SELECT CustomerProjectID, group_concat(company.Name) as ModuleName from rel_customer_project_module
+                 JOIN company ON company.ID = rel_customer_project_module.VenderID group by CustomerProjectID
+                 ) rel_customer_project_module ON rel_customer_project_module.CustomerProjectID = customer_project.id
+            LEFT JOIN (
+                 SELECT CustomerProjectID, group_concat(company.Name) as AssemblyName from rel_customer_project_assembly
+                 JOIN company ON company.ID = rel_customer_project_assembly.VenderID group by CustomerProjectID
+                 ) rel_customer_project_assembly ON rel_customer_project_assembly.CustomerProjectID = customer_project.id
+            JOIN company ON customer_project.CustomerID = company.id
+            ORDER BY {$orderBy} {$orderFormat}
+            LIMIT {$limit} OFFSET {$start}";
 
-        $this->db->select('customer_project.id, customer_project.Name, company.Name CustomerName, customer_project.SOCCompany,
-        customer_project.SOCName, customer_project.GPU, customer_project.DSP, customer_project.RAM, customer_project.FrontCameraType,
-        customer_project.RearCameraType, customer_project.AddedDate, customer_project.UpdatedDate, customer_project.Notes,
-        customer_project.RearCameraRes, customer_project.FrontCameraRes, customer_project.CodeFreeze, customer_project.MP, customer_project.Ship');
-
-        $this->db->join('company', 'customer_project.CustomerID = company.id');
-
-        $run_q = $this->db->get('customer_project');
+        $run_q = $this->db->query($q);
 
         if($run_q->num_rows() > 0){
             return $run_q->result();
-        }
-
-        else{
+        } else {
             return FALSE;
         }
     }
@@ -98,10 +104,19 @@ class CustomerProject extends CI_Model{
      */
     public function itemsearch($value){
         $q = "SELECT customer_project.id, customer_project.Name, company.Name CustomerName, customer_project.SOCCompany,
-        customer_project.SOCName, customer_project.GPU, customer_project.DSP, customer_project.RAM, customer_project.FrontCameraType,
-        customer_project.FrontCameraRes, customer_project.RearCameraRes,
-        customer_project.RearCameraType, customer_project.CodeFreeze, customer_project.MP, customer_project.Ship, customer_project.AddedDate, customer_project.UpdatedDate, customer_project.Notes
+            rel_customer_project_module.ModuleName, rel_customer_project_assembly.AssemblyName,
+            customer_project.SOCName, customer_project.GPU, customer_project.DSP, customer_project.RAM, customer_project.FrontCameraType,
+            customer_project.RearCameraType, customer_project.AddedDate, customer_project.UpdatedDate, customer_project.Notes,
+            customer_project.RearCameraRes, customer_project.FrontCameraRes, customer_project.CodeFreeze, customer_project.MP, customer_project.Ship
             FROM customer_project
+            LEFT JOIN (
+                 SELECT CustomerProjectID, group_concat(company.Name) as ModuleName from rel_customer_project_module
+                 JOIN company ON company.ID = rel_customer_project_module.VenderID group by CustomerProjectID
+                 ) rel_customer_project_module ON rel_customer_project_module.CustomerProjectID = customer_project.id
+            LEFT JOIN (
+                 SELECT CustomerProjectID, group_concat(company.Name) as AssemblyName from rel_customer_project_assembly
+                 JOIN company ON company.ID = rel_customer_project_assembly.VenderID group by CustomerProjectID
+                 ) rel_customer_project_assembly ON rel_customer_project_assembly.CustomerProjectID = customer_project.id
             JOIN company ON customer_project.CustomerID = company.id
             WHERE
             customer_project.Name LIKE '%".$this->db->escape_like_str($value)."%'";
@@ -110,9 +125,7 @@ class CustomerProject extends CI_Model{
 
         if($run_q->num_rows() > 0){
             return $run_q->result();
-        }
-
-        else{
+        } else {
             return FALSE;
         }
     }

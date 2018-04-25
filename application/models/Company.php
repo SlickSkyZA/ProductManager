@@ -132,4 +132,23 @@ class Company extends CI_Model{
         }
     }
 
+    /**
+     * get active times.
+     * @param  [type] $orderBy     [description]
+     * @param  [type] $orderFormat [description]
+     * @return [type]              [description]
+     */
+    public function getCompanyByType($orderBy, $type, $orderFormat){
+        $this->db->order_by($orderBy, $orderFormat);
+        $this->db->select('company.id, company.Name Name, customer_type.Name TypeName, company.RelationshipType');
+        $this->db->join('customer_type', 'company.TypeID = customer_type.id');
+        $this->db->where('customer_type.Name', $type);
+        $run_q = $this->db->get('company');
+
+        if($run_q->num_rows() > 0){
+            return $run_q->result();
+        } else {
+            return FALSE;
+        }
+    }
 }

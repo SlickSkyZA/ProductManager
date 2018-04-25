@@ -8,6 +8,20 @@ if(isset($customers) && !empty($customers)){
     }
 }
 
+$current_CameraVender = [];
+if(isset($camera_vender) && !empty($camera_vender)){
+    foreach($camera_vender as $get){
+        $current_CameraVender[$get->id] = $get->Name;
+    }
+}
+
+$current_CameraAssembly = [];
+if(isset($camera_assembly) && !empty($camera_assembly)){
+    foreach($camera_assembly as $get){
+        $current_CameraAssembly[$get->id] = $get->Name;
+    }
+}
+
 $current_soccompanies = [];
 if(isset($soc_companies) && !empty($soc_companies)){
     $id = 0;
@@ -97,6 +111,8 @@ if(isset($camera_res1) && !empty($camera_res1)){
     var currentCamera1Types = <?=json_encode($current_Camera1Types)?>;
     var currentCamera0Res = <?=json_encode($current_Camera0Res)?>;
     var currentCamera1Res = <?=json_encode($current_Camera1Res)?>;
+    var currentCamVenders = <?=json_encode($current_CameraVender)?>;
+    var currentCamAssemblies = <?=json_encode($current_CameraAssembly)?>;
 </script>
 
 <div class="pwell hidden-print">
@@ -216,6 +232,16 @@ if(isset($camera_res1) && !empty($camera_res1)){
                         <div class="col-sm-4 form-group-sm">
                             <label for="itemCamera1Res">Camera Rear Resolution</label>
                             <select class="form-control selectedCamera1ResDefault checkField" id="itemCamera1Res" name="itemCamera1Res"> </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4 form-group-sm">
+                            <label for="itemCamModule">Camera Module</label>
+                            <select class="form-control selectedCamVenderDefault checkField" id="itemCamModule" name="itemCamModule" multiple="true"> </select>
+                        </div>
+                        <div class="col-sm-4 form-group-sm">
+                            <label for="itemCamAssembly">Camera Assembly</label>
+                            <select class="form-control selectedCamAssemblyDefault checkField" id="itemCamAssembly" name="itemCamAssembly" multiple="true"> </select>
                         </div>
                     </div>
 
@@ -365,6 +391,17 @@ if(isset($camera_res1) && !empty($camera_res1)){
                         <div class="col-sm-4 form-group-sm">
                             <label for="itemCamera1ResEdit">Camera Rear Resolution</label>
                             <select class="form-control selectedCamera1ResDefault checkField" id="itemCamera1ResEdit" name="itemCamera1ResEdit"> </select>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-4 form-group-sm">
+                            <label for="itemCamModuleEdit">Camera Module</label>
+                            <select class="form-control selectedCamVenderDefault checkField" id="itemCamModuleEdit" name="itemCamModuleEdit" multiple="true"> </select>
+                        </div>
+                        <div class="col-sm-4 form-group-sm">
+                            <label for="itemCamAssemblyEdit">Camera Assembly</label>
+                            <select class="form-control selectedCamAssemblyDefault checkField" id="itemCamAssemblyEdit" name="itemCamAssemblyEdit" multiple="true"> </select>
                         </div>
                     </div>
 

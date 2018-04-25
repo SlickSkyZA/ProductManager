@@ -35,6 +35,8 @@ $(document).ready(function(){
             selected2_tag_addnew_initial(".selectedCamera1Default", currentCamera1Types, "Select Camera Type");
             selected2_tag_addnew_initial(".selectedCamera0ResDefault", currentCamera0Res, "Select Resolution");
             selected2_tag_addnew_initial(".selectedCamera1ResDefault", currentCamera1Res, "Select Resolution");
+            selected2_tag_addopt_initial(".selectedCamVenderDefault", currentCamVenders);
+            selected2_tag_addopt_initial(".selectedCamAssemblyDefault", currentCamAssemblies);
 
 			resolve(); //selectedGroupsArr, selectedPrioritysArr
 		}).then(()=>{ //selectedGroupsArray, selectedPrioritysArray
@@ -49,6 +51,8 @@ $(document).ready(function(){
             $('.selectedCamera0ResDefault').select2({dropdownAutoWidth : true, width : "100%", tags : true});
             $('.selectedCamera1Default').select2({dropdownAutoWidth : true, width : "100%", tags : true});
             $('.selectedCamera1ResDefault').select2({dropdownAutoWidth : true, width : "100%", tags : true});
+            $('.selectedCamVenderDefault').select2({dropdownAutoWidth : true, width : "100%"});
+            $('.selectedCamAssemblyDefault').select2({dropdownAutoWidth : true, width : "100%"});
 		}).catch(()=>{
 			console.log('outer promise err');
 		});
@@ -109,6 +113,11 @@ $(document).ready(function(){
         var itemShipDate = $("#itemShipDate").val();
         var itemDesc = $("#itemDesc").val();
 
+        var itemCamModules = $("#itemCamModule").select2("val");
+        var itemCamAssemblies = $("#itemCamAssembly").select2("val");
+        //console.log(itemCamModules);
+        //console.log(itemCamAssemblies);
+
         var itemSOCCompany = $("#itemSOCCompany").find("option:selected").text();
         var itemSOCName = $("#itemSOCName").find("option:selected").text();
         var itemGPU = itemGPUVal != '' ? $("#itemGPU").find("option:selected").text() : '';
@@ -135,8 +144,8 @@ $(document).ready(function(){
         $.ajax({
             type: "post",
             url: appRoot+"customerProjects/add",
-            data:{itemName:itemName, itemCustomer:itemCustomer, itemSOCCompany:itemSOCCompany,
-                itemSOCName:itemSOCName, itemGPU:itemGPU, itemDSP:itemDSP, itemRAM:itemRAM,
+            data:{itemName:itemName, itemCustomer:itemCustomer, itemSOCCompany:itemSOCCompany, itemCamAssemblies:itemCamAssemblies,
+                itemSOCName:itemSOCName, itemGPU:itemGPU, itemDSP:itemDSP, itemRAM:itemRAM, itemCamModules:itemCamModules,
                 itemCamera0:itemCamera0, itemCamera1:itemCamera1, itemDesc:itemDesc, itemCamera0Res:itemCamera0Res,
                 itemCamera1Res:itemCamera1Res, itemStartDate:itemStartDate, itemMPDate:itemMPDate, itemShipDate:itemShipDate},
 
@@ -235,6 +244,9 @@ $(document).ready(function(){
         var itemMPDate = $("#itemMPDate-"+itemId).html();
         var itemShipDate = $("#itemShipDate-"+itemId).html();
 
+        var itemCamModule = $("#itemCamModule-"+itemId).html();
+        var itemCamAssembly = $("#itemCamAssembly-"+itemId).html();
+
         //prefill form with info
         $("#itemIdEdit").val(itemId);
         $("#itemNameEdit").val(itemName);
@@ -264,7 +276,8 @@ $(document).ready(function(){
             selected2_tag_update_optional(".selectedRAMDefault", currentRAMs, itemRAM, "Select RAM");
             selected2_tag_update_optional(".selectedGPUDefault", currentGPUs, itemGPU, "Select GPU");
             selected2_tag_update_optional(".selectedDSPDefault", currentDSPs, itemDSP, "Select DSP");
-
+            selected2_tag_addopt_update(".selectedCamVenderDefault", currentCamVenders, itemCamModule);
+            selected2_tag_addopt_update(".selectedCamAssemblyDefault", currentCamAssemblies, itemCamAssembly);
 			resolve(); //selectedGroupsArr, selectedPrioritysArr
 		}).then(()=>{ //selectedGroupsArray, selectedPrioritysArray
 			//add select2 to the 'select input'
@@ -278,6 +291,8 @@ $(document).ready(function(){
             $('.selectedCamera0ResDefault').select2({dropdownAutoWidth : true, width : "100%", tags : true});
             $('.selectedCamera1Default').select2({dropdownAutoWidth : true, width : "100%", tags : true});
             $('.selectedCamera1ResDefault').select2({dropdownAutoWidth : true, width : "100%", tags : true});
+            $('.selectedCamVenderDefault').select2({dropdownAutoWidth : true, width : "100%"});
+            $('.selectedCamAssemblyDefault').select2({dropdownAutoWidth : true, width : "100%"});
 		}).catch(()=>{
 			console.log('outer promise err');
 		});
@@ -327,6 +342,11 @@ $(document).ready(function(){
         var itemShipDate = $("#itemShipDateEdit").val();
         var itemDesc = $("#itemDescEdit").val();
 
+        var itemCamModules = $("#itemCamModuleEdit").select2("val");
+        var itemCamAssemblies = $("#itemCamAssemblyEdit").select2("val");
+        console.log(itemCamModules);
+        console.log(itemCamAssemblies);
+        
         var itemSOCCompany = $("#itemSOCCompanyEdit").find("option:selected").text();
         var itemSOCName = $("#itemSOCNameEdit").find("option:selected").text();
         var itemGPU = itemGPUVal != '' ? $("#itemGPUEdit").find("option:selected").text() : '';
@@ -351,7 +371,7 @@ $(document).ready(function(){
         $.ajax({
             method: "POST",
             url: appRoot+"customerProjects/edit",
-            data: {itemName:itemName, itemCustomer:itemCustomer, itemSOCCompany:itemSOCCompany,
+            data: {itemName:itemName, itemCustomer:itemCustomer, itemSOCCompany:itemSOCCompany, itemCamModules:itemCamModules, itemCamAssemblies:itemCamAssemblies,
                 itemSOCName:itemSOCName, itemGPU:itemGPU, itemDSP:itemDSP, itemRAM:itemRAM,
                 itemCamera0:itemCamera0, itemCamera1:itemCamera1, itemDesc:itemDesc, itemCamera0Res:itemCamera0Res,
                 itemCamera1Res:itemCamera1Res, itemStartDate:itemStartDate, itemMPDate:itemMPDate,
@@ -463,71 +483,4 @@ function resetItemSN(){
     $(".itemSN").each(function(i){
         $(this).html(parseInt(i)+1);
     });
-}
-
-/**
-* 编辑页面指定对应选中项
-*
-*/
-function selected2_tag_update_optional(str, list, item, str2) {
-    $(str).empty();
-    for(let key in list){
-    	if (list[key] == item) {
-    		$(str).append("<option value='"+key+"' selected>"+list[key]+"</option>");
-        } else {
-        	$(str).append("<option value='"+key+"'>"+list[key]+"</option>");
-        }
-    }
-    if (item == '') {
-        $(str).prepend("<option value='' selected>"+ str2 +"</option>");
-    } else {
-        $(str).prepend("<option value=''>"+ str2 +"</option>");
-    }
-}
-
-/**
-* 新增页面所有中项
-*
-*/
-function selected2_tag_addnew_initial(str, list, str2) {
-    $(str).empty();
-    for(let key in list){
-        $(str).append("<option value='"+key+"'>"+list[key]+"</option>");
-    }
-    $(str).prepend("<option value='' selected>"+str2+"</option>");
-}
-
-/**
-* 新增页面新加项目添加至列表
-*
-*/
-function selected2_tag_addnew_optional(str, strVal, list, item, itemVal, str2) {
-    if(!inArray(item, list)){
-        if (itemVal != '') {
-            list.push(item);
-            $(str).empty();
-            for(let key in list){
-                if (list[key] == item) {
-                    $(str).append("<option value='"+key+"' selected>"+list[key]+"</option>");
-                } else {
-                    $(str).append("<option value='"+key+"'>"+list[key]+"</option>");
-                }
-            }
-            $(str).prepend("<option value=''>"+str2+"</option>");
-        }
-    } else {
-        $(strVal).val(itemVal);
-    }
-}
-
-/**
-* 更新tag数据到list
-*
-*/
-function selected2_tag_update_array(list, item, itemVal) {
-    if(!inArray(item, list)){
-        if (itemVal != '') {
-            list.push(item);
-        }
-    }
 }
