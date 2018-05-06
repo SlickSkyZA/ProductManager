@@ -4,6 +4,9 @@
 $(document).ready(function(){
     checkDocumentVisibility(checkLogin);//check document visibility in order to confirm user's log in status
 
+    //initial select
+    selected2_tag_addnew_initial(".selectedTypeDefault", currentTypes, "Select Type");
+
     //load all items once the page is ready
     lilt();
 
@@ -123,6 +126,12 @@ $(document).ready(function(){
 
     //reload items list table when events occur
     $("#itemsListPerPage, #itemsListSortBy").change(function(){
+        displayFlashMsg("Please wait...", spinnerClass, "", "");
+        lilt();
+    });
+
+    //reload items list table when events occur
+    $("#itemsListPerPage, #itemsListTypeFilterBy").change(function(){
         displayFlashMsg("Please wait...", spinnerClass, "", "");
         lilt();
     });
@@ -341,13 +350,15 @@ $(document).ready(function(){
 function lilt(url){
     var orderBy = $("#itemsListSortBy").val().split("-")[0];
     var orderFormat = $("#itemsListSortBy").val().split("-")[1];
+    var filter = $("#itemsListTypeFilterBy").val();
     var limit = $("#itemsListPerPage").val();
 
+    console.log(filter);
 
     $.ajax({
         type:'get',
         url: url ? url : appRoot+"companies/lilt/",
-        data: {orderBy:orderBy, orderFormat:orderFormat, limit:limit},
+        data: {orderBy:orderBy, orderFormat:orderFormat, filter:filter, limit:limit},
 
         success: function(returnedData){
             hideFlashMsg();

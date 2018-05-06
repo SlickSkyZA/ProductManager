@@ -102,9 +102,10 @@ class Companies extends CI_Controller{
         //set the sort order
         $orderBy = $this->input->get('orderBy', TRUE) ? $this->input->get('orderBy', TRUE) : "Name";
         $orderFormat = $this->input->get('orderFormat', TRUE) ? $this->input->get('orderFormat', TRUE) : "ASC";
+        $filter = $this->input->get('filter', TRUE) ? $this->input->get('filter', TRUE) : "";
 
         //count the total number of items in db
-        $totalItems = $this->db->count_all('company');
+        $totalItems = $this->company->countAll($filter);
 
         $this->load->library('pagination');
 
@@ -119,7 +120,12 @@ class Companies extends CI_Controller{
         $this->pagination->initialize($config);//initialize the library class
 
         //get all items from db
-        $data['allItems'] = $this->company->getAll($orderBy, $orderFormat, $start, $limit);
+        if ($filter == "") {
+            $data['allItems'] = $this->company->getAll($orderBy, $orderFormat, $start, $limit);
+        } else {
+            $data['allItems'] = $this->company->getAll($orderBy, $orderFormat, $start, $limit, $filter);
+        }
+
         $data['range'] = $totalItems > 0 ? "Showing " . ($start+1) . "-" . ($start + count($data['allItems'])) . " of " . $totalItems : "";
         $data['links'] = $this->pagination->create_links();//page links
         $data['sn'] = $start+1;

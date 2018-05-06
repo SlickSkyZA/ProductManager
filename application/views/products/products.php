@@ -17,8 +17,6 @@ if(isset($product_group) && !empty($product_group)){
 }
 ?>
 
-<style href="<?=base_url('public/ext/datetimepicker/bootstrap-datepicker.min.css')?>" rel="stylesheet"></style>
-
 <script>
     var currentGroups = <?=json_encode($current_groups)?>;
     var currentPriorities = <?=json_encode($current_priorities)?>;
@@ -217,7 +215,3 @@ if(isset($product_group) && !empty($product_group)){
 
 <!---End of copy of div to clone when adding more items to sales transaction---->
 <script src="<?=base_url()?>public/js/products.js"></script>
-<script src="<?=base_url('public/ext/datetimepicker/bootstrap-datepicker.min.js')?>"></script>
-<script src="<?=base_url('public/ext/datetimepicker/jquery.timepicker.min.js')?>"></script>
-<script src="<?=base_url()?>public/ext/datetimepicker/datepair.min.js"></script>
-<script src="<?=base_url()?>public/ext/datetimepicker/jquery.datepair.min.js"></script>

@@ -20,7 +20,7 @@ class Company extends CI_Model{
      * @param  string  $limit       [description]
      * @return [type]               [description]
      */
-    public function getAll($orderBy, $orderFormat, $start=0, $limit=''){
+    public function getAll($orderBy, $orderFormat, $start=0, $limit='', $filter=''){
         $this->db->limit($limit, $start);
         $this->db->order_by($orderBy, $orderFormat);
         $this->db->select('company.id, company.Name, IFNULL(customer_region.Name,"") RegionName, customer_type.Name TypeName,
@@ -30,15 +30,32 @@ class Company extends CI_Model{
         $this->db->join('customer_type', 'company.TypeID = customer_type.id');
         $this->db->join('priority', 'company.PriorityID = priority.id');
 
+        if ($filter != '') {
+            $this->db->where('TypeID', $filter);
+        }
+
         $run_q = $this->db->get('company');
 
         if($run_q->num_rows() > 0){
             return $run_q->result();
-        }
-
-        else{
+        } else {
             return FALSE;
         }
+    }
+
+    /**
+     * count all records
+     * @param  string $filter [description]
+     * @return [type]         [description]
+     */
+    public function countAll($filter='') {
+        if ($filter != '') {
+            $this->db->where('TypeID', $filter);
+        }
+
+        $run_q = $this->db->get('company');
+        
+        return $run_q->num_rows();
     }
 
     /**

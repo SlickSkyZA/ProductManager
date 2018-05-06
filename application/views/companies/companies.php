@@ -58,7 +58,7 @@ if(isset($customer_types) && !empty($customer_types)){
                         <label>per page</label>
                     </div>
 
-                    <div class="col-sm-4 form-group-sm form-inline">
+                    <div class="col-sm-2 form-group-sm form-inline">
                         <label for="itemsListSortBy">Sort by</label>
                         <select id="itemsListSortBy" class="form-control">
                             <option value="Name-ASC">Company Name (A-Z)</option>
@@ -71,7 +71,11 @@ if(isset($customer_types) && !empty($customer_types)){
                             <option value="PriorityValue-DESC">Priority (Descending)</option>
                         </select>
                     </div>
-
+                    <div class="col-sm-2 form-group-sm form-inline">
+                        <label for="itemsListFilterBy">Company</label>
+                        <select class="form-control selectedTypeDefault" id="itemsListTypeFilterBy" name="itemsListTypeFilterBy">
+                        </select>
+                    </div>
                     <div class="col-sm-3 form-inline form-group-sm">
                         <label for='itemSearch'><i class="fa fa-search"></i></label>
                         <input type="search" id="itemSearch" class="form-control" placeholder="Search Customer Name">
