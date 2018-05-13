@@ -86,43 +86,55 @@ if(isset($product_group) && !empty($product_group)){
 
                         <div class="row">
                             <div class="col-sm-12 form-group-sm">
-                                <label for="productName">Product Name</label>
-                                <input type="text" id="productName" name="productName" placeholder="Product Name" maxlength="80"
-                                    class="form-control" onchange="checkField(this.value, 'productNameErr')">
-                                <span class="help-block errMsg" id="productNameErr"></span>
+                                <label for="itemName">Product Name</label>
+                                <input type="text" id="itemName" name="itemName" placeholder="Product Name" maxlength="80"
+                                    class="form-control" onchange="checkField(this.value, 'itemNameErr')">
+                                <span class="help-block errMsg" id="itemNameErr"></span>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-sm-12 form-group-sm">
-                                <label for="productGroup">Product Group</label>
-                                <select class="form-control selectedGroupDefault" id="productGroup" name="productGroup" maxlength="80"
-                                    onchange="checkField(this.value, 'productGroupErr')"></select>
-                                <span class="help-block errMsg" id="productGroupErr"></span>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-sm-12 form-group-sm">
-                                <label for="priority">Priority</label>
-                                <select class="form-control selectedPriorityDefault" id="priority" name="priority" maxlength="80"
-                                    onchange="checkField(this.value, 'priorityErr')"></select>
-                                <span class="help-block errMsg" id="priorityErr"></span>
+                                <label for="itemGroup">Product Group</label>
+                                <select class="form-control selectedGroupDefault" id="itemGroup" name="itemGroup" maxlength="80"
+                                    onchange="checkField(this.value, 'itemGroupErr')"></select>
+                                <span class="help-block errMsg" id="itemGroupErr"></span>
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-sm-12 form-group-sm">
-                                <label for="version">Version (Optional)</label>
-                                <input type="text" id="version" name="version" placeholder="Version " maxlength="80"
-                                    class="form-control" onchange="checkField(this.value, 'versionErr')">
-                                <span class="help-block errMsg" id="versionErr"></span>
+                                <label for="itemPriority">Priority</label>
+                                <select class="form-control selectedPriorityDefault" id="itemPriority" name="itemPriority" maxlength="80"
+                                    onchange="checkField(this.value, 'itemPriorityErr')"></select>
+                                <span class="help-block errMsg" id="itemPriorityErr"></span>
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-sm-12 form-group-sm">
-                                <label for="description" class="">Description (Optional)</label>
-                                <textarea class="form-control" id="description" name="description" rows='4'
+                                <label for="itemDPM">DPM (Optional)</label>
+                                <input type="text" id="itemDPM" name="itemDPM" placeholder="DPM (Optional)" maxlength="80" class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-12 form-group-sm">
+                                <label for="itemQPM">QPM (Optional)</label>
+                                <input type="text" id="itemQPM" name="itemQPM" placeholder="QPM (Optional)" maxlength="80" class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-12 form-group-sm">
+                                <label for="itemPM">PM (Optional)</label>
+                                <input type="text" id="itemPM" name="itemPM" placeholder="PM (Optional)" maxlength="80" class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-12 form-group-sm">
+                                <label for="itemDesc" class="">Description (Optional)</label>
+                                <textarea class="form-control" id="itemDesc" name="itemDesc" rows='4'
                                     placeholder="Optional Product Description"></textarea>
                             </div>
                         </div>
@@ -165,7 +177,7 @@ if(isset($product_group) && !empty($product_group)){
                 <div id="editItemFMsg" class="text-center"></div>
             </div>
             <div class="modal-body">
-                <form name="addNewItemForm" id="addNewItemForm" role="form">
+                <form name="addNewItemEditForm" id="addNewItemEditForm" role="form">
                     <div class="row">
                         <div class="col-sm-4 form-group-sm">
                             <label for="itemNameEdit">Product Name</label>
@@ -191,15 +203,29 @@ if(isset($product_group) && !empty($product_group)){
 
                     <div class="row">
                         <div class="col-sm-4 form-group-sm">
-                            <label for="itemVersionEdit">Version (Optional)</label>
-                            <input type="text" id="itemVersionEdit" name="itemVersionEdit" placeholder="Version" class="form-control">
-                            <span class="help-block errMsg" id="itemVersionEditErr"></span>
+                            <label for="itemDPMEdit">DPM (Optional)</label>
+                            <input type="text" id="itemDPMEdit" name="itemDPMEdit" placeholder="DPM" class="form-control">
+                            <span class="help-block errMsg" id="itemDPMEditErr"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4 form-group-sm">
+                            <label for="itemQPMEdit">QPM (Optional)</label>
+                            <input type="text" id="itemQPMEdit" name="itemQPMEdit" placeholder="QPM" class="form-control">
+                            <span class="help-block errMsg" id="itemQPMEditErr"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4 form-group-sm">
+                            <label for="itemPMEdit">PM (Optional)</label>
+                            <input type="text" id="itemPMEdit" name="itemPMEdit" placeholder="PM" class="form-control">
+                            <span class="help-block errMsg" id="itemDPMEditErr"></span>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-12 form-group-sm">
-                            <label for="itemDescriptionEdit" class="">Description (Optional)</label>
-                            <textarea class="form-control" id="itemDescriptionEdit" placeholder="Optional Item Description"></textarea>
+                            <label for="itemDescEdit" class="">Description (Optional)</label>
+                            <textarea class="form-control" id="itemDescEdit" placeholder="Optional Item Description"></textarea>
                         </div>
                     </div>
                     <input type="hidden" id="itemIdEdit">

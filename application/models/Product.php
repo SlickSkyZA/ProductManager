@@ -12,16 +12,18 @@ class Product extends CI_Model{
         parent::__construct();
     }
 
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+    /**
+     * [getAll description]
+     * @param  [type]  $orderBy     [description]
+     * @param  [type]  $orderFormat [description]
+     * @param  integer $start       [description]
+     * @param  string  $limit       [description]
+     * @return [type]               [description]
+     */
     public function getAll($orderBy, $orderFormat, $start=0, $limit=''){
         $this->db->limit($limit, $start);
         $this->db->order_by($orderBy, $orderFormat);
-        $this->db->select('product.id, product.Name, product_group.Name GroupName, product.Version,
+        $this->db->select('product.id, product.Name, product_group.Name GroupName, product.DPM, product.QPM, product.PM,
         priority.Name PriorityName, priority.Value PriorityValue, product.AddedDate, product.UpdatedDate, product.Notes');
 
         $this->db->join('product_group', 'product.GroupID = product_group.id');
@@ -31,33 +33,23 @@ class Product extends CI_Model{
 
         if($run_q->num_rows() > 0){
             return $run_q->result();
-        }
-
-        else{
+        } else {
             return FALSE;
         }
     }
 
-    /*
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    */
-
-
     /**
-     *
-     * @param type $itemName
-     * @param type $itemQuantity
-     * @param type $itemPrice
-     * @param type $itemDescription
-     * @param type $itemCode
-     * @return boolean
+     * [add description]
+     * @param [type] $itemName       [description]
+     * @param [type] $itemGroupID    [description]
+     * @param [type] $itemPriorityID [description]
+     * @param [type] $itemDPM        [description]
+     * @param [type] $itemQPM        [description]
+     * @param [type] $itemPM         [description]
+     * @param [type] $itemDesc       [description]
      */
-    public function add($productName, $productGroup, $priority, $version, $description){
-        $data = ['GroupID'=>$productGroup, 'PriorityID'=>$priority, 'Name'=>$productName, 'Version'=>$version, 'Notes'=>$description];
+    public function add($itemName, $itemGroupID, $itemPriorityID, $itemDPM, $itemQPM, $itemPM, $itemDesc) {
+        $data = ['Name'=>$itemName, 'GroupID'=>$itemGroupID, 'PriorityID'=>$itemPriorityID, 'DPM'=>$itemDPM, 'QPM'=>$itemQPM, 'PM'=>$itemPM, 'Notes'=>$itemDesc];
 
         //set the datetime based on the db driver in use
         $this->db->platform() == "sqlite3"
@@ -70,20 +62,10 @@ class Product extends CI_Model{
 
         if($this->db->insert_id()){
             return $this->db->insert_id();
-        }
-
-        else{
+        } else {
             return FALSE;
         }
     }
-
-    /*
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    */
 
     /**
      *
@@ -91,7 +73,7 @@ class Product extends CI_Model{
      * @return boolean
      */
     public function itemsearch($value){
-        $q = "SELECT product.id, product.Name, product_group.Name GroupName, product.Version,
+        $q = "SELECT product.id, product.Name, product_group.Name GroupName, product.DPM, product.QPM, product.PM,
                 priority.Name PriorityName, priority.Value PriorityValue, product.AddedDate, product.UpdatedDate, product.Notes
                 FROM product
                 JOIN product_group ON product.GroupID = product_group.id
@@ -103,143 +85,38 @@ class Product extends CI_Model{
 
         if($run_q->num_rows() > 0){
             return $run_q->result();
-        }
-
-        else{
+        } else {
             return FALSE;
         }
     }
-
-
-    /*
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    */
 
     /**
-     * To add to the number of an item in stock
-     * @param type $itemId
-     * @param type $numberToadd
-     * @return boolean
+     * [edit description]
+     * @param  [type] $itemId         [description]
+     * @param  [type] $itemName       [description]
+     * @param  [type] $itemGroupID    [description]
+     * @param  [type] $itemPriorityID [description]
+     * @param  [type] $itemDPM        [description]
+     * @param  [type] $itemQPM        [description]
+     * @param  [type] $itemPM         [description]
+     * @param  [type] $itemDesc       [description]
+     * @return [type]                 [description]
      */
-    public function incrementItem($itemId, $numberToadd){
-        $q = "UPDATE items SET quantity = quantity + ? WHERE id = ?";
-
-        $this->db->query($q, [$numberToadd, $itemId]);
-
-        if($this->db->affected_rows() > 0){
-            return TRUE;
-        }
-
-        else{
-            return FALSE;
-        }
-    }
-
-    /*
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    */
-
-    public function decrementItem($itemCode, $numberToRemove){
-        $q = "UPDATE items SET quantity = quantity - ? WHERE code = ?";
-
-        $this->db->query($q, [$numberToRemove, $itemCode]);
-
-        if($this->db->affected_rows() > 0){
-            return TRUE;
-        }
-
-        else{
-            return FALSE;
-        }
-    }
-
-
-    /*
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    */
-
-
-   public function newstock($itemId, $qty){
-       $q = "UPDATE items SET quantity = quantity + $qty WHERE id = ?";
-
-       $this->db->query($q, [$itemId]);
-
-       if($this->db->affected_rows()){
-           return TRUE;
-       }
-
-       else{
-           return FALSE;
-       }
-   }
-
-
-   /*
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    */
-
-   public function deficit($itemId, $qty){
-       $q = "UPDATE items SET quantity = quantity - $qty WHERE id = ?";
-
-       $this->db->query($q, [$itemId]);
-
-       if($this->db->affected_rows()){
-           return TRUE;
-       }
-
-       else{
-           return FALSE;
-       }
-   }
-
-   /*
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    */
-
-   /**
-    *
-    * @param type $itemId
-    * @param type $itemName
-    * @param type $itemDesc
-    * @param type $itemPrice
-    */
-   public function edit($itemId, $itemName, $itemGroupID, $itemPriorityID, $itemVersion, $itemDesc){
-       $data = ['Name'=>$itemName, 'GroupID'=>$itemGroupID, 'PriorityID'=>$itemPriorityID, 'Version'=>$itemVersion, 'Notes'=>$itemDesc];
+    public function edit($itemId, $itemName, $itemGroupID, $itemPriorityID, $itemDPM, $itemQPM, $itemPM, $itemDesc){
+       $data = ['Name'=>$itemName, 'GroupID'=>$itemGroupID, 'PriorityID'=>$itemPriorityID, 'DPM'=>$itemDPM, 'QPM'=>$itemQPM, 'PM'=>$itemPM,'Notes'=>$itemDesc];
 
        $this->db->where('id', $itemId);
        $this->db->update('product', $data);
 
        return TRUE;
-   }
+    }
 
-   /*
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    */
-
+    /**
+     * [getActiveItems description]
+     * @param  [type] $orderBy     [description]
+     * @param  [type] $orderFormat [description]
+     * @return [type]              [description]
+     */
 	public function getActiveItems($orderBy, $orderFormat){
         $this->db->order_by($orderBy, $orderFormat);
 
@@ -252,30 +129,5 @@ class Product extends CI_Model{
         else{
             return FALSE;
         }
-    }
-
-
-    /*
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    */
-
-    /**
-     * array $where_clause
-     * array $fields_to_fetch
-     *
-     * return array | FALSE
-     */
-    public function getItemInfo($where_clause, $fields_to_fetch){
-        $this->db->select($fields_to_fetch);
-
-        $this->db->where($where_clause);
-
-        $run_q = $this->db->get('product group');
-
-        return $run_q->num_rows() ? $run_q->row() : FALSE;
     }
 }

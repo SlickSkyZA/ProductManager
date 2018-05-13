@@ -14,9 +14,9 @@
                     <th>Name</th>
                     <th>Group</th>
                     <th>Priority</th>
-                    <th>Version</th>
-                    <th>Create DATE</th>
-                    <th>Update DATE</th>
+                    <th>DPM</th>
+                    <th>QPM</th>
+                    <th>PM</th>
                     <th>DESCRIPTION</th>
                     <th>EDIT</th>
                     <th>DELETE</th>
@@ -31,9 +31,9 @@
                     <td><span id="itemName-<?=$get->id?>"><?=$get->Name?></td>
                     <td><span id="itemGroup-<?=$get->id?>"><?=$get->GroupName?></td>
                     <td><span id="itemPriority-<?=$get->id?>"><?=$get->PriorityName?></td>
-                    <td><span id="itemVersion-<?=$get->id?>"><?=$get->Version?></td>
-                    <td><span id="itemAddDate-<?=$get->id?>"><?=$get->AddedDate?></td>
-                    <td><span id="itemUpdateDate-<?=$get->id?>"><?=$get->UpdatedDate?></td>
+                    <td><span id="itemDPM-<?=$get->id?>"><?=$get->DPM?></td>
+                    <td><span id="itemQPM-<?=$get->id?>"><?=$get->QPM?></td>
+                    <td><span id="itemPM-<?=$get->id?>"><?=$get->PM?></td>
                     <td>
                         <span id="itemDesc-<?=$get->id?>" data-toggle="tooltip" title="<?=$get->Notes?>" data-placement="auto">
                             <?=character_limiter($get->Notes, 15)?>
