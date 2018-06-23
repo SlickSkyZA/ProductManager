@@ -29,7 +29,7 @@ class ProductIssues extends CI_Controller{
         $transData['customers'] = $this->company->getActiveItems('Name', 'Customer', 'ASC');
         $transData['customerProjects'] = $this->customerProject->getActiveItems('Name', 'ASC');
         $transData['products'] = $this->product->getActiveItems('Name', 'ASC');
-        $transData['productIssues'] = $this->productIssue->getTagItems('IssueType', 'ASC');
+        $transData['productIssues'] = $this->productIssue->getSortedItems('IssueType', 'ASC');
 
         $data['pageContent'] = $this->load->view('productIssues/productIssues', $transData, TRUE);
         $data['pageTitle'] = "Product Issues";
@@ -95,14 +95,6 @@ class ProductIssues extends CI_Controller{
 
         $this->output->set_content_type('application/json')->set_output(json_encode($json));
     }
-
-    /*
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    */
 
     /**
      * "lilt" = "load Items List Table"

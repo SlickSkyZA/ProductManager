@@ -118,7 +118,7 @@ class ProductPerformance extends CI_Model{
    }
 
 
-   public function getTagItems($orderBy, $orderFormat){
+   public function getSortedItems($orderBy, $orderFormat){
        $this->db->order_by($orderBy, $orderFormat);
        $this->db->select($orderBy);
        $this->db->group_by($orderBy);

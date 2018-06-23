@@ -116,12 +116,12 @@ class ProductIssue extends CI_Model{
    }
 
    /**
-    * [getTagItems description]
+    * [getSortedItems description]
     * @param  [type] $orderBy     [description]
     * @param  [type] $orderFormat [description]
     * @return [type]              [description]
     */
-   public function getTagItems($orderBy, $orderFormat){
+   public function getSortedItems($orderBy, $orderFormat){
        $this->db->order_by($orderBy, $orderFormat);
        $this->db->select($orderBy);
        $this->db->group_by($orderBy);

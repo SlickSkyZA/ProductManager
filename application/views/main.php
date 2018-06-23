@@ -130,10 +130,10 @@ defined('BASEPATH') OR exit('');
                         <?php endif; ?>
 
                         <?php if($this->session->admin_role === "Admin" || $this->session->admin_role === "Super"):?>
-                        <li class="<?= $pageTitle == 'Product Transactions' ? 'active' : '' ?>">
-                            <a href="<?= site_url('ProductTransactions') ?>">
+                        <li class="<?= $pageTitle == 'Market' ? 'active' : '' ?>">
+                            <a href="<?= site_url('markets') ?>">
                                 <i class="fa fa-exchange"></i>
-                                Product Transactions
+                                Market
                             </a>
                         </li>
 

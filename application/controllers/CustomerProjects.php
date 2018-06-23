@@ -27,15 +27,15 @@ class CustomerProjects extends CI_Controller{
         $transData['camera_vender'] = $this->company->getCompanyByType('Name', 'Camera Module Factory', 'ASC');
         $transData['camera_assembly'] = $this->company->getCompanyByType('Name', 'Assembly Factory', 'ASC');
         $transData['customers'] = $this->company->getActiveItems('Name', 'Customer', 'ASC');
-        $transData['soc_companies'] = $this->customerProject->getTagItems('SOCCompany', 'ASC');
-        $transData['soc_names'] = $this->customerProject->getTagItems('SOCName', 'ASC');
-        $transData['hardware_DSP'] = $this->customerProject->getTagItems('DSP', 'ASC');
-        $transData['hardware_GPU'] = $this->customerProject->getTagItems('GPU', 'ASC');
-        $transData['hardware_RAM'] = $this->customerProject->getTagItems('RAM', 'ASC');
-        $transData['camera_type0'] = $this->customerProject->getTagItems('FrontCameraType', 'ASC');
-        $transData['camera_res0'] = $this->customerProject->getTagItems('FrontCameraRes', 'ASC');
-        $transData['camera_type1'] = $this->customerProject->getTagItems('RearCameraType', 'ASC');
-        $transData['camera_res1'] = $this->customerProject->getTagItems('RearCameraRes','ASC');
+        $transData['soc_companies'] = $this->customerProject->getSortedItems('SOCCompany', 'ASC');
+        $transData['soc_names'] = $this->customerProject->getSortedItems('SOCName', 'ASC');
+        $transData['hardware_DSP'] = $this->customerProject->getSortedItems('DSP', 'ASC');
+        $transData['hardware_GPU'] = $this->customerProject->getSortedItems('GPU', 'ASC');
+        $transData['hardware_RAM'] = $this->customerProject->getSortedItems('RAM', 'ASC');
+        $transData['camera_type0'] = $this->customerProject->getSortedItems('FrontCameraType', 'ASC');
+        $transData['camera_res0'] = $this->customerProject->getSortedItems('FrontCameraRes', 'ASC');
+        $transData['camera_type1'] = $this->customerProject->getSortedItems('RearCameraType', 'ASC');
+        $transData['camera_res1'] = $this->customerProject->getSortedItems('RearCameraRes','ASC');
 
         $data['pageContent'] = $this->load->view('customerProjects/customerProjects', $transData, TRUE);
         $data['pageTitle'] = "Customer Projects";
@@ -54,9 +54,10 @@ class CustomerProjects extends CI_Controller{
         //set the sort order
         $orderBy = $this->input->get('orderBy', TRUE) ? $this->input->get('orderBy', TRUE) : "Name";
         $orderFormat = $this->input->get('orderFormat', TRUE) ? $this->input->get('orderFormat', TRUE) : "ASC";
+        $filter = $this->input->get('filter', TRUE) ? $this->input->get('filter', TRUE) : "";
 
         //count the total number of items in db
-        $totalItems = $this->db->count_all('customer_project');
+        $totalItems = $this->customerProject->countAll($filter);
 
         $this->load->library('pagination');
 
@@ -71,7 +72,11 @@ class CustomerProjects extends CI_Controller{
         $this->pagination->initialize($config);//initialize the library class
 
         //get all items from db
-        $data['allItems'] = $this->customerProject->getAll($orderBy, $orderFormat, $start, $limit);
+        if ($filter == "") {
+            $data['allItems'] = $this->customerProject->getAll($orderBy, $orderFormat, $start, $limit);
+        } else {
+            $data['allItems'] = $this->customerProject->getAll($orderBy, $orderFormat, $start, $limit, $filter);
+        }
         $data['range'] = $totalItems > 0 ? "Showing " . ($start+1) . "-" . ($start + count($data['allItems'])) . " of " . $totalItems : "";
         $data['links'] = $this->pagination->create_links();//page links
         $data['sn'] = $start+1;
@@ -133,8 +138,6 @@ class CustomerProjects extends CI_Controller{
 
             $this->RelCustomerAssembly->add($insertedId, $itemCamAssemblies);
             $this->RelCustomerModule->add($insertedId, $itemCamModules);
-
-            $itemName = set_value('itemName');
 
             //insert into eventlog
             //function header: addevent($event, $eventRowId, $eventDesc, $eventTable, $staffId)

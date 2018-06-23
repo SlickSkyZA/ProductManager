@@ -4,15 +4,12 @@
 $(document).ready(function(){
     checkDocumentVisibility(checkLogin);//check document visibility in order to confirm user's log in status
 
+    //initial select
+    selected2_tag_addnew_initial(".selectedFilterDefault", currentCustomers, "Select Customer");
+    $('.selectedFilterDefault').select2({dropdownAutoWidth : true});
+
     //load all items once the page is ready
     lilt();
-
-    //WHEN USE BARCODE SCANNER IS CLICKED
-    $("#useBarcodeScanner").click(function(e){
-        e.preventDefault();
-
-        $("#itemCode").focus();
-    });
 
     /**
      * Toggle the form to add a new item
@@ -170,9 +167,7 @@ $(document).ready(function(){
 
                     //return focus to item code input to allow adding item with barcode scanner
                     $("#itemName").focus();
-                }
-
-                else{
+                } else {
                     hideFlashMsg();
 
                     //display all errors
@@ -197,7 +192,7 @@ $(document).ready(function(){
     });
 
     //reload items list table when events occur
-    $("#itemsListPerPage, #itemsListSortBy").change(function(){
+    $("#itemsListPerPage, #itemsListSortBy, #itemsListFilterBy").change(function(){
         displayFlashMsg("Please wait...", spinnerClass, "", "");
         lilt();
     });
@@ -346,7 +341,7 @@ $(document).ready(function(){
         var itemCamAssemblies = $("#itemCamAssemblyEdit").select2("val");
         console.log(itemCamModules);
         console.log(itemCamAssemblies);
-        
+
         var itemSOCCompany = $("#itemSOCCompanyEdit").find("option:selected").text();
         var itemSOCName = $("#itemSOCNameEdit").find("option:selected").text();
         var itemGPU = itemGPUVal != '' ? $("#itemGPUEdit").find("option:selected").text() : '';
@@ -458,13 +453,13 @@ $(document).ready(function(){
 function lilt(url){
     var orderBy = $("#itemsListSortBy").val().split("-")[0];
     var orderFormat = $("#itemsListSortBy").val().split("-")[1];
+    var filter = $("#itemsListFilterBy").val();
     var limit = $("#itemsListPerPage").val();
-
 
     $.ajax({
         type:'get',
         url: url ? url : appRoot+"customerProjects/lilt/",
-        data: {orderBy:orderBy, orderFormat:orderFormat, limit:limit},
+        data: {orderBy:orderBy, orderFormat:orderFormat, filter:filter, limit:limit},
 
         success: function(returnedData){
             hideFlashMsg();

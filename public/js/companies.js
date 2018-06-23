@@ -6,6 +6,7 @@ $(document).ready(function(){
 
     //initial select
     selected2_tag_addnew_initial(".selectedTypeDefault", currentTypes, "Select Type");
+    $('.selectedTypeDefault').select2({dropdownAutoWidth : true});
 
     //load all items once the page is ready
     lilt();
@@ -37,7 +38,7 @@ $(document).ready(function(){
 			//add select2 to the 'select input'
 		    $('.selectedGroupDefault').select2({dropdownAutoWidth : true, width : "100%"});
             $('.selectedPriorityDefault').select2({dropdownAutoWidth : true, width : "100%"});
-            $('.selectedTypeDefault').select2({dropdownAutoWidth : true, width : "100%"});
+            $('.selectedTypeDefault').select2({dropdownAutoWidth : true});
             $('.selectedRSTypeDefault').select2({dropdownAutoWidth : true, width : "100%"});
 		}).catch(()=>{
 			console.log('outer promise err');
@@ -125,13 +126,7 @@ $(document).ready(function(){
     });
 
     //reload items list table when events occur
-    $("#itemsListPerPage, #itemsListSortBy").change(function(){
-        displayFlashMsg("Please wait...", spinnerClass, "", "");
-        lilt();
-    });
-
-    //reload items list table when events occur
-    $("#itemsListPerPage, #itemsListTypeFilterBy").change(function(){
+    $("#itemsListPerPage, #itemsListFilterBy, itemsListSortBy").change(function(){
         displayFlashMsg("Please wait...", spinnerClass, "", "");
         lilt();
     });
@@ -258,47 +253,6 @@ $(document).ready(function(){
         });
     });
 
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    //trigers the modal to update stock
-    $("#itemsListTable").on('click', '.updateStock', function(){
-        //get item info and fill the form with them
-        var itemId = $(this).attr('id').split("-")[1];
-        var itemName = $("#itemName-"+itemId).html();
-        var itemCurQuantity = $("#itemQuantity-"+itemId).html();
-        var itemCode = $("#itemCode-"+itemId).html();
-
-        $("#stockUpdateItemId").val(itemId);
-        $("#stockUpdateItemName").val(itemName);
-        $("#stockUpdateItemCode").val(itemCode);
-        $("#stockUpdateItemQInStock").val(itemCurQuantity);
-
-        $("#updateStockModal").modal('show');
-    });
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    //PREVENT AUTO-SUBMISSION BY THE BARCODE SCANNER
-    $("#itemCode").keypress(function(e){
-        if(e.which === 13){
-            e.preventDefault();
-
-            //change to next input by triggering the tab keyboard
-            $("#itemName").focus();
-        }
-    });
-
-
-
     //TO DELETE AN ITEM (The item will be marked as "deleted" instead of removing it totally from the db)
     $("#itemsListTable").on('click', '.delItem', function(e){
         e.preventDefault();
@@ -350,7 +304,7 @@ $(document).ready(function(){
 function lilt(url){
     var orderBy = $("#itemsListSortBy").val().split("-")[0];
     var orderFormat = $("#itemsListSortBy").val().split("-")[1];
-    var filter = $("#itemsListTypeFilterBy").val();
+    var filter = $("#itemsListFilterBy").val();
     var limit = $("#itemsListPerPage").val();
 
     console.log(filter);
@@ -372,22 +326,6 @@ function lilt(url){
 
     return false;
 }
-
-
-/**
- * "vittrhist" = "View item's transaction history"
- * @param {type} itemId
- * @returns {Boolean}
- */
-function vittrhist(itemId){
-    if(itemId){
-
-    }
-
-    return false;
-}
-
-
 
 function resetItemSN(){
     $(".itemSN").each(function(i){

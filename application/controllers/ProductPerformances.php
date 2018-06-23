@@ -27,8 +27,8 @@ class ProductPerformances extends CI_Controller{
     public function index(){
         $transData['platforms'] = $this->platform->getActiveItems('Name', 'ASC');
         $transData['products'] = $this->product->getActiveItems('Name', 'ASC');
-        $transData['devices'] = $this->productPerformance->getTagItems('Device', 'ASC');
-        $transData['resolutions'] = $this->productPerformance->getTagItems('Resolution', 'ASC');
+        $transData['devices'] = $this->productPerformance->getSortedItems('Device', 'ASC');
+        $transData['resolutions'] = $this->productPerformance->getSortedItems('Resolution', 'ASC');
         $transData['customers'] = $this->company->getActiveItems('Name', 'Customer', 'ASC');
         $transData['customerProjects'] = $this->customerProject->getActiveItems('Name', 'ASC');
 

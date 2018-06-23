@@ -20,7 +20,7 @@ class CustomerProject extends CI_Model{
      * @param  string  $limit       [description]
      * @return [type]               [description]
      */
-    public function getAll($orderBy, $orderFormat, $start=0, $limit=''){
+    public function getAll($orderBy, $orderFormat, $start=0, $limit='', $filter=''){
         $q = "SELECT customer_project.id, customer_project.Name, company.Name CustomerName, customer_project.SOCCompany,
             rel_customer_project_module.ModuleName, rel_customer_project_assembly.AssemblyName,
             customer_project.SOCName, customer_project.GPU, customer_project.DSP, customer_project.RAM, customer_project.FrontCameraType,
@@ -35,8 +35,11 @@ class CustomerProject extends CI_Model{
                  SELECT CustomerProjectID, group_concat(company.Name) as AssemblyName from rel_customer_project_assembly
                  JOIN company ON company.ID = rel_customer_project_assembly.VenderID group by CustomerProjectID
                  ) rel_customer_project_assembly ON rel_customer_project_assembly.CustomerProjectID = customer_project.id
-            JOIN company ON customer_project.CustomerID = company.id
-            ORDER BY {$orderBy} {$orderFormat}
+            JOIN company ON customer_project.CustomerID = company.id ";
+        if ($filter != '') {
+            $q = $q."WHERE customer_project.CustomerID={$filter} ";
+        }
+        $q = $q."ORDER BY {$orderBy} {$orderFormat}
             LIMIT {$limit} OFFSET {$start}";
 
         $run_q = $this->db->query($q);
@@ -90,11 +93,24 @@ class CustomerProject extends CI_Model{
 
         if($this->db->insert_id()){
             return $this->db->insert_id();
-        }
-
-        else{
+        } else {
             return FALSE;
         }
+    }
+
+    /**
+     * count all records
+     * @param  string $filter [description]
+     * @return [type]         [description]
+     */
+    public function countAll($filter='') {
+        if ($filter != '') {
+            $this->db->where('CustomerID', $filter);
+        }
+
+        $run_q = $this->db->get('customer_project');
+
+        return $run_q->num_rows();
     }
 
     /**
@@ -166,12 +182,12 @@ class CustomerProject extends CI_Model{
    }
 
     /**
-     * [getTagItems description]
-     * @param  [type] $orderBy     [description]
-     * @param  [type] $orderFormat [description]
-     * @return [type]              [description]
+     * 以某个属性排序
+     * @param  [type] $orderBy     属性名
+     * @param  [type] $orderFormat 排序方式
+     * @return [type]              返回成功/失败
      */
-	public function getTagItems($orderBy, $orderFormat){
+	public function getSortedItems($orderBy, $orderFormat){
         $this->db->order_by($orderBy, $orderFormat);
         $this->db->select($orderBy);
         $this->db->group_by($orderBy);
@@ -194,6 +210,23 @@ class CustomerProject extends CI_Model{
     public function getActiveItems($orderBy, $orderFormat){
         $this->db->order_by($orderBy, $orderFormat);
 
+        $run_q = $this->db->get('customer_project');
+
+        if($run_q->num_rows() > 0){
+            return $run_q->result();
+        } else {
+            return FALSE;
+        }
+    }
+
+    /**
+    * [getActiveItems description]
+    * @param  [type] $orderBy     [description]
+    * @param  [type] $orderFormat [description]
+    * @return [type]              [description]
+    */
+    public function getProjects($name, $value){
+        $this->db->where($name.'=', $value);
         $run_q = $this->db->get('customer_project');
 
         if($run_q->num_rows() > 0){

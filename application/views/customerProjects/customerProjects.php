@@ -125,7 +125,7 @@ if(isset($camera_res1) && !empty($camera_res1)){
                         <button class="btn btn-primary btn-sm" id='createItem'>Add New Project</button>
                     </div>
 
-                    <div class="col-sm-3 form-inline form-group-sm">
+                    <div class="col-sm-2 form-inline form-group-sm">
                         <label for="itemsListPerPage">Show</label>
                         <select id="itemsListPerPage" class="form-control">
                             <option value="1">1</option>
@@ -140,13 +140,19 @@ if(isset($camera_res1) && !empty($camera_res1)){
                         <label>per page</label>
                     </div>
 
-                    <div class="col-sm-4 form-group-sm form-inline">
+                    <div class="col-sm-2 form-group-sm form-inline">
                         <label for="itemsListSortBy">Sort by</label>
                         <select id="itemsListSortBy" class="form-control">
                             <option value="Name-ASC">Project Name (A-Z)</option>
                             <option value="CustomerName-ASC">Customer Name (A-Z)</option>
                             <option value="Name-DESC">Project Name (Z-A)</option>
                             <option value="CustomerName-DESC">Customer Name (Z-A)</option>
+                        </select>
+                    </div>
+
+                    <div class="col-sm-2 form-group-sm form-inline">
+                        <label for="itemsListFilterBy">Customers</label>
+                        <select id="itemsListFilterBy" name="itemsListFilterBy" class="form-control selectedFilterDefault">
                         </select>
                     </div>
 
