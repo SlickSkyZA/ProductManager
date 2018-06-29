@@ -29,7 +29,7 @@ class Markets extends CI_Controller{
         $transData['products'] = $this->product->getActiveItems('Name', 'ASC');
         $transData['customers'] = $this->company->getActiveItems('Name', 'Customer', 'ASC');
         $transData['platforms'] = $this->platform->getActiveItems('Name', 'ASC');
-        //$transData['priorities'] = $this->priority->getActiveItems('Name', 'ASC');
+        $transData['venders'] = $this->company->getCompanyByType('Name', 'ASC', 'Algorithm');
         $transData['competitors'] = $this->company->getActiveItems('Name', 'Competitor', 'ASC');
         $transData['customer_projects'] = $this->customerProject->getActiveItems('Name', 'ASC');
         $transData['product_statuses'] = $this->productStatus->getActiveItems('Name', 'ASC');
@@ -79,11 +79,12 @@ class Markets extends CI_Controller{
             $platform = set_value('itemPlatform');
             $status = set_value('itemStatus');
             $itemCompetitor = set_value('itemCompetitor');
+            $itemVender = set_value('itemVender');
             $itemProject = set_value('itemProjectName');
             $itemDate = set_value('itemMilestone');
             $itemDesc = set_value('itemDesc');
-
-            $insertedId = $this->Market->add($itemProduct, $customer, $platform, $status, $itemProject, $itemDate, $itemDesc);
+            log_message('debug', print_r("itemVender:".$itemVender, true));
+            $insertedId = $this->Market->add($itemProduct, $customer, $platform, $status, $itemVender, $itemProject, $itemDate, $itemDesc);
 
             $this->RelProductCompetitor->add($insertedId, $itemCompetitor);
             //insert into eventlog
@@ -226,12 +227,13 @@ class Markets extends CI_Controller{
             $itemPlatformID = set_value('itemPlatform');
             $itemStatusID = set_value('itemStatus');
             $itemCompetitorID = set_value('itemCompetitor');
+            $itemVenderID = set_value('itemVender');
             $itemProjectID = set_value('itemProject');
             $itemDesc = set_value('itemDesc');
             $itemStatusDate = set_value('itemStatusDate');
 
             //update item in db
-            $updated = $this->Market->edit($itemId, $itemProductID, $itemCustomerID, $itemPlatformID, $itemStatusID, $itemProjectID, $itemStatusDate, $itemDesc);
+            $updated = $this->Market->edit($itemId, $itemProductID, $itemCustomerID, $itemPlatformID, $itemVenderID, $itemStatusID, $itemProjectID, $itemStatusDate, $itemDesc);
 
             $this->RelProductCompetitor->edit($itemId, $itemCompetitorID);
 

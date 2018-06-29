@@ -54,7 +54,7 @@ class Company extends CI_Model{
         }
 
         $run_q = $this->db->get('company');
-        
+
         return $run_q->num_rows();
     }
 
@@ -150,17 +150,43 @@ class Company extends CI_Model{
     }
 
     /**
-     * get active times.
+     * 获取指定类型的公司
      * @param  [type] $orderBy     [description]
      * @param  [type] $orderFormat [description]
      * @return [type]              [description]
      */
-    public function getCompanyByType($orderBy, $type, $orderFormat){
+    public function getCompanyByType($orderBy, $orderFormat, $type){
         $this->db->order_by($orderBy, $orderFormat);
         $this->db->select('company.id, company.Name Name, customer_type.Name TypeName, company.RelationshipType');
         $this->db->join('customer_type', 'company.TypeID = customer_type.id');
         $this->db->where('customer_type.Name', $type);
         $run_q = $this->db->get('company');
+
+        if($run_q->num_rows() > 0){
+            return $run_q->result();
+        } else {
+            return FALSE;
+        }
+    }
+
+    /**
+     * 获取指定类型、关系、优先级的公司
+     * @param  [type] $orderBy     [description]
+     * @param  [type] $orderFormat [description]
+     * @param  [type] $type        [description]
+     * @param  [type] $relType     [description]
+     * @param  [int] $priority    指定优先级以上
+     * @return [type]              [description]
+     */
+    public function getCompanyByPriority($orderBy, $orderFormat, $type, $relType, $priority) {
+        $q = " SELECT company.id, company.Name Name, priority.Value Value, customer_type.Name TypeName
+            FROM company
+            JOIN priority ON company.PriorityID = priority.id
+            JOIN customer_type ON company.TypeID = customer_type.id
+            WHERE customer_type.Name = '{$type}' AND company.RelationshipType = '$relType' AND Value <= {$priority}
+            ORDER BY {$orderBy} {$orderFormat}";
+
+        $run_q = $this->db->query($q);
 
         if($run_q->num_rows() > 0){
             return $run_q->result();

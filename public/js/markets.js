@@ -6,7 +6,7 @@ $(document).ready(function(){
     checkDocumentVisibility(checkLogin);//check document visibility in order to confirm user's log in status
 
     //initial select
-    selected2_tag_addnew_initial(".selectedFilterDefault", currentProducts, "Select Product");
+    selected2_tag_default_initial(".selectedFilterDefault", currentProducts, "Select Product", "");
     $('.selectedFilterDefault').select2({dropdownAutoWidth : true});
 
     //load all items once the page is ready
@@ -31,6 +31,20 @@ $(document).ready(function(){
     });
 
     /**
+     * 根据选择的交易状态，Signed Replaced NoNeed 触发选择供应商
+     * @return {[type]} [description]
+     */
+    $("#itemStatus").change(function(){
+        console.debug($(this).val());
+        if ($(this).val() == 5 || $(this).val() == 6 || $(this).val() == 10) {
+            $('#newVender').toggleClass('collapse', false);
+        } else {
+            $('#newVender').toggleClass('collapse', true);
+            $(".selectedVenderDefault").val("").trigger('change');
+        }
+    });
+
+    /**
      * 创建一个交易
      * @return {[type]} [description]
      */
@@ -46,11 +60,12 @@ $(document).ready(function(){
         }
 
         return new Promise((resolve, reject)=>{
-            selected2_tag_addnew_initial(".selectedProductDefault", currentProducts, "Select Prodcut");
-            selected2_tag_addnew_initial(".selectedCustomerDefault", currentCustomers, "Select Customer");
-            selected2_tag_addnew_initial(".selectedPlatformDefault", currentPlatforms, "Select Platforms");
-            selected2_tag_addnew_initial(".selectedStatusDefault", currentStatuses, "Select Status");
-            selected2_tag_addopt_initial(".selectedCompetitorDefault", currentCompetitors);
+            selected2_tag_default_initial(".selectedProductDefault", currentProducts, "Select Prodcut", "");
+            selected2_tag_default_initial(".selectedCustomerDefault", currentCustomers, "Select Customer", "");
+            selected2_tag_default_initial(".selectedPlatformDefault", currentPlatforms, "Select Platforms", "");
+            selected2_tag_default_initial(".selectedStatusDefault", currentStatuses, "Select Status", "");
+            selected2_tag_default_initial(".selectedCompetitorDefault", currentCompetitors, "", "");
+            selected2_tag_default_initial(".selectedVenderDefault", currentVenders, "Select Vender", "");
 			resolve();
 
 		}).then(()=>{
@@ -60,6 +75,7 @@ $(document).ready(function(){
             $('.selectedPlatformDefault').select2({dropdownAutoWidth : true, width : "100%"});
             $('.selectedCustomerDefault').select2({dropdownAutoWidth : true, width : "100%"});
             $('.selectedProductDefault').select2({dropdownAutoWidth : true, width : "100%"});
+            $('.selectedVenderDefault').select2({dropdownAutoWidth : true, width : "100%"});
 		}).catch(()=>{
 			console.log('outer promise err');
 		});
@@ -77,6 +93,7 @@ $(document).ready(function(){
         var itemPlatform = $("#itemPlatform").val();
         var itemStatus = $("#itemStatus").val();
         var itemCompetitor = $("#itemCompetitor").val();
+        var itemVender = $("#itemVender").val();
         var itemProjectName = $("#itemProject").val();
         var itemMilestone = $("#itemMilestone").val();
         var itemDesc = $("#itemDesc").val();
@@ -96,7 +113,7 @@ $(document).ready(function(){
         $.ajax({
             type: "post",
             url: appRoot+"Markets/add",
-            data:{itemProduct:itemProduct, itemCustomer:itemCustomer, itemPlatform:itemPlatform,
+            data:{itemProduct:itemProduct, itemCustomer:itemCustomer, itemPlatform:itemPlatform, itemVender:itemVender,
                 itemStatus:itemStatus, itemCompetitor:itemCompetitor, itemProjectName:itemProjectName, itemMilestone:itemMilestone, itemDesc:itemDesc},
 
             success: function(returnedData){
@@ -107,6 +124,7 @@ $(document).ready(function(){
                     $("#itemCustomer").val(itemCustomer);
                     $("#itemPlatform").val(itemPlatform);
                     $("#itemStatus").val(itemStatus);
+                    $("#itemVender").val(itemVender);
                     $("#itemCompetitor").val(itemCompetitor);
                     $("#itemProject").val(itemProjectName);
                     //refresh the items list table
@@ -173,6 +191,7 @@ $(document).ready(function(){
         var itemPlatform = $("#itemPlatform-"+itemId).html();
         var itemStatus = $("#itemStatus-"+itemId).html();
         var itemCompetitor = $("#itemCompetitor-"+itemId).html();
+        var itemVender = $("#itemVender-"+itemId).html();
         var itemProject = $("#itemProject-"+itemId).html();
         var itemMilestone = $("#itemMilestone-"+itemId).html();
         var itemDesc = $("#itemDesc-"+itemId).attr('title');
@@ -207,10 +226,11 @@ $(document).ready(function(){
             selected2_tag_update_optional(".selectedPlatformDefault", currentPlatforms, itemPlatform, "Select Platform");
             selected2_tag_update_optional(".selectedStatusDefault", currentStatuses, itemStatus, "Select Status");
             selected2_tag_addopt_update(".selectedCompetitorDefault", currentCompetitors, itemCompetitor);
-
+            selected2_tag_update_optional(".selectedVenderDefault", currentVenders, itemVender, "Select Vender");
 			resolve(); //selectedGroupsArr, selectedPrioritysArr
 		}).then(()=>{ //selectedGroupsArray, selectedPrioritysArray
 			//add select2 to the 'select input'
+			$('.selectedVenderDefault').select2({dropdownAutoWidth : true, width : "100%"});
 		    $('.selectedCompetitorDefault').select2({dropdownAutoWidth : true, width : "100%"});
             $('.selectedStatusDefault').select2({dropdownAutoWidth : true, width : "100%"});
             $('.selectedPlatformDefault').select2({dropdownAutoWidth : true, width : "100%"});
@@ -233,6 +253,7 @@ $(document).ready(function(){
         var itemPlatform = $("#itemPlatformEdit").val();
         var itemStatus = $("#itemStatusEdit").val();
         var itemCompetitor = $("#itemCompetitorEdit").val();
+        var itemVender = $("#itemVenderEdit").val();
         var itemProject = $("#itemProjectEdit").val();
         var itemDesc = $("#itemDescEdit").val();
         var itemMilestone = $("#itemMilestoneEdit").val();
@@ -254,7 +275,7 @@ $(document).ready(function(){
             method: "POST",
             url: appRoot+"Markets/edit",
             data: {itemProduct:itemProduct, itemCustomer:itemCustomer, itemPlatform:itemPlatform, itemStatus:itemStatus, itemCompetitor:itemCompetitor,
-                itemProject:itemProject, itemDesc:itemDesc, itemStatusDate:itemMilestone, _iId:itemId}
+                itemVender:itemVender, itemProject:itemProject, itemDesc:itemDesc, itemStatusDate:itemMilestone, _iId:itemId}
         }).done(function(returnedData){
             if(returnedData.status === 1){
                 $("#editItemFMsg").css('color', 'green').html("Product transaction successfully updated");

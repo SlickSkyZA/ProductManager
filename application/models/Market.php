@@ -21,7 +21,7 @@ class Market extends CI_Model{
      * @return [type]               [description]
      */
     public function getAll($orderBy, $orderFormat, $start=0, $limit='', $filter='', $status='') {
-        $q = "SELECT market.id, product.Name ProductName, company.Name CustomerName, rel_project_product_competitor.CompetitorName,
+        $q = "SELECT market.id, product.Name ProductName, company.Name CustomerName, rel_project_product_competitor.CompetitorName, vender.VenderName,
                 product_status.Name StatusName, product_platform.Name PlatformName, market.Active,
                 IFNULL(customer_project.Name,'') ProjectName, market.StatusDate, market.AddedDate, market.UpdatedDate, market.Notes
             FROM market
@@ -31,6 +31,9 @@ class Market extends CI_Model{
              ) rel_project_product_competitor ON rel_project_product_competitor.MarketID = market.id
 
             JOIN company ON market.CustomerID = company.id
+            LEFT JOIN (
+                 SELECT company.Name as VenderName, company.id as VenderID FROM company
+            ) vender ON vender.VenderID = market.VenderID
             JOIN product ON market.ProductID = product.id
             JOIN product_platform ON market.PlatformID = product_platform.id
             JOIN product_status ON market.StatusID = product_status.id
@@ -68,9 +71,13 @@ class Market extends CI_Model{
      * @param type $itemCode
      * @return boolean
      */
-    public function add($itemProduct, $customer, $platform, $status, $itemProject, $itemDate, $itemDesc) {
+    public function add($itemProduct, $customer, $platform, $status, $itemVender, $itemProject, $itemDate, $itemDesc) {
         $data = ['ProductID'=>$itemProduct, 'CustomerID'=>$customer, 'PlatformID'=>$platform,
         'StatusID'=>$status, 'ProjectID'=>$itemProject, 'Notes'=>$itemDesc];
+
+        if ($itemVender !== "") {
+            $this->db->set('VenderID', $itemVender);
+        }
 
         if ($itemDate !== "") {
             $this->db->set('StatusDate', $itemDate);
@@ -142,9 +149,7 @@ class Market extends CI_Model{
 
         if($run_q->num_rows() > 0){
             return $run_q->result();
-        }
-
-        else{
+        } else {
             return FALSE;
         }
     }
@@ -156,9 +161,12 @@ class Market extends CI_Model{
     * @param type $itemDesc
     * @param type $itemPrice
     */
-   public function edit($itemId, $itemProductID, $itemCustomerID, $itemPlatformID, $itemStatusID, $itemProjectName, $itemStatusDate, $itemDesc){
+   public function edit($itemId, $itemProductID, $itemCustomerID, $itemPlatformID, $itemVenderID, $itemStatusID, $itemProjectName, $itemStatusDate, $itemDesc){
        $data = ['ProductID'=>$itemProductID, 'CustomerID'=>$itemCustomerID, 'PlatformID'=>$itemPlatformID,
        'StatusID'=>$itemStatusID, 'ProjectID'=>$itemProjectName, 'Notes'=>$itemDesc];
+       if ($itemVenderID !== "") {
+           $this->db->set('VenderID', $itemVenderID);
+       }
        if ($itemStatusDate !== "") {
            $this->db->set('StatusDate', $itemStatusDate);
        } else {
@@ -168,6 +176,32 @@ class Market extends CI_Model{
        $this->db->update('market', $data);
 
        return TRUE;
+   }
+
+   /**
+    * 获取指定年份最后一次签约的供应商
+    * 隐含条件 销售记录 的状态需要为 Signed，Replaced
+    * @param  [type] $itemYear       [description]
+    * @param  [type] $itemProduct    [description]
+    * @param  [type] $itemCustomerID [description]
+    * @return [type]                 [description]
+    */
+   public function getLastVender($itemYear, $itemProductID, $itemCustomerID) {
+       $itemNextYear = $itemYear + 1;
+       $q = "SELECT market.id, product.Name ProductName, company.Name VenderName, max(market.StatusDate) StatusDate
+               FROM market
+               join product ON market.ProductID = product.id
+               join company ON market.VenderID = company.id
+               WHERE market.ProductID = {$itemProductID} AND market.CustomerID = {$itemCustomerID} AND
+               TO_DAYS(market.StatusDate) > TO_DAYS('{$itemYear}-1-1') AND TO_DAYS(market.StatusDate) < TO_DAYS('{$itemNextYear}-1-1') AND market.StatusID IN(5,6)";
+
+       $run_q = $this->db->query($q);
+
+       if($run_q->num_rows() > 0){
+           return $run_q->result();
+       } else {
+           return FALSE;
+       }
    }
 
 }

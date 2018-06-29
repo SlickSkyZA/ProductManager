@@ -6,6 +6,7 @@ $current_products = [];
 $current_platforms = [];
 $current_statuses = [];
 $current_competitors = [];
+$current_venders = [];
 
 if(isset($customers) && !empty($customers)){
     foreach($customers as $get){
@@ -32,6 +33,12 @@ if(isset($competitors) && !empty($competitors)){
         $current_competitors[$get->id] = $get->Name;
     }
 }
+if(isset($venders) && !empty($venders)){
+    foreach($venders as $get){
+        $current_venders[$get->id] = $get->Name;
+    }
+}
+
 
 ?>
 <!-- LOAD FILES
@@ -45,6 +52,7 @@ if(isset($competitors) && !empty($competitors)){
     var currentPlatforms = <?=json_encode($current_platforms)?>;
     var currentStatuses = <?=json_encode($current_statuses)?>;
     var currentCompetitors = <?=json_encode($current_competitors)?>;
+    var currentVenders = <?=json_encode($current_venders)?>;
 </script>
 
 <div class="pwell hidden-print">
@@ -108,13 +116,6 @@ if(isset($competitors) && !empty($competitors)){
 
                                     <div class="row">
                                         <div class="col-sm-4 form-group-sm">
-                                            <label for="itemCompetitor">Competitor</label>
-                                            <select class="form-control selectedCompetitorDefault" id="itemCompetitor" name="itemCompetitor" multiple="true"></select>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-sm-4 form-group-sm">
                                             <label for="itemStatus">Status</label>
                                             <select class="form-control selectedStatusDefault checkField" id="itemStatus" name="itemStatus"></select>
                                             <span class="help-block errMsg" id="itemStatusErr"></span>
@@ -128,6 +129,16 @@ if(isset($competitors) && !empty($competitors)){
                                                 <input type="text" class="form-control" value="" id="itemMilestone" name="itemMilestone" >
                                             </div>
                                             <span class="help-block errMsg" id='itemMilestoneErr'></span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-4 form-group-sm">
+                                            <label for="itemCompetitor">Competitor</label>
+                                            <select class="form-control selectedCompetitorDefault" id="itemCompetitor" name="itemCompetitor" multiple="true"></select>
+                                        </div>
+                                        <div class="col-sm-4 form-group-sm collapse" id="newVender">
+                                            <label for="itemVender">Vender</label>
+                                            <select class="form-control selectedVenderDefault" id="itemVender" name="itemVender"></select>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -169,9 +180,9 @@ if(isset($competitors) && !empty($competitors)){
                         <select id="itemsListPerPage" class="form-control">
                             <option value="1">1</option>
                             <option value="5">5</option>
-                            <option value="10" selected>10</option>
+                            <option value="10">10</option>
                             <option value="15">15</option>
-                            <option value="20">20</option>
+                            <option value="20" selected>20</option>
                             <option value="30">30</option>
                             <option value="50">50</option>
                             <option value="100">100</option>
@@ -265,6 +276,10 @@ if(isset($competitors) && !empty($competitors)){
                         <div class="col-sm-4 form-group-sm">
                             <label for="itemCompetitorEdit">Competitor</label>
                             <select class="form-control selectedCompetitorDefault" id="itemCompetitorEdit" name="itemCompetitorEdit" multiple="true"></select>
+                        </div>
+                        <div class="col-sm-4 form-group-sm">
+                            <label for="itemVenderEdit">Vender</label>
+                            <select class="form-control selectedVenderDefault" id="itemVenderEdit" name="itemVenderEdit"></select>
                         </div>
                     </div>
 

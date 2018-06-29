@@ -5,9 +5,38 @@ jQuery(document).ready(function () {
 });
 
 /**
-* 新增页面所有中项
-*
-*/
+ * select2 初始化，增加 list 到 str的select控件
+ * @param  {[string]} str    select 标签 id
+ * @param  {[array]} list   保存了key->name 的 列表
+ * @param  {[string]} str2   默认为空的选项字符串
+ * @param  {[string]} select 默认选择的选项
+ * @return {[type]}
+ */
+function selected2_tag_default_initial(str, list, str2, select) {
+    $(str).empty();
+    for(let key in list){
+        if (select == list[key]) {
+            $(str).append("<option value='"+key+"' selected>"+list[key]+"</option>");
+        } else {
+            $(str).append("<option value='"+key+"'>"+list[key]+"</option>");
+        }
+    }
+    if(str2 != '') {
+        if (select == str2 || select == '') {
+            $(str).prepend("<option value='' selected>"+str2+"</option>");
+        } else {
+            $(str).prepend("<option value=''>"+str2+"</option>");
+        }
+    }
+}
+
+/**
+ * select2 初始化，增加 list 到 str的select控件
+ * @param  {[string]} str  select 标签 id
+ * @param  {[array]} list 保存了key->name 的 列表
+ * @param  {[string]} str2 默认为空的选项字符串
+ * @return {[type]}      [description]
+ */
 function selected2_tag_addnew_initial(str, list, str2) {
     $(str).empty();
     for(let key in list){

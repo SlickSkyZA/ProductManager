@@ -16,6 +16,7 @@
                     <th>Project</th>
                     <th>Platform</th>
                     <th>Competitor</th>
+                    <th>Vender</th>
                     <th>Status</th>
                     <th>StatusDate</th>
                     <th>Notes</th>
@@ -35,6 +36,7 @@
                     <td><span id="itemProject-<?=$get->id?>"><?=$get->ProjectName?></td>
                     <td><span id="itemPlatform-<?=$get->id?>"><?=$get->PlatformName?></td>
                     <td><span id="itemCompetitor-<?=$get->id?>"><?=$get->CompetitorName?></td>
+                    <td><span id="itemVender-<?=$get->id?>"><?=$get->VenderName?></td>
                     <td><span id="itemStatus-<?=$get->id?>"><?=$get->StatusName?></td>
                     <td><span id="itemMilestone-<?=$get->id?>"><?= $get->StatusDate?> </td>
                     <td>

@@ -1,6 +1,35 @@
 <?php
 defined('BASEPATH') OR exit('');
+
+$current_products = [];
+$current_priorities = [];
+$current_competitors = [];
+
+if(isset($products) && !empty($products)){
+    foreach($products as $get){
+        $current_products[$get->id] = $get->Name;
+    }
+}
+
+if(isset($priorities) && !empty($priorities)){
+    foreach($priorities as $get){
+        $current_priorities[$get->Value] = $get->Name;
+    }
+}
+
+if(isset($competitors) && !empty($competitors)){
+    foreach($competitors as $get){
+        $current_competitors[$get->id] = $get->Name;
+    }
+}
+
 ?>
+
+<script>
+    var currentProducts = <?=json_encode($current_products)?>;
+    var currentPriorities = <?=json_encode($current_priorities)?>;
+    var currentCompetitors = <?=json_encode($current_competitors)?>;
+</script>
 
 <div class="row latestStuffs">
     <div class="col-sm-4">
@@ -40,8 +69,36 @@ defined('BASEPATH') OR exit('');
         </div>
     </div>
 </div>
+<div class="row margin-top-5" >
+    <div class="col-sm-6">
+        <div class="panel panel-hash ">
+            <div class="panel-heading">
+                <i class="fa fa-cart-plus"></i> Product PIE
+            </div>
+            <div class="col-sm-4 margin-top-5">
+                <select class="form-control selectedYearDefault" id="itemYear"></select>
+                <span id="itemYearLoading"></span>
+            </div>
+            <div class="col-sm-4 margin-top-5">
+                <select class="form-control selectedProductDefault " id="itemProduct"> </select>
+                <span id="itemProductLoading"></span>
+            </div>
+            <div class="col-sm-4 margin-top-5">
+                <select class="form-control selectedPriorityDefault" id="itemPriority"> </select>
+                <span id="itemPriorityLoading"></span>
+            </div>
+            <section class="panel" style="margin-bottom:0px">
+              <center>
+                  <div id="marketChart"/>
+              </center>
+            </section>
+        </div>
+    </div>
 
+    <div class="col-sm-6" id="itemsListTable">
 
+    </div>
+</div>
 <!-- ROW OF GRAPH/CHART OF EARNINGS PER MONTH/YEAR-->
 <div class="row margin-top-5">
     <div class="col-sm-9">
@@ -332,6 +389,8 @@ defined('BASEPATH') OR exit('');
     </div>
 </div>
 
-
 <script src="<?=base_url('public/chart/chart.min.js'); ?>"></script>
+<script src="<?=base_url('public/highcharts-6.1.0/code/highcharts.src.js'); ?>"></script>
+<script src="<?=base_url('public/highcharts-6.1.0/code/modules/exporting.src.js'); ?>"></script>
+<script src="<?=base_url('public/highcharts-6.1.0/code/modules/export-data.src.js'); ?>"></script>
 <script src="<?=base_url('public/js/dashboard.js')?>"></script>

@@ -24,8 +24,8 @@ class CustomerProjects extends CI_Controller{
      * @return [type] [description]
      */
     public function index(){
-        $transData['camera_vender'] = $this->company->getCompanyByType('Name', 'Camera Module Factory', 'ASC');
-        $transData['camera_assembly'] = $this->company->getCompanyByType('Name', 'Assembly Factory', 'ASC');
+        $transData['camera_vender'] = $this->company->getCompanyByType('Name', 'ASC', 'Camera Module Factory');
+        $transData['camera_assembly'] = $this->company->getCompanyByType('Name', 'ASC', 'Assembly Factory');
         $transData['customers'] = $this->company->getActiveItems('Name', 'Customer', 'ASC');
         $transData['soc_companies'] = $this->customerProject->getSortedItems('SOCCompany', 'ASC');
         $transData['soc_names'] = $this->customerProject->getSortedItems('SOCName', 'ASC');

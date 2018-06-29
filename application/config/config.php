@@ -25,7 +25,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 */
 $host = $_SERVER['HTTP_HOST'];//e.g practa.ng || www.practa.ng || localhost
 $protocol = is_https() ? "https://" : "http://";
-        
+
 if(is_cli()){
     $config['base_url'] = "";
 }
@@ -232,7 +232,7 @@ $config['directory_trigger'] = 'd';
 | your log files will fill up very fast.
 |
 */
-$config['log_threshold'] = 1;
+$config['log_threshold'] = 2;
 
 /*
 |--------------------------------------------------------------------------
