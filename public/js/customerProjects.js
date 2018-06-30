@@ -3,7 +3,7 @@
 
 $(document).ready(function(){
     checkDocumentVisibility(checkLogin);//check document visibility in order to confirm user's log in status
-
+    var LastSearchKey = '';
     //initial select
     selected2_tag_addnew_initial(".selectedFilterDefault", currentCustomers, "Select Customer");
     $('.selectedFilterDefault').select2({dropdownAutoWidth : true});
@@ -201,6 +201,7 @@ $(document).ready(function(){
         var value = $(this).val();
         //console.log("The Priority NAME value: %s", value);
         if(value){
+            LastSearchKey = value;
             $.ajax({
                 url: appRoot+"search/customerProjectSearch",
                 type: "get",
@@ -209,12 +210,13 @@ $(document).ready(function(){
                     $("#itemsListTable").html(returnedData.itemsListTable);
                 }
             });
-        }
-
-        else{
-            //reload the table if all text in search box has been cleared
-            displayFlashMsg("Loading page...", spinnerClass, "", "");
-            lilt();
+        } else {
+            if (LastSearchKey != value) {
+                LastSearchKey = value;
+                //reload the table if all text in search box has been cleared
+                displayFlashMsg("Loading page...", spinnerClass, "", "");
+                lilt();
+            }
         }
     });
 

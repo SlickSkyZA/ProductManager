@@ -53,6 +53,7 @@ if(isset($venders) && !empty($venders)){
     var currentStatuses = <?=json_encode($current_statuses)?>;
     var currentCompetitors = <?=json_encode($current_competitors)?>;
     var currentVenders = <?=json_encode($current_venders)?>;
+    var currentStatusEdit = 0;
 </script>
 
 <div class="pwell hidden-print">
@@ -205,7 +206,7 @@ if(isset($venders) && !empty($venders)){
                         </select>
                     </div>
 
-                    <div class="col-sm-3 form-group-sm form-inline">
+                    <div class="col-sm-4 form-group-sm form-inline">
                         <label for="itemsListFilterBy">Product</label>
                         <select id="itemsListFilterBy" name="itemsListFilterBy" class="form-control selectedFilterDefault">
                         </select>
@@ -215,8 +216,8 @@ if(isset($venders) && !empty($venders)){
                         <input type="checkbox" checked="checked" id="itemsActiveBy" name="itemsActiveBy" value="1">
                     </div>
                     <div class="col-sm-3 form-inline form-group-sm">
-                        <label for='transSearch'><i class="fa fa-search"></i></label>
-                        <input type="search" id="transSearch" class="form-control" placeholder="Search Transactions">
+                        <label for='itemSearch'><i class="fa fa-search"></i></label>
+                        <input type="search" id="itemSearch" class="form-control" placeholder="Search Transactions">
                     </div>
                 </div>
             </div>
@@ -277,7 +278,7 @@ if(isset($venders) && !empty($venders)){
                             <label for="itemCompetitorEdit">Competitor</label>
                             <select class="form-control selectedCompetitorDefault" id="itemCompetitorEdit" name="itemCompetitorEdit" multiple="true"></select>
                         </div>
-                        <div class="col-sm-4 form-group-sm">
+                        <div class="col-sm-4 form-group-sm" id="newVenderEdit">
                             <label for="itemVenderEdit">Vender</label>
                             <select class="form-control selectedVenderDefault" id="itemVenderEdit" name="itemVenderEdit"></select>
                         </div>
@@ -311,7 +312,8 @@ if(isset($venders) && !empty($venders)){
                 </form>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-primary" id="editItemSubmit">Save</button>
+                <button class="btn btn-primary collapse" id="editNewSubmit">AddNewStatus</button>
+                <button class="btn btn-primary" id="editItemSubmit">Update</button>
                 <button class="btn btn-danger" data-dismiss="modal">Cancel</button>
             </div>
         </div>

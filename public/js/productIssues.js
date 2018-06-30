@@ -3,7 +3,7 @@
 
 $(document).ready(function(){
     checkDocumentVisibility(checkLogin);//check document visibility in order to confirm user's log in status
-
+    var LastSearchKey = '';
     //load all items once the page is ready
     lilt();
 
@@ -186,6 +186,7 @@ $(document).ready(function(){
         var value = $(this).val();
         //console.log("The Priority NAME value: %s", value);
         if(value){
+            LastSearchKey = value;
             $.ajax({
                 url: appRoot+"search/productIssueSearch",
                 type: "get",
@@ -195,9 +196,12 @@ $(document).ready(function(){
                 }
             });
         } else {
-            //reload the table if all text in search box has been cleared
-            displayFlashMsg("Loading page...", spinnerClass, "", "");
-            lilt();
+            if (LastSearchKey != value) {
+                LastSearchKey = value;
+                //reload the table if all text in search box has been cleared
+                displayFlashMsg("Loading page...", spinnerClass, "", "");
+                lilt();
+            }
         }
     });
 

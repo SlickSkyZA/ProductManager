@@ -74,6 +74,11 @@ class Market extends CI_Model{
     public function add($itemProduct, $customer, $platform, $status, $itemVender, $itemProject, $itemDate, $itemDesc) {
         $data = ['ProductID'=>$itemProduct, 'CustomerID'=>$customer, 'PlatformID'=>$platform,
         'StatusID'=>$status, 'ProjectID'=>$itemProject, 'Notes'=>$itemDesc];
+        if ($status == 5 || $status == 6) {
+            $this->db->set('Active', 0);
+        } else {
+            $this->db->set('Active', 1);
+        }
 
         if ($itemVender !== "") {
             $this->db->set('VenderID', $itemVender);
@@ -161,19 +166,24 @@ class Market extends CI_Model{
     * @param type $itemDesc
     * @param type $itemPrice
     */
-   public function edit($itemId, $itemProductID, $itemCustomerID, $itemPlatformID, $itemVenderID, $itemStatusID, $itemProjectName, $itemStatusDate, $itemDesc){
-       $data = ['ProductID'=>$itemProductID, 'CustomerID'=>$itemCustomerID, 'PlatformID'=>$itemPlatformID,
-       'StatusID'=>$itemStatusID, 'ProjectID'=>$itemProjectName, 'Notes'=>$itemDesc];
-       if ($itemVenderID !== "") {
-           $this->db->set('VenderID', $itemVenderID);
-       }
-       if ($itemStatusDate !== "") {
-           $this->db->set('StatusDate', $itemStatusDate);
+   public function edit($itemId, $itemProductID, $itemCustomerID, $itemPlatformID, $itemVenderID, $itemStatusID, $itemProjectName, $itemStatusDate, $itemDesc, $itemTransport) {
+       if ($itemTransport == "true") {
+           $this->db->where('id', $itemId)->set('Active', 0)->update('market');
+           $this->add($itemProductID, $itemCustomerID, $itemPlatformID, $itemStatusID, $itemVenderID, $itemProjectName, $itemStatusDate, $itemDesc);
        } else {
-           $this->db->set('StatusDate', NULL);
+           $data = ['ProductID'=>$itemProductID, 'CustomerID'=>$itemCustomerID, 'PlatformID'=>$itemPlatformID,
+           'StatusID'=>$itemStatusID, 'ProjectID'=>$itemProjectName, 'Notes'=>$itemDesc];
+           if ($itemVenderID !== "") {
+               $this->db->set('VenderID', $itemVenderID);
+           }
+           if ($itemStatusDate !== "") {
+               $this->db->set('StatusDate', $itemStatusDate);
+           } else {
+               $this->db->set('StatusDate', NULL);
+           }
+           $this->db->where('id', $itemId);
+           $this->db->update('market', $data);
        }
-       $this->db->where('id', $itemId);
-       $this->db->update('market', $data);
 
        return TRUE;
    }
@@ -188,12 +198,29 @@ class Market extends CI_Model{
     */
    public function getLastVender($itemYear, $itemProductID, $itemCustomerID) {
        $itemNextYear = $itemYear + 1;
-       $q = "SELECT market.id, product.Name ProductName, company.Name VenderName, max(market.StatusDate) StatusDate
+       $q = "SELECT market.id, product.Name ProductName, company.Name VenderName, market.StatusDate StatusDate
+               FROM market
+               JOIN product ON market.ProductID = product.id
+               JOIN company ON market.VenderID = company.id
+               WHERE market.ProductID = {$itemProductID} AND market.CustomerID = {$itemCustomerID} AND
+               TO_DAYS(market.StatusDate) > TO_DAYS('{$itemYear}-1-1') AND TO_DAYS(market.StatusDate) < TO_DAYS('{$itemNextYear}-1-1') AND market.StatusID IN(5,6)
+               ORDER BY market.StatusDate DESC LIMIT 1";
+
+       $run_q = $this->db->query($q);
+
+       if($run_q->num_rows() > 0){
+           return $run_q->result();
+       } else {
+           return FALSE;
+       }
+   }
+
+   public function getTotalSales($VenderName) {
+       $q = "SELECT market.id, product.Name ProductName, company.Name VenderName
                FROM market
                join product ON market.ProductID = product.id
                join company ON market.VenderID = company.id
-               WHERE market.ProductID = {$itemProductID} AND market.CustomerID = {$itemCustomerID} AND
-               TO_DAYS(market.StatusDate) > TO_DAYS('{$itemYear}-1-1') AND TO_DAYS(market.StatusDate) < TO_DAYS('{$itemNextYear}-1-1') AND market.StatusID IN(5,6)";
+               WHERE company.Name = '{$VenderName}' AND market.StatusID = 5";
 
        $run_q = $this->db->query($q);
 

@@ -44,7 +44,7 @@
                             <?=character_limiter($get->Notes, 15)?>
                         </span>
                     </td>
-                    <td class="text-center issueActive text-success" id="itemActive-<?=$get->id?>">
+                    <td class="text-center itemActive text-success" id="itemActive-<?=$get->id?>">
                         <?php if($get->Active === "1"): ?>
                         <i class="fa fa-toggle-on pointer"></i>
                         <?php else: ?>

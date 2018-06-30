@@ -31,16 +31,37 @@ $(document).ready(function(){
     });
 
     /**
-     * 根据选择的交易状态，Signed Replaced NoNeed 触发选择供应商
+     * 新增区域：根据选择的交易状态，Signed Replaced 触发选择供应商
      * @return {[type]} [description]
      */
     $("#itemStatus").change(function(){
         console.debug($(this).val());
-        if ($(this).val() == 5 || $(this).val() == 6 || $(this).val() == 10) {
+        if ($(this).val() == 5 || $(this).val() == 6) {
             $('#newVender').toggleClass('collapse', false);
         } else {
             $('#newVender').toggleClass('collapse', true);
             $(".selectedVenderDefault").val("").trigger('change');
+        }
+    });
+
+    /**
+     * 编辑对话框 ： 根据选择的交易状态，Signed Replaced 触发选择供应商
+     * @return {[type]} [description]
+     */
+    $("#itemStatusEdit").change(function(){
+        console.debug($(this).val());
+        if ($(this).val() == 5 || $(this).val() == 6) {
+            $('#newVenderEdit').toggleClass('collapse', false);
+        } else {
+            $('#newVenderEdit').toggleClass('collapse', true);
+            $(".selectedVenderDefault").val("").trigger('change');
+        }
+        if ($(this).val() == currentStatusEdit) {
+            $('#editNewSubmit').toggleClass('collapse', true);
+            $('#editItemSubmit').toggleClass('collapse', false);
+        } else {
+            $('#editNewSubmit').toggleClass('collapse', false);
+            $('#editItemSubmit').toggleClass('collapse', true);
         }
     });
 
@@ -83,7 +104,10 @@ $(document).ready(function(){
         return false;
     });
 
-    //handles the submission of a new sales order
+    /**
+     * 增加一条记录
+     * @return {[type]} [description]
+     */
     $("#addNewItem").click(function(){
         //ensure all fields are properly filled
         changeInnerHTML(['itemProductErr', 'itemCustomerErr', 'itemPlatformErr', 'itemStatusErr', 'newTransErrMsg'], "");
@@ -145,9 +169,7 @@ $(document).ready(function(){
             error: function(){
                 if(!navigator.onLine){
                     changeFlashMsgContent("You appear to be offline. Please reconnect to the internet and try again", "", "red", "");
-                }
-
-                else{
+                } else {
                     changeFlashMsgContent("Unable to process your request at this time. Pls try again later!", "", "red", "");
                 }
             }
@@ -155,29 +177,8 @@ $(document).ready(function(){
 
     });
 
-    $("#transSearch").keyup(function(){
-        var value = $(this).val();
-
-        if(value){
-            $.ajax({
-                url: appRoot+"search/productTransactionsearch",
-                type: "get",
-                data: {v:value},
-                success: function(returnedData){
-                    $("#transListTable").html(returnedData.itemsListTable);
-                }
-            });
-        }
-
-        else{
-            //reload the table if all text in search box has been cleared
-            displayFlashMsg("Loading page...", spinnerClass, "", "");
-            lilt();
-        }
-    });
-
     /**
-     * [description]
+     * 点击记录编辑按钮执行
      * @param  {[type]} e [description]
      * @return {[type]}   [description]
      */
@@ -220,6 +221,19 @@ $(document).ready(function(){
         }
         update_customer_project(CustomerID, itemProject);
 
+        for(let key in currentStatuses){
+            if (currentStatuses[key] == itemStatus) {
+                currentStatusEdit = key;
+            }
+        }
+
+        if (currentStatusEdit == 5 || currentStatusEdit == 6) {
+            $('#newVenderEdit').toggleClass('collapse', false);
+        } else {
+            $('#newVenderEdit').toggleClass('collapse', true);
+            $(".selectedVenderDefault").val("").trigger('change');
+        }
+
         return new Promise((resolve, reject)=>{
             selected2_tag_update_optional(".selectedProductDefault", currentProducts, itemProduct, "Select Product");
             selected2_tag_update_optional(".selectedCustomerDefault", currentCustomers, itemCustomer, "Select Customer");
@@ -244,10 +258,10 @@ $(document).ready(function(){
     });
 
     /**
-     * [description]
+     * 编辑当前的 记录
      * @return {[type]} [description]
      */
-    $("#editItemSubmit").click(function(){
+    $("#editItemSubmit,#editNewSubmit").click(function(){
         var itemProduct = $("#itemProductEdit").val();
         var itemCustomer = $("#itemCustomerEdit").val();
         var itemPlatform = $("#itemPlatformEdit").val();
@@ -258,6 +272,9 @@ $(document).ready(function(){
         var itemDesc = $("#itemDescEdit").val();
         var itemMilestone = $("#itemMilestoneEdit").val();
         var itemId = $("#itemIdEdit").val();
+        var itemTransport = currentStatusEdit != itemStatus;
+
+        console.debug(itemTransport);
 
         if(!itemProduct || !itemCustomer || !itemPlatform || !itemStatus){
             !itemProduct ? $("#itemProductEditErr").text("required") : "";
@@ -275,7 +292,7 @@ $(document).ready(function(){
             method: "POST",
             url: appRoot+"Markets/edit",
             data: {itemProduct:itemProduct, itemCustomer:itemCustomer, itemPlatform:itemPlatform, itemStatus:itemStatus, itemCompetitor:itemCompetitor,
-                itemVender:itemVender, itemProject:itemProject, itemDesc:itemDesc, itemStatusDate:itemMilestone, _iId:itemId}
+                itemVender:itemVender, itemProject:itemProject, itemDesc:itemDesc, itemStatusDate:itemMilestone, itemTransport:itemTransport, _iId:itemId}
         }).done(function(returnedData){
             if(returnedData.status === 1){
                 $("#editItemFMsg").css('color', 'green').html("Product transaction successfully updated");
@@ -299,8 +316,11 @@ $(document).ready(function(){
         });
     });
 
-    //When the toggle on/off button is clicked to change
-    $("#itemsListTable").on('click', '.issueActive', function(){
+    /**
+     * 当前记录状态改变
+     * @return {[type]} [description]
+     */
+    $("#itemsListTable").on('click', '.itemActive', function(){
         var ElemId = $(this).attr('id');
         var itemId = $(this).attr('id').split("-")[1];
         //show spinner
@@ -324,15 +344,42 @@ $(document).ready(function(){
         }
     });
 
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //TO DELETE AN ITEM (The item will be marked as "deleted" instead of removing it totally from the db)
-    $("#transListTable").on('click', '.delItem', function(e){
-        e.preventDefault();
+    /**
+     * 查询
+     * @param  {[type]} e [description]
+     * @return {[type]}   [description]
+     */
+    $("#itemSearch").keypress(function(e) {
+        // 回车键事件
+        if(e.which == 13) {
+            $("#itemSearch").blur();
+            var value = $(this).val();
+            console.debug("value="+value);
+            if (value) {
+                $.ajax({
+                    url: appRoot+"search/productTransactionsearch",
+                    type: "get",
+                    data: {v:value},
+                    success: function(returnedData){
+                        $("#transListTable").html(returnedData.itemsListTable);
+                    }
+                });
+            } else {
+                //reload the table if all text in search box has been cleared
+                displayFlashMsg("Loading page...", spinnerClass, "", "");
+                lilt();
+            }
+        }
+    });
 
+    /**
+     * 删除一条记录
+     * @param  {[type]} e [description]
+     * @return {[type]}   [description]
+     */
+    $("#itemsListTable").on('click', '.delItem', function(e){
+        e.preventDefault();
+        console.debug("del");
         //get the item id
         var itemId = $(this).parents('tr').find('.curItemId').val();
         var itemRow = $(this).closest('tr');//to be used in removing the currently deleted row
@@ -344,7 +391,7 @@ $(document).ready(function(){
                 displayFlashMsg('Please wait...', spinnerClass, 'black');
 
                 $.ajax({
-                    url: appRoot+"productTransactions/delete",
+                    url: appRoot+"Markets/delete",
                     method: "POST",
                     data: {i:itemId}
                 }).done(function(rd){
@@ -357,9 +404,7 @@ $(document).ready(function(){
 
                         //display success message
                         changeFlashMsgContent('Item deleted', '', 'green', 1000);
-                    }
-
-                    else{
+                    } else {
 
                     }
                 }).fail(function(){
@@ -369,68 +414,10 @@ $(document).ready(function(){
         }
     });
 
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-    //WHEN THE "USE SCANNER" BTN IS CLICKED
-    $("#useScanner").click(function(e){
-        e.preventDefault();
-
-        //focus on the barcode text input
-        $("#barcodeText").focus();
-    });
-
-
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    //WHEN THE BARCODE TEXT INPUT VALUE CHANGED
-    $("#barcodeText").keyup(function(e){
-        e.preventDefault();
-
-        var bText = $(this).val();
-        var allItems = [];
-
-		if(bText){
-			for(let i in currentItems){
-				if(bText === i){
-					//remove any message that might have been previously displayed
-					$("#itemCodeNotFoundMsg").html("");
-
-					//if no select input has been added or the last select input has a value (i.e. an item has been selected)
-					if(!$(".selectedItem").length || $(".selectedItem").last().val()){
-						//add a new item by triggering the clickToClone btn. This will handle everything from 'appending a list of items' to 'auto-selecting
-						//the corresponding item to the value detected by the scanner'
-						$("#clickToClone").click();
-					}
-
-					//else if the last select input doesn't have a value
-					else{
-						//just change the selected item to the corresponding code in var bText
-						changeSelectedItemWithBarcodeText($(this), bText);
-					}
-
-					break;
-				}
-
-				//if the value doesn't match the code of any item
-				else{
-					//display message telling user item not found
-					$("#itemCodeNotFoundMsg").css('color', 'red').html("Item not found. Item may not be registered.");
-				}
-			}
-		}
-    });
-
-    //TO HIDE THE TRANSACTION FORM FROM THE TRANSACTION FORM
+    /**
+     * 关闭、取消记录
+     * @return {[type]} [description]
+     */
     $("#hideTransForm").click(function(){
         $("#newTransDiv").toggleClass('collapse');
 
@@ -441,6 +428,10 @@ $(document).ready(function(){
         $("#showTransForm").html("<i class='fa fa-plus'></i> New Product Transaction");
     });
 
+    /**
+     * 设置时间选择控件
+     * @type {String}
+     */
     $('#itemMilestone').datepicker({
         dateFormat: 'yy-mm-dd',
         changeMonth: true,
@@ -448,6 +439,10 @@ $(document).ready(function(){
         autoSize: true
     });
 
+    /**
+     * 设置时间选择控件
+     * @type {String}
+     */
     $('#itemMilestoneEdit').datepicker({
         dateFormat: 'yy-mm-dd',
         changeMonth: true,

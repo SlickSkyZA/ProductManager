@@ -159,7 +159,7 @@ class Markets extends CI_Controller{
      * [active issue or not]
      * @return [type] [description]
      */
-   public function active() {
+    public function active() {
        $this->genlib->ajaxOnly();
 
        $item_id = $this->input->post('itemId');
@@ -177,17 +177,12 @@ class Markets extends CI_Controller{
 
        //set final output
        $this->output->set_content_type('application/json')->set_output(json_encode($json));
-   }
+    }
 
-    /*
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    ********************************************************************************************************************************
-    */
-
-
+    /**
+     * 删除一条记录
+     * @return [type] [description]
+     */
     public function delete(){
         $this->genlib->ajaxOnly();
 
@@ -195,7 +190,8 @@ class Markets extends CI_Controller{
         $item_id = $this->input->post('i', TRUE);
 
         if($item_id){
-            $this->db->where('id', $item_id)->delete('xscp');
+            $this->db->where('id', $item_id)->delete('market');
+            $this->db->where('MarketID', $item_id)->delete('rel_project_product_competitor');
 
             $json['status'] = 1;
         }
@@ -231,9 +227,12 @@ class Markets extends CI_Controller{
             $itemProjectID = set_value('itemProject');
             $itemDesc = set_value('itemDesc');
             $itemStatusDate = set_value('itemStatusDate');
+            $itemTransport = set_value('itemTransport');
+
+            log_message('debug', print_r("itemTransport=".$itemTransport, true));
 
             //update item in db
-            $updated = $this->Market->edit($itemId, $itemProductID, $itemCustomerID, $itemPlatformID, $itemVenderID, $itemStatusID, $itemProjectID, $itemStatusDate, $itemDesc);
+            $updated = $this->Market->edit($itemId, $itemProductID, $itemCustomerID, $itemPlatformID, $itemVenderID, $itemStatusID, $itemProjectID, $itemStatusDate, $itemDesc, $itemTransport);
 
             $this->RelProductCompetitor->edit($itemId, $itemCompetitorID);
 

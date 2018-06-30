@@ -3,6 +3,8 @@
 
 $(document).ready(function(){
     checkDocumentVisibility(checkLogin);//check document visibility in order to confirm user's log in status
+    //搜索记录
+    var LastSearchKey = '';
 
     //load all items once the page is ready
     lilt();
@@ -115,7 +117,7 @@ $(document).ready(function(){
             type: "post",
             url: appRoot+"productPerformances/add",
             data:{itemProduct:itemProduct, itemPlatform:itemPlatform, itemDevice:itemDevice, itemPerformance:itemPerformance,
-                itemPower:itemPower, itemResolution:itemResolution, itemVersion:itemVersion, itemCustomer:itemCustomer, itemProject:itemProject, 
+                itemPower:itemPower, itemResolution:itemResolution, itemVersion:itemVersion, itemCustomer:itemCustomer, itemProject:itemProject,
                 itemReportDate:itemReportDate, itemDesc:itemDesc},
 
             success: function(returnedData){
@@ -195,8 +197,9 @@ $(document).ready(function(){
         var orderBy = $("#itemsListSortBy").val().split("-")[0];
         var orderFormat = $("#itemsListSortBy").val().split("-")[1];
         var value = $(this).val();
-        //console.log("The Priority NAME value: %s", value);
+        console.log("The Priority NAME value: %s", value);
         if(value){
+            LastSearchKey = value;
             $.ajax({
                 url: appRoot+"search/productPerformanceSearch",
                 type: "get",
@@ -206,9 +209,12 @@ $(document).ready(function(){
                 }
             });
         } else {
-            //reload the table if all text in search box has been cleared
-            displayFlashMsg("Loading page...", spinnerClass, "", "");
-            lilt();
+            if (LastSearchKey != value) {
+                LastSearchKey = value;
+                //reload the table if all text in search box has been cleared
+                displayFlashMsg("Loading page...", spinnerClass, "", "");
+                lilt();
+            }
         }
     });
 

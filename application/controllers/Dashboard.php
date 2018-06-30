@@ -14,7 +14,7 @@ class Dashboard extends CI_Controller{
 
         $this->genlib->checkLogin();
 
-        $this->load->model(['item', 'transaction', 'analytic', 'product', 'priority', 'company', 'market']);
+        $this->load->model(['item', 'analytic', 'product', 'priority', 'company', 'market']);
     }
 
     /**
@@ -23,6 +23,8 @@ class Dashboard extends CI_Controller{
     public function index(){
         $data['products'] = $this->product->getActiveItems('Name', 'ASC');
         $data['priorities'] = $this->priority->getActiveItems('Name', 'ASC');
+        $data['totalProducts'] = $this->db->count_all('product');
+        $data['totalTransactions'] = count($this->market->getTotalSales('ArcSoft'));
 
         $data['topDemanded'] = $this->analytic->topDemanded();
         $data['leastDemanded'] = $this->analytic->leastDemanded();
@@ -30,7 +32,6 @@ class Dashboard extends CI_Controller{
         $data['lowestEarners'] = $this->analytic->lowestEarners();
         $data['totalItems'] = $this->db->count_all('items');
         $data['totalSalesToday'] = (int)$this->analytic->totalSalesToday();
-        $data['totalTransactions'] = $this->transaction->totalTransactions();
         $data['dailyTransactions'] = $this->analytic->getDailyTrans();
         $data['transByDays'] = $this->analytic->getTransByDays();
         $data['transByMonths'] = $this->analytic->getTransByMonths();
@@ -84,6 +85,8 @@ class Dashboard extends CI_Controller{
                     $list = array_merge($list, $temp);
                     //log_message('debug', print_r($list[$vender[0]->VenderName], TRUE));
                 }
+            } else {
+                $list['N/A'] = $list['N/A'] + 1;
             }
             //log_message('debug', print_r($vender, TRUE));
         }

@@ -314,13 +314,10 @@ function formChanges(form) {
         }
     }
 
-
     //return true or false based on the length of variable "changed"
     if(changed.length > 0){
         return true;
-    }
-
-    else{
+    } else {
         return false;
     }
 }
@@ -347,11 +344,13 @@ function displayFlashMsg(msg, iconClassName, color, time){
 }
 
 
+
 /**
- *
+ * 隐藏
  * @returns {undefined}
  */
 function hideFlashMsg(){
+
     changeClassName('flashMsgIcon', "");//set spinner class name
     $("#flashMsg").css('color', '');//change font color
     changeInnerHTML('flashMsg', "");//set message to display

@@ -3,6 +3,8 @@
 
 $(document).ready(function(){
     checkDocumentVisibility(checkLogin);//check document visibility in order to confirm user's log in status
+    //搜索记录
+    var LastSearchKey = '';
 
     //load all items once the page is ready
     lilt();
@@ -86,9 +88,7 @@ $(document).ready(function(){
 
                     //return focus to item code input to allow adding item with barcode scanner
                     $("#productName").focus();
-                }
-
-                else{
+                } else {
                     hideFlashMsg();
 
                     //display all errors
@@ -102,9 +102,7 @@ $(document).ready(function(){
             error: function(){
                 if(!navigator.onLine){
                     changeFlashMsgContent("You appear to be offline. Please reconnect to the internet and try again", "", "red", "");
-                }
-
-                else{
+                } else {
                     changeFlashMsgContent("Unable to process your request at this time. Pls try again later!", "", "red", "");
                 }
             }
@@ -117,10 +115,15 @@ $(document).ready(function(){
         lilt();
     });
 
-    $("#itemSearch").keyup(function(){
+    /**
+     * 搜索函数
+     * @return {[type]} [description]
+     */
+    $("#itemSearch").keyup(function() {
         var value = $(this).val();
         //console.log("The Priority NAME value: %s", value);
         if(value){
+            LastSearchKey = value;
             $.ajax({
                 url: appRoot+"search/productSearch",
                 type: "get",
@@ -129,12 +132,13 @@ $(document).ready(function(){
                     $("#itemsListTable").html(returnedData.itemsListTable);
                 }
             });
-        }
-
-        else{
-            //reload the table if all text in search box has been cleared
-            displayFlashMsg("Loading page...", spinnerClass, "", "");
-            lilt();
+        } else {
+            if (LastSearchKey != value) {
+                LastSearchKey = value;
+                //reload the table if all text in search box has been cleared
+                displayFlashMsg("Loading page...", spinnerClass, "", "");
+                lilt();
+            }
         }
     });
 

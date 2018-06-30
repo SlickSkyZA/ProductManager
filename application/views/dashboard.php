@@ -38,10 +38,10 @@ if(isset($competitors) && !empty($competitors)){
                 <div class="pull-left"><i class="fa fa-exchange"></i></div>
                 <div class="pull-right">
                     <div><?=$totalSalesToday?></div>
-                    <div class="latestStuffsText">Total Sales Today</div>
+                    <div class="latestStuffsText">Total Sales Quarter</div>
                 </div>
             </div>
-            <div class="panel-footer text-center" style="color:#5cb85c">Number of Items Sold Today</div>
+            <div class="panel-footer text-center" style="color:#5cb85c">Number of Product Sold Quarter</div>
         </div>
     </div>
     <div class="col-sm-4">
@@ -61,11 +61,11 @@ if(isset($competitors) && !empty($competitors)){
             <div class="panel-body latestStuffsBody" style="background-color: #337ab7">
                 <div class="pull-left"><i class="fa fa-shopping-cart"></i></div>
                 <div class="pull-right">
-                    <div><?=$totalItems?></div>
-                    <div class="latestStuffsText pull-right">Items in Stock</div>
+                    <div><?=$totalProducts?></div>
+                    <div class="latestStuffsText pull-right">Products</div>
                 </div>
             </div>
-            <div class="panel-footer text-center" style="color:#337ab7">Total Items in Stock</div>
+            <div class="panel-footer text-center" style="color:#337ab7">Total Products</div>
         </div>
     </div>
 </div>
@@ -111,25 +111,6 @@ if(isset($competitors) && !empty($competitors)){
               <canvas style="padding-right:25px" id="earningsGraph" width="200" height="80"/></canvas>
             </div>
         </div>
-    </div>
-
-    <div class="col-sm-3">
-        <section class="panel form-group-sm">
-            <label class="control-label">Select Account Year:</label>
-            <select class="form-control" id="earningAndExpenseYear">
-                <?php $years = range("2016", date('Y')); ?>
-                <?php foreach($years as $y):?>
-                <option value="<?=$y?>" <?=$y == date('Y') ? 'selected' : ''?>><?=$y?></option>
-                <?php endforeach; ?>
-            </select>
-            <span id="yearAccountLoading"></span>
-        </section>
-
-        <section class="panel">
-          <center>
-              <canvas id="paymentMethodChart" width="200" height="200"/></canvas><br>Payment Methods(%)<span id="paymentMethodYear"></span>
-          </center>
-        </section>
     </div>
 </div>
 <!-- END OF ROW OF GRAPH/CHART OF EARNINGS PER MONTH/YEAR-->
